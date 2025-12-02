@@ -1263,14 +1263,14 @@ export default function Layout({ children, currentPageName }) {
 
               {/* RotaGrid Controls */}
               {isRotaGrid && rotaState &&
-                <div className="flex items-center gap-3 mx-4 flex-1">
+                <div className="flex items-center gap-2 mx-2 flex-1 overflow-x-auto no-scrollbar mask-fade-right">
                   {/* Department & View Controls Group */}
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg border" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
+                  <div className="flex items-center gap-1 px-1.5 py-1 rounded-lg border shrink-0" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 gap-2 themed" title="Select departments">
+                        <Button variant="ghost" size="sm" className="h-8 gap-1 px-2 themed" title="Select departments">
                           <TableIcon className="w-4 h-4" />
-                          <span className="text-xs font-medium">Departments</span>
+                          <span className="text-xs font-medium hidden 2xl:inline">Departments</span>
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent align="start" className="w-[280px] p-2 themed">
@@ -1315,9 +1315,9 @@ export default function Layout({ children, currentPageName }) {
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 gap-2 themed" title="View options">
+                        <Button variant="ghost" size="sm" className="h-8 gap-1 px-2 themed" title="View options">
                           <SlidersHorizontal className="w-4 h-4" />
-                          <span className="text-xs font-medium">View</span>
+                          <span className="text-xs font-medium hidden 2xl:inline">View</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="themed">
@@ -1354,15 +1354,15 @@ export default function Layout({ children, currentPageName }) {
                       onClick={() => rotaState.setShowFilters((v) => !v)}
                       variant="ghost"
                       size="sm"
-                      className="h-8 gap-2 themed"
+                      className="h-8 gap-1 px-2 themed"
                       title="Toggle filters">
                       <Filter className="w-4 h-4" />
-                      <span className="text-xs font-medium">Filters</span>
+                      <span className="text-xs font-medium hidden 2xl:inline">Filters</span>
                     </Button>
-                  </div>
+                    </div>
 
-                  {/* Navigation Controls Group */}
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg border" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
+                    {/* Navigation Controls Group */}
+                    <div className="flex items-center gap-1 px-1.5 py-1 rounded-lg border shrink-0" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -1451,13 +1451,13 @@ export default function Layout({ children, currentPageName }) {
                   </div>
 
                   {/* Actions Group */}
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg border ml-auto" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
+                  <div className="flex items-center gap-1 px-1.5 py-1 rounded-lg border ml-auto shrink-0" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
                     {access !== "staff" &&
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 gap-2 themed" title="Actions">
+                        <Button variant="ghost" size="sm" className="h-8 gap-1 px-2 themed" title="Actions">
                           <MoreVertical className="w-4 h-4" />
-                          <span className="text-xs font-medium">Actions</span>
+                          <span className="text-xs font-medium hidden 2xl:inline">Actions</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="themed">
@@ -1504,9 +1504,9 @@ export default function Layout({ children, currentPageName }) {
                     {rotaState.canManage &&
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-8 gap-2 themed" title="Add">
+                          <Button variant="ghost" size="sm" className="h-8 gap-1 px-2 themed" title="Add">
                             <Plus className="w-4 h-4" />
-                            <span className="text-xs font-medium">Add</span>
+                            <span className="text-xs font-medium hidden 2xl:inline">Add</span>
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="themed">
@@ -1536,20 +1536,20 @@ export default function Layout({ children, currentPageName }) {
                         <Button
                           onClick={rotaState.togglePublish}
                           size="sm"
-                          className={`${rotaState.published ? "bg-slate-900 hover:bg-slate-800" : "bg-sky-600 hover:bg-sky-700"} h-8 gap-2 text-white`}
+                          className={`${rotaState.published ? "bg-slate-900 hover:bg-slate-800" : "bg-sky-600 hover:bg-sky-700"} h-8 gap-1 px-2 text-white`}
                           title={rotaState.published ? "Published" : "Publish"}>
                           <Lock className="w-3.5 h-3.5" />
-                          <span className="text-xs font-medium">{rotaState.published ? "Published" : "Publish"}</span>
+                          <span className="text-xs font-medium hidden 2xl:inline">{rotaState.published ? "Published" : "Publish"}</span>
                         </Button>
 
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 gap-2 themed"
+                          className="h-8 gap-1 px-2 themed"
                           onClick={() => rotaState.setShowSnapshot(true)}
                           title="Snapshots">
                           <Save className="w-3.5 h-3.5" />
-                          <span className="text-xs font-medium">Snapshot</span>
+                          <span className="text-xs font-medium hidden 2xl:inline">Snapshot</span>
                         </Button>
                       </>
                     }
@@ -1558,16 +1558,16 @@ export default function Layout({ children, currentPageName }) {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-8 gap-2 themed"
+                      className="h-8 gap-1 px-2 themed"
                       onClick={rotaState.handleReset}
                       title="Reset view">
                       <RefreshCw className="w-3.5 h-3.5" />
-                      <span className="text-xs font-medium">Reset</span>
+                      <span className="text-xs font-medium hidden 2xl:inline">Reset</span>
                     </Button>
                     }
-                  </div>
-                </div>
-              }
+                    </div>
+                    </div>
+                    }
 
               {/* Right Side Actions */}
               <div className="flex items-center gap-2 ml-auto">
