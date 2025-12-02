@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Mail, ClipboardList, Check, X, RefreshCw, ExternalLink } from "lucide-react";
 import RequestForm from "@/components/requests/RequestForm";
-import SwapShiftDialog from "@/components/requests/SwapShiftDialog";
 import { format, parseISO } from "date-fns";
 import { withRetry } from "@/components/utils/withRetry"; // ADD: use retry and keep UI responsive
 
@@ -21,7 +20,6 @@ export default function RequestsPage() {
   const [loading, setLoading] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
   const [tab, setTab] = React.useState("mine"); // mine | all (managers/admins)
-  const [showSwap, setShowSwap] = React.useState(false);
   const [swapRequests, setSwapRequests] = React.useState([]);
 
   React.useEffect(() => {
@@ -59,50 +57,91 @@ export default function RequestsPage() {
 
   const submitRequest = async (payload) => {
     setSubmitting(true);
-    const managerEmail = myEmployee?.reports_to;
     try {
-      // Create request record (with retry)
-      await withRetry(() => Request.create({
-        ...payload,
-        employee_id: myEmployee?.id,
-        status: "submitted"
-      }));
+      // HANDLE SWAP SHIFT
+      if (payload.request_type === "swap_shift") {
+        const { myShift, targetShift, targetEmp } = payload;
+        const managerEmail = myEmployee?.reports_to;
 
-      // Refresh list (doesn't block button state)
-      const canSeeAll = me.role === "admin" || me.access_level === "manager" || me.access_level === "admin";
-      const list = await withRetry(() => Request.list("-created_date"));
-      setRequests(list.filter(r => canSeeAll ? true : r.employee_id === myEmployee?.id));
-
-      // Fire-and-forget the email so the UI doesn't wait on delivery
-      if (managerEmail) {
-        const reqTypeLabel = payload.request_type === "annual_leave" ? "Annual Leave" : "Schedule Change";
-        const link = window.location.origin + createPageUrl("Requests");
-        SendEmail({
-          to: managerEmail,
-          subject: `New ${reqTypeLabel} request from ${myEmployee?.full_name || me?.email}`,
-          body: [
-            `Hello,`,
-            ``,
-            `${myEmployee?.full_name || me?.email} submitted a ${reqTypeLabel} request.`,
-            `Subject: ${payload.subject || "(no subject)"}`,
-            payload.start_date ? `Start: ${payload.start_date}` : null,
-            payload.end_date ? `End: ${payload.end_date}` : null,
-            ``,
-            `Details:`,
-            payload.details || "(no details)",
-            ``,
-            `Review it here: ${link}`
-          ].filter(Boolean).join("\n")
-        }).catch(() => {
-          // Non-blocking; ignore email failures here to keep UI responsive
-          console.warn("Manager email failed to send (non-blocking).");
+        await ShiftSwapRequest.create({
+          requester_id: myEmployee.id,
+          requester_name: myEmployee.full_name,
+          requester_email: myEmployee.user_email,
+          requester_shift_id: myShift.id,
+          requester_date: myShift.date,
+          requester_shift_code: myShift.shift_code,
+          
+          target_employee_id: targetEmp.id,
+          target_employee_name: targetEmp.full_name,
+          target_employee_email: targetEmp.user_email,
+          target_shift_id: targetShift.id,
+          target_date: targetShift.date,
+          target_shift_code: targetShift.shift_code,
+          
+          status: "pending_peer",
+          manager_approver_email: managerEmail
         });
-        alert("Your request was submitted. An email to your manager is being sent in the background.");
+
+        // Notify Target
+        if (targetEmp.user_email) {
+          SendEmail({
+            to: targetEmp.user_email,
+            subject: `Shift Swap Request from ${myEmployee.full_name}`,
+            body: `Hello ${targetEmp.full_name},\n\n${myEmployee.full_name} wants to swap their ${myShift.shift_code} shift on ${myShift.date} with your ${targetShift.shift_code} shift on ${targetShift.date}.\n\nPlease log in to the app to approve or reject this request.`
+          }).catch(() => console.warn("Failed to send email"));
+        }
+        
+        alert("Swap request sent! The other person needs to approve it first.");
+        
+        // Refresh swap list
+        const swaps = await ShiftSwapRequest.list("-created_date");
+        setSwapRequests(swaps);
+
       } else {
-        alert("Your request was submitted. No manager email is set on your profile.");
+        // HANDLE STANDARD REQUEST
+        const managerEmail = myEmployee?.reports_to;
+        
+        await withRetry(() => Request.create({
+          ...payload,
+          employee_id: myEmployee?.id,
+          status: "submitted"
+        }));
+
+        // Refresh list
+        const canSeeAll = me.role === "admin" || me.access_level === "manager" || me.access_level === "admin";
+        const list = await withRetry(() => Request.list("-created_date"));
+        setRequests(list.filter(r => canSeeAll ? true : r.employee_id === myEmployee?.id));
+
+        // Notify Manager
+        if (managerEmail) {
+          const reqTypeLabel = payload.request_type === "annual_leave" ? "Annual Leave" : "Schedule Change";
+          const link = window.location.origin + createPageUrl("Requests");
+          SendEmail({
+            to: managerEmail,
+            subject: `New ${reqTypeLabel} request from ${myEmployee?.full_name || me?.email}`,
+            body: [
+              `Hello,`,
+              ``,
+              `${myEmployee?.full_name || me?.email} submitted a ${reqTypeLabel} request.`,
+              `Subject: ${payload.subject || "(no subject)"}`,
+              payload.start_date ? `Start: ${payload.start_date}` : null,
+              payload.end_date ? `End: ${payload.end_date}` : null,
+              ``,
+              `Details:`,
+              payload.details || "(no details)",
+              ``,
+              `Review it here: ${link}`
+            ].filter(Boolean).join("\n")
+          }).catch(() => {});
+          alert("Your request was submitted. An email to your manager is being sent in the background.");
+        } else {
+          alert("Your request was submitted. No manager email is set on your profile.");
+        }
       }
+    } catch (e) {
+      console.error("Request failed", e);
+      alert("Failed to submit request. Please try again.");
     } finally {
-      // Always re-enable the button even if a network call is slow
       setSubmitting(false);
     }
   };
@@ -307,32 +346,21 @@ export default function RequestsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
-              <Tabs defaultValue="standard">
-                <TabsList className="w-full mb-4">
-                  <TabsTrigger value="standard" className="flex-1">Leave / Change</TabsTrigger>
-                  <TabsTrigger value="swap" className="flex-1">Swap Shift</TabsTrigger>
-                </TabsList>
-                <TabsContent value="standard">
-                  <RequestForm submitting={submitting} onSubmit={submitRequest} />
-                  {myEmployee?.reports_to ? (
-                    <div className="text-[11px] text-slate-500 mt-2">
-                      Emails will be sent to your manager: {myEmployee.reports_to}
-                    </div>
-                  ) : (
-                    <div className="text-[11px] text-orange-600 mt-2">
-                      No manager email is set on your profile. The request will be saved without email notification.
-                    </div>
-                  )}
-                </TabsContent>
-                <TabsContent value="swap">
-                   <div className="text-sm text-slate-600 mb-4">
-                     Swap your shift with a colleague. Requires their approval + manager approval.
-                   </div>
-                   <Button className="w-full bg-indigo-600 hover:bg-indigo-700" onClick={() => setShowSwap(true)}>
-                     Start Swap Request
-                   </Button>
-                </TabsContent>
-              </Tabs>
+              <RequestForm 
+                submitting={submitting} 
+                onSubmit={submitRequest} 
+                myEmployee={myEmployee}
+                employees={employees}
+              />
+              {myEmployee?.reports_to ? (
+                <div className="text-[11px] text-slate-500 mt-2">
+                  For leave/changes, emails go to manager: {myEmployee.reports_to}. For swaps, peer must approve first.
+                </div>
+              ) : (
+                <div className="text-[11px] text-orange-600 mt-2">
+                  No manager email is set on your profile. Notifications may be limited.
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -388,12 +416,6 @@ export default function RequestsPage() {
           </Card>
         </div>
       </div>
-      <SwapShiftDialog 
-        open={showSwap} 
-        onClose={() => setShowSwap(false)} 
-        myEmployee={myEmployee}
-        employees={employees}
-      />
     </div>
   );
 }
