@@ -1686,87 +1686,29 @@ export default function RotaGrid() {
 
                       // Determine Redeploy Status
                       let redeployStatus = null; // null, 'out', 'in'
-                      if (shift) {
+                      if (shift && shift.is_redeployed) {
                         const homeDeptId = emp.department_id;
                         const shiftDeptId = shift.department_id;
                         
-                        // Are we viewing the home dept?
+                        // Check if we are in a context where we see the Target Dept specifically
+                        // e.g. We filtered for Ward 3 (Target) and NOT Ward 2 (Home)
+                        // Or "Visiting Staff" logic brought this row here.
+                        
+                        // If the current row context (emp) is being shown because they are visiting:
+                        // How do we know? Check if the employee is in the `visitingStaff` list?
+                        // Simpler: Check selectedDepts.
+                        
                         const viewingHome = selectedDepts.includes(homeDeptId) || selectedDepts.includes("all");
-                        const viewingTarget = selectedDepts.includes(shiftDeptId) || selectedDepts.includes("all");
+                        const viewingTarget = selectedDepts.includes(shiftDeptId); // strict check for target if not "all"
                         
-                        if (shift.is_redeployed) {
-                           if (viewingHome && shiftDeptId !== homeDeptId) {
-                             // We are in Home Ward, but shift is in Target Ward -> OUT
-                             redeployStatus = 'out';
-                             // BUT: If we are viewing "All", we might see the shift in its actual place if grouped by Dept?
-                             // If grouped by Dept, the row belongs to Home Dept.
-                             // The shift physically exists in Target Dept.
-                             // We want to show the arrow in the HOME row.
-                           } else if (shiftDeptId !== homeDeptId) {
-                             // We are likely in Target Ward view (since we see the shift)
-                             redeployStatus = 'in';
-                           }
+                        // If "all" is selected, viewingTarget is conceptually true, but viewingHome is also true.
+                        // In "All" view, we want to show the "Out" arrow because they are listed under their Home Dept (usually).
+                        
+                        if (viewingTarget && !viewingHome) {
+                           redeployStatus = 'in';
                         } else {
-                          // Even if not marked is_redeployed, if dept mismatch it effectively is?
-                          // Ideally rely on is_redeployed flag for explicit intent
-                          if (shiftDeptId !== homeDeptId && homeDeptId) {
-                             // It's a shift in another dept
-                             if (viewingHome && !viewingTarget) redeployStatus = 'out'; // Should not happen if filtering is strict, but logic holds
-                             else redeployStatus = 'in';
-                          }
-                        }
-                        
-                        // Fix logic for "Redeployed Out":
-                        // If I am Employee of Ward 2. Shift is in Ward 3.
-                        // Row is Ward 2 (Home).
-                        // I want to see "Arrow Right" in this cell.
-                        // However, visibleShifts filters by date.
-                        // The shift object HAS department_id = Ward 3.
-                        // So we need to pass this info to ShiftChip.
-                        
-                        if (shiftDeptId !== emp.department_id) {
-                           // Shift is not in home dept.
-                           // If the current view context (selectedDepts) includes Home Dept, we treat as Out?
-                           // Wait, if "All" is selected, we see everyone.
-                           // If we group by Department, the employee appears under "Ward 2".
-                           // The shift is in Ward 3.
-                           // We want to show "Arrow Right" in the Ward 2 row?
-                           // Or do we want to show the shift in Ward 3 row (if employee was listed there)?
-                           // The requirement says: "Ward 2 shows arrow right... Ward 3 shows arrow up".
-                           // So we need TWO indications if viewing both.
-                           
-                           // Current Grid implementation lists Employee ONCE (usually).
-                           // If grouped by Dept, Employee appears under their Home Dept.
-                           // So we see Ward 2 -> Employee -> Cell.
-                           // In this cell, we see the shift.
-                           // If the shift is in Ward 3, we should show "Redeployed Out" (Arrow Right).
-                           
-                           // BUT, what about Ward 3 view?
-                           // If we filter just Ward 3.
-                           // The employee is "Visiting".
-                           // They appear in the list.
-                           // They show the shift.
-                           // It should show "Redeployed In" (Arrow Up).
-                           
-                           // So status depends on the CONTEXT of the ROW (emp.department_id) vs SHIFT (shift.department_id).
-                           // Actually, `filteredEmp` places the employee.
-                           // If the employee is in the list because they are Home:
-                           if (emp.department_id && selectedDepts.includes(emp.department_id)) {
-                              // Viewing Home context
-                              if (shift.department_id !== emp.department_id) redeployStatus = 'out';
-                           } 
-                           // If employee is in the list because they are Visiting:
-                           else {
-                              // Viewing Target context
-                              redeployStatus = 'in';
-                           }
-                           
-                           // Edge case: "All" selected.
-                           // Employee is listed once under Home Dept.
-                           // We see "Redeployed Out" arrow.
-                           // We DO NOT see the shift in Ward 3 separately unless the employee is listed TWICE?
-                           // Grid usually unique by Employee ID.
-                           // So in "All" view, we just see "Redeployed Out". This seems acceptable.
+                           // Default to 'out' if we are viewing Home or All
+                           redeployStatus = 'out';
                         }
                       }
 
