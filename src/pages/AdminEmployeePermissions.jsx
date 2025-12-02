@@ -10,6 +10,8 @@ import { Switch } from "@/components/ui/switch";
 import { ShieldAlert, Trash2, Pencil } from "lucide-react";
 import { enqueueEmployeeDelete } from "@/components/utils/deleteQueue";
 import EmployeeDialog from "@/components/team/EmployeeDialog";
+import { base44 } from "@/api/base44Client";
+import { Sparkles } from "lucide-react";
 
 export default function AdminEmployeePermissions() {
   const [me, setMe] = React.useState(null);
@@ -32,6 +34,7 @@ export default function AdminEmployeePermissions() {
   const [savingId, setSavingId] = React.useState(null);
   const [selectedIds, setSelectedIds] = React.useState(new Set());
   const [deleting, setDeleting] = React.useState(false);
+  const [cleaning, setCleaning] = React.useState(false);
 
   const [showEmpDialog, setShowEmpDialog] = React.useState(false);
   const [empEditing, setEmpEditing] = React.useState(null);
@@ -177,6 +180,31 @@ export default function AdminEmployeePermissions() {
       setStatusMessage(`Deleted ${ok.length} employee record(s).`);
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleCleanupDuplicates = async () => {
+    if (!window.confirm("This will scan for duplicate employees (same name) and remove the ones with placeholder/invalid emails, keeping the best record. Continue?")) {
+      return;
+    }
+
+    setCleaning(true);
+    try {
+      const res = await base44.functions.invoke("cleanupDuplicates");
+      if (res.data.success) {
+        setStatusMessage(res.data.message);
+        window.alert(res.data.message + "\n\nRefreshing list...");
+        // Refresh list
+        const emps = await Employee.list();
+        setEmployees(emps || []);
+      } else {
+        window.alert("Cleanup failed: " + (res.data.message || "Unknown error"));
+      }
+    } catch (e) {
+      console.error(e);
+      window.alert("Error running cleanup: " + e.message);
+    } finally {
+      setCleaning(false);
     }
   };
 
