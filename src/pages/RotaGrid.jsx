@@ -726,11 +726,11 @@ export default function RotaGrid() {
       ),
       residentDrs: departments.find((d) =>
       d.name?.toLowerCase().includes('resident') ||
-      (d.name?.toLowerCase().includes('doctor') && !d.name?.toLowerCase().includes('ecu'))
+      d.name?.toLowerCase().includes('doctor') && !d.name?.toLowerCase().includes('ecu')
       ),
       ecuDrs: departments.find((d) =>
-      d.name?.toLowerCase().includes('ecu') &&
-      (d.name?.toLowerCase().includes('doctor') || d.name?.toLowerCase().includes('dr'))
+      d.name?.toLowerCase().includes('ecu') && (
+      d.name?.toLowerCase().includes('doctor') || d.name?.toLowerCase().includes('dr'))
       )
     };
 
@@ -894,7 +894,7 @@ export default function RotaGrid() {
         let code = cells[codeIdx] || "";
         // Remove replacement char and control chars
         code = code.replace(/[\uFFFD\u0000-\u001F\u007F-\u009F]/g, "").trim();
-        
+
         return {
           date: cells[dateIdx],
           employee_id: cells[empIdx],
@@ -1017,13 +1017,13 @@ export default function RotaGrid() {
           // 1. Trim whitespace
           // 2. Remove invisible unicode characters / replacement chars
           // 3. Ignore if the result is one of the blacklist items
-          
+
           // Regex to strip non-printable ASCII and common unicode junk (like replacement char )
           // This keeps alphanumeric, standard punctuation, but removes control chars and symbols
           const cleanCode = code.replace(/[\uFFFD\u0000-\u001F\u007F-\u009F]/g, "").trim();
 
           const blacklist = ["", "◇", "?", "-", ".", "+", "", "UNDEFINED", "NULL"];
-          
+
           if (cleanCode && !blacklist.includes(cleanCode)) {
             shiftsToCreate.push({
               employee_id: emp.id,
@@ -1404,8 +1404,8 @@ export default function RotaGrid() {
                     {group.label &&
                   <tr>
                         <td
-                      colSpan={visibleDays.length + 1}
-                      className="bg-slate-200 border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800">
+                      colSpan={visibleDays.length + 1} className="bg-gray-900 text-blue-50 px-3 py-2 text-xs font-bold border border-slate-300">
+
                           {group.label}
                         </td>
                       </tr>
@@ -1435,22 +1435,22 @@ export default function RotaGrid() {
                           </div>
                         </td>
                         {visibleDays.map((day) => {
-                          const dateStr = format(day, "yyyy-MM-dd");
-                          const key = `${emp.id}_${dateStr}`;
-                          const shift = shiftsByEmpDate[key];
+                      const dateStr = format(day, "yyyy-MM-dd");
+                      const key = `${emp.id}_${dateStr}`;
+                      const shift = shiftsByEmpDate[key];
 
-                          let rawCode = shift ? String(shift.shift_code || "").trim() : "";
-                          // Filter out garbage so the + button appears
-                          if (rawCode && (
-                            /[\uFFFD\u0000-\u001F\u007F-\u009F]/.test(rawCode) || 
-                            ["?", "-", ".", "+", "UNDEFINED", "NULL", "NAN", "◇", "DIV", "HTML", "BODY", "SPAN"].some(g => rawCode.toUpperCase().includes(g))
-                          )) {
-                            rawCode = "";
-                          }
-                          const code = rawCode;
+                      let rawCode = shift ? String(shift.shift_code || "").trim() : "";
+                      // Filter out garbage so the + button appears
+                      if (rawCode && (
+                      /[\uFFFD\u0000-\u001F\u007F-\u009F]/.test(rawCode) ||
+                      ["?", "-", ".", "+", "UNDEFINED", "NULL", "NAN", "◇", "DIV", "HTML", "BODY", "SPAN"].some((g) => rawCode.toUpperCase().includes(g))))
+                      {
+                        rawCode = "";
+                      }
+                      const code = rawCode;
 
-                          return (
-                            <td
+                      return (
+                        <td
                           key={dateStr} className="bg-white p-0 text-center rounded-none border border-slate-300 hover:bg-slate-50 relative">
                           
                               {canManage && !published ?
