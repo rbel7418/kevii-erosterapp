@@ -2,6 +2,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Shift } from "@/entities/all";
 import { Clock } from "lucide-react";
 
@@ -9,18 +10,30 @@ export default function RedeploymentDetailsDialog({ open, onClose, shift, canMan
     const [isEditing, setIsEditing] = React.useState(false);
     const [startTime, setStartTime] = React.useState("");
     const [endTime, setEndTime] = React.useState("");
+    const [notes, setNotes] = React.useState("");
 
     React.useEffect(() => {
         if (open && shift) {
             setStartTime(shift.start_time || "");
             setEndTime(shift.end_time || "");
+            setNotes(shift.redeploy_meta?.notes || "");
             setIsEditing(false);
         }
     }, [open, shift]);
 
     const handleSave = async () => {
         try {
-            await Shift.update(shift.id, { start_time: startTime, end_time: endTime });
+            const updatedMeta = {
+                ...(shift.redeploy_meta || {}),
+                notes: notes
+            };
+            
+            await Shift.update(shift.id, { 
+                start_time: startTime, 
+                end_time: endTime,
+                redeploy_meta: updatedMeta
+            });
+            
             if (onShiftUpdated) {
                 onShiftUpdated();
             }
@@ -37,7 +50,7 @@ export default function RedeploymentDetailsDialog({ open, onClose, shift, canMan
 
     return (
         <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>Redeployment Details</DialogTitle>
                 </DialogHeader>
@@ -90,11 +103,22 @@ export default function RedeploymentDetailsDialog({ open, onClose, shift, canMan
                                 )}
                             </div>
 
-                            {shift.redeploy_meta?.notes && (
+                            {(isEditing || shift.redeploy_meta?.notes) && (
                                 <>
-                                    <div className="text-slate-500 self-start">Notes</div>
-                                    <div className="col-span-2 italic text-slate-700 bg-blue-100/50 p-2 rounded">
-                                        "{shift.redeploy_meta.notes}"
+                                    <div className="text-slate-500 self-start pt-2">Notes</div>
+                                    <div className="col-span-2">
+                                        {isEditing ? (
+                                            <Textarea 
+                                                value={notes} 
+                                                onChange={(e) => setNotes(e.target.value)} 
+                                                placeholder="Add comments..."
+                                                className="min-h-[80px] bg-white resize-none text-sm"
+                                            />
+                                        ) : (
+                                            <div className="italic text-slate-700 bg-blue-100/50 p-2 rounded">
+                                                "{shift.redeploy_meta.notes}"
+                                            </div>
+                                        )}
                                     </div>
                                 </>
                             )}
