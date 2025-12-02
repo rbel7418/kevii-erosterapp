@@ -1842,34 +1842,60 @@ export default function RotaGrid() {
           </DialogHeader>
           {redeployInfoShift && (
              <div className="space-y-4 py-2">
-                <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-sm space-y-2">
-                   <div className="grid grid-cols-3 gap-2">
+                <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-sm space-y-3 shadow-sm">
+                   <div className="grid grid-cols-3 gap-3">
                       <div className="text-slate-500">Status</div>
-                      <div className="col-span-2 font-medium text-blue-700">Redeployed Out</div>
+                      <div className="col-span-2 font-semibold text-blue-700 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+                        Redeployed Out
+                      </div>
                       
                       <div className="text-slate-500">To Ward</div>
-                      <div className="col-span-2 font-medium">{
+                      <div className="col-span-2 font-medium text-slate-900">{
                          departments.find(d => d.id === redeployInfoShift.department_id)?.name || 'Unknown'
                       }</div>
 
                       <div className="text-slate-500">Shift Code</div>
-                      <div className="col-span-2 font-medium">{redeployInfoShift.shift_code}</div>
+                      <div className="col-span-2 font-medium text-slate-900">{redeployInfoShift.shift_code}</div>
                       
                       <div className="text-slate-500">Time</div>
-                      <div className="col-span-2">{redeployInfoShift.start_time} - {redeployInfoShift.end_time}</div>
+                      <div className="col-span-2 font-medium text-slate-900">{redeployInfoShift.start_time} - {redeployInfoShift.end_time}</div>
 
                       {redeployInfoShift.redeploy_meta?.notes && (
                         <>
                           <div className="text-slate-500">Notes</div>
-                          <div className="col-span-2 italic">"{redeployInfoShift.redeploy_meta.notes}"</div>
+                          <div className="col-span-2 italic text-slate-700 bg-blue-100/50 p-2 rounded">"{redeployInfoShift.redeploy_meta.notes}"</div>
                         </>
                       )}
                       
                       <div className="text-slate-500">Initiated By</div>
-                      <div className="col-span-2 text-xs">{redeployInfoShift.redeploy_meta?.initiated_by}</div>
+                      <div className="col-span-2 text-xs text-slate-600">{redeployInfoShift.redeploy_meta?.initiated_by}</div>
                    </div>
                 </div>
-                <DialogFooter>
+                
+                <DialogFooter className="gap-2 sm:gap-0">
+                  {/* Allow editing if < 48h */}
+                  {canManage && (!redeployInfoShift.redeploy_meta?.initiated_at || (new Date() - new Date(redeployInfoShift.redeploy_meta.initiated_at)) < 48 * 60 * 60 * 1000) && (
+                    <Button variant="outline" className="mr-auto text-blue-600 border-blue-200 hover:bg-blue-50" onClick={() => {
+                       // Very basic edit: prompt for new time/notes? 
+                       // For now, just a placeholder or basic alert as full edit UI wasn't explicitly asked for "Out" dialog, 
+                       // but user said "manager can Confirm hours details or edit hours details".
+                       // Let's implement a simple prompt for now to satisfy the requirement without overengineering a new component.
+                       const newStart = prompt("Edit Start Time (HH:MM)", redeployInfoShift.start_time);
+                       if (newStart === null) return;
+                       const newEnd = prompt("Edit End Time (HH:MM)", redeployInfoShift.end_time);
+                       if (newEnd === null) return;
+                       
+                       Shift.update(redeployInfoShift.id, { start_time: newStart, end_time: newEnd }).then(() => {
+                         const updatedShift = { ...redeployInfoShift, start_time: newStart, end_time: newEnd };
+                         setRedeployInfoShift(updatedShift);
+                         // trigger refresh
+                         Shift.list().then(s => setShifts(s || []));
+                       });
+                    }}>
+                      Edit Hours
+                    </Button>
+                  )}
                   <Button onClick={() => setRedeployInfoShift(null)}>Close</Button>
                 </DialogFooter>
              </div>

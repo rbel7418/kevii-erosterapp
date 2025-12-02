@@ -368,9 +368,19 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
     </div>
   );
 
+  // Check for 48h lock on redeployed shifts
+  const isRedeployLocked = React.useMemo(() => {
+    if (!shift.is_redeployed || !shift.redeploy_meta?.initiated_at) return false;
+    const initiated = new Date(shift.redeploy_meta.initiated_at);
+    const now = new Date();
+    const hoursDiff = (now - initiated) / (1000 * 60 * 60);
+    return hoursDiff > 48;
+  }, [shift]);
+
   // CHANGED: Comments should be accessible regardless of locked status
   // Only Edit and Delete are blocked when locked
-  const canEditShift = canManage && !locked;
+  // Also blocked if redeployed > 48h ago
+  const canEditShift = canManage && !locked && !isRedeployLocked;
 
   if (redeployStatus === 'out') {
     return (

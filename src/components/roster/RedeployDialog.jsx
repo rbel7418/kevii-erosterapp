@@ -77,18 +77,23 @@ export default function RedeployDialog({
 
         {step === 1 ? (
           <div className="grid gap-4 py-4">
-            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm space-y-2">
-              <div className="flex justify-between">
-                <span className="text-slate-500">Staff:</span>
-                <span className="font-medium">{employee.full_name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Home Ward:</span>
-                <span className="font-medium">{homeDeptName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Current Shift:</span>
-                <span className="font-medium">{shift.shift_code} ({shift.date})</span>
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm space-y-3 shadow-sm">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="text-slate-500">Staff Member</div>
+                <div className="font-semibold text-slate-900">{employee.full_name}</div>
+                
+                <div className="text-slate-500">Home Ward</div>
+                <div className="font-medium text-slate-900">{homeDeptName}</div>
+                
+                <div className="text-slate-500">Current Allocation</div>
+                <div className="font-medium text-slate-900">{homeDeptName}</div>
+                
+                <div className="text-slate-500">Shift Hours</div>
+                <div className="font-medium text-slate-900">
+                  {shift.start_time && shift.end_time 
+                    ? `${shift.start_time} - ${shift.end_time} (${getDuration().replace(' ', '')})` 
+                    : "Not set"}
+                </div>
               </div>
             </div>
 
