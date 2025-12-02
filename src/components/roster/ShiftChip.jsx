@@ -3,6 +3,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { colorForCode, textColorForBg, darkenHex, getActivePaletteName, getActivePaletteVariant, getCustomPalette, PALETTES } from "@/components/utils/colors";
 import { Input } from "@/components/ui/input";
 import { ShiftCode, Shift } from "@/entities/all";
+import { ArrowRightCircle, ArrowUpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { withRetry } from "@/components/utils/withRetry";
 import { enqueueShiftDelete } from "@/components/utils/deleteQueue";
 // Pencil icon is no longer used in the redesigned menu items
@@ -166,7 +173,7 @@ function overriddenColors(code) {
   return null; // fallback randomized
 }
 
-export default function ShiftChip({ shift, canManage, locked, onChanged, codes: codesProp, compact, currentUser }) {
+export default function ShiftChip({ shift, canManage, locked, onChanged, codes: codesProp, compact, currentUser, redeployStatus, onRedeploy, onRedeployInfo }) {
   // Sanitize code - block garbage display immediately
   let code = String(shift.shift_code || "").toUpperCase().trim();
   // Filter out replacement characters and known garbage
@@ -356,6 +363,7 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
       }}
       title={`${code}${shift?.start_time && shift?.end_time ? ` • ${shift.start_time}-${shift.end_time}` : ""}${shift?.has_comments ? " • Has manager comments" : ""}`}
     >
+      {redeployStatus === 'in' && <ArrowUpCircle className="w-3 h-3 mr-1 text-blue-600" />}
       {code}
     </div>
   );
@@ -364,11 +372,31 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
   // Only Edit and Delete are blocked when locked
   const canEditShift = canManage && !locked;
 
+  if (redeployStatus === 'out') {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button 
+              className="absolute inset-0 flex items-center justify-center bg-blue-50 hover:bg-blue-100 transition-colors"
+              onClick={(e) => { e.stopPropagation(); onRedeployInfo && onRedeployInfo(shift); }}
+            >
+              <ArrowRightCircle className="w-5 h-5 text-blue-600" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Redeployed to {shift.redeploy_meta?.to_dept_name || 'another ward'}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
   return (
     <>
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
-          <button className="absolute inset-0">
+          <button className={`absolute inset-0 ${redeployStatus === 'in' ? 'ring-2 ring-blue-500 ring-inset z-10' : ''}`}>
             {Chip}
           </button>
         </DropdownMenuTrigger>
@@ -391,6 +419,13 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
                         onSelect={(e) => {e.preventDefault();setMenuView("edit");setQuery("");}}>
                         Edit
                       </DropdownMenuItem>
+                      {!shift.is_redeployed && (
+                        <DropdownMenuItem
+                          className="text-blue-600"
+                          onSelect={() => onRedeploy && onRedeploy(shift)}>
+                          Redeploy Staff...
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem className="text-red-600" onSelect={() => removeShift()}>
                         Delete shift
                       </DropdownMenuItem>
