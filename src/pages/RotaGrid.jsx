@@ -517,26 +517,54 @@ export default function RotaGrid() {
     if (!currentUser) return;
     const defaults = currentUser.settings?.defaults || {};
 
-    // Restore department default
-    const deptDef = defaults.department;
-    if (deptDef?.enabled) {
-      let enforce = ["all"];
-      if (deptDef.ids && Array.isArray(deptDef.ids)) {
-        enforce = deptDef.ids.length > 0 ? deptDef.ids : ["all"];
-      } else if (deptDef.id) {
-        enforce = deptDef.id === "" ? ["all"] : [deptDef.id];
-      }
-      if (JSON.stringify(selectedDepts) !== JSON.stringify(enforce)) {
-        setSelectedDepts(enforce);
-      }
-      setDefaultDeptEnabled(true);
-    } else {
-      setDefaultDeptEnabled(false);
-    }
-
-    // Restore view default
+    // Restore view default first (as it might override dept settings)
     const viewDef = defaults.view;
     if (viewDef?.enabled) {
+       // If view default is enabled, we also check if there are department settings to restore
+       // because now "View as Default" controls department persistence too.
+       const deptDef = defaults.department;
+       if (deptDef?.enabled || viewDef.enabled) { // Respect existing Dept Default or View Default
+          let enforce = ["all"];
+          if (deptDef?.ids && Array.isArray(deptDef.ids)) {
+            enforce = deptDef.ids.length > 0 ? deptDef.ids : ["all"];
+          } else if (deptDef?.id) {
+            enforce = deptDef.id === "" ? ["all"] : [deptDef.id];
+          }
+          // Only update if different to avoid loop
+          if (JSON.stringify(selectedDepts) !== JSON.stringify(enforce)) {
+             setSelectedDepts(enforce);
+          }
+          setDefaultDeptEnabled(true);
+       } else {
+          setDefaultDeptEnabled(false);
+       }
+       
+       // Restore other view settings
+       if (viewDef.period && viewDef.period !== period) setPeriod(viewDef.period);
+       if (typeof viewDef.showWeekends === "boolean" && viewDef.showWeekends !== showWeekends) setShowWeekends(viewDef.showWeekends);
+       if (typeof viewDef.compactRows === "boolean" && viewDef.compactRows !== compactRows) setCompactRows(viewDef.compactRows);
+       if (viewDef.groupBy && viewDef.groupBy !== groupBy) setGroupBy(viewDef.groupBy);
+       if (typeof viewDef.dmOnlyToggle === "boolean" && viewDef.dmOnlyToggle !== dmOnlyToggle) setDmOnlyToggle(viewDef.dmOnlyToggle);
+       setDefaultViewEnabled(true);
+    } else {
+       // If view default is disabled, we check for legacy department default
+       const deptDef = defaults.department;
+       if (deptDef?.enabled) {
+          let enforce = ["all"];
+          if (deptDef.ids && Array.isArray(deptDef.ids)) {
+            enforce = deptDef.ids.length > 0 ? deptDef.ids : ["all"];
+          } else if (deptDef.id) {
+            enforce = deptDef.id === "" ? ["all"] : [deptDef.id];
+          }
+          if (JSON.stringify(selectedDepts) !== JSON.stringify(enforce)) {
+             setSelectedDepts(enforce);
+          }
+          setDefaultDeptEnabled(true);
+       } else {
+          setDefaultDeptEnabled(false);
+       }
+       setDefaultViewEnabled(false);
+    }
       if (viewDef.period && viewDef.period !== period) setPeriod(viewDef.period);
       if (typeof viewDef.showWeekends === "boolean" && viewDef.showWeekends !== showWeekends) setShowWeekends(viewDef.showWeekends);
       if (typeof viewDef.compactRows === "boolean" && viewDef.compactRows !== compactRows) setCompactRows(viewDef.compactRows);
