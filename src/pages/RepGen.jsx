@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +14,8 @@ import { Shift, Employee, Department, Role, WardCensus, ShiftCode } from "@/enti
 import { PTListAdmission } from "@/entities/PTListAdmission";
 import { calcShiftHoursSafe } from "@/components/utils/time";
 import { HealthBanner } from "@/components/common/HealthWidget";
+// Probe for health check
+const shiftProbe = async () => await Shift.list("-date", 50);
 import MiniSparkline from "@/components/common/MiniSparkline";
 
 /**
@@ -390,7 +391,7 @@ export default function RepGen() {
       const emp = s.employee_id ? empById[s.employee_id] : null;
       const role = s.role_id ? roleById[s.role_id] : null;
       const dept = s.department_id ? deptById[s.department_id] : null;
-      const hrs = Number(calcShiftHoursSafe(s, 0));
+      const hrs = Number(calcShiftHoursSafe(s.start_time, s.end_time, s.break_minutes));
       const rate = Number(emp?.custom_hourly_rate || role?.hourly_rate || 0);
       const cost = Math.round((Number.isFinite(hrs) ? hrs : 0) * rate);
 
@@ -421,7 +422,7 @@ export default function RepGen() {
       const emp = s.employee_id ? empById[s.employee_id] : null;
       const toDept = s.department_id ? deptById[s.department_id] : null;
       const fromDept = s.redeployed_from_id ? deptById[s.redeployed_from_id] : null;
-      const hrs = Number(calcShiftHoursSafe(s, 0));
+      const hrs = Number(calcShiftHoursSafe(s.start_time, s.end_time, s.break_minutes));
 
       rows.push({
         date: String(s.date || "").slice(0, 10),
@@ -444,7 +445,7 @@ export default function RepGen() {
 
       const role = s.role_id ? roleById[s.role_id] : null;
       const dept = s.department_id ? deptById[s.department_id] : null;
-      const hrs = Number(calcShiftHoursSafe(s, 0));
+      const hrs = Number(calcShiftHoursSafe(s.start_time, s.end_time, s.break_minutes));
       const rate = Number(role?.hourly_rate || 0);
       const key = `${String(s.date).slice(0,10)}|${dept?.name || ""}|${role?.name || "Unknown"}`;
       const prev = map.get(key) || {
@@ -621,7 +622,7 @@ export default function RepGen() {
       const dKey = String(s.date || "").slice(0,10);
       if (dKey < startDate || dKey > endDate) return;
       if (deptFilter !== "all" && s.department_id !== deptFilter) return;
-      const hours = calcShiftHoursSafe(s, 0);
+      const hours = calcShiftHoursSafe(s.start_time, s.end_time, s.break_minutes);
       const role = s.role_id ? roleById[s.role_id] : null;
       const emp = s.employee_id ? empById[s.employee_id] : null;
       const rate = Number(emp?.custom_hourly_rate || role?.hourly_rate || 0);
@@ -664,7 +665,7 @@ export default function RepGen() {
       const dKey = String(s.date || "").slice(0,10);
       if (dKey < startDate || dKey > endDate) return;
       if (deptFilter !== "all" && s.department_id !== deptFilter) return;
-      const hours = calcShiftHoursSafe(s, 0);
+      const hours = calcShiftHoursSafe(s.start_time, s.end_time, s.break_minutes);
       const role = s.role_id ? roleById[s.role_id] : null;
       const rate = Number(role?.hourly_rate || 0);
       if (!map[dKey]) map[dKey] = { d: dKey, cost: 0, hours: 0 }; // NEW guard
@@ -739,7 +740,7 @@ export default function RepGen() {
       if (deptFilter !== "all" && s.department_id !== deptFilter) return acc;
       const role = s.role_id ? roleById[s.role_id] : null;
       const rate = Number(role?.hourly_rate || 0);
-      const hrs = Number(calcShiftHoursSafe(s, 0)) || 0;
+      const hrs = Number(calcShiftHoursSafe(s.start_time, s.end_time, s.break_minutes)) || 0;
       return acc + hrs * rate;
     }, 0);
 
@@ -754,7 +755,7 @@ export default function RepGen() {
       if (deptFilter !== "all" && s.department_id !== deptFilter) return;
       const role = s.role_id ? roleById[s.role_id] : null;
       const name = role?.name || "Unknown";
-      const hrs = Number(calcShiftHoursSafe(s, 0)) || 0;
+      const hrs = Number(calcShiftHoursSafe(s.start_time, s.end_time, s.break_minutes)) || 0;
       const cost = hrs * Number(role?.hourly_rate || 0);
       roleMap[name] = (roleMap[name] || 0) + (Number.isFinite(cost) ? cost : 0);
     });
@@ -901,7 +902,7 @@ export default function RepGen() {
     <div className="min-h-screen bg-slate-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Data health indicator for key datasets (defaults to PTListAdmission) */}
-        <HealthBanner />
+        <HealthBanner probe={shiftProbe} />
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-xl font-bold text-slate-900">Report Generator</h1>
