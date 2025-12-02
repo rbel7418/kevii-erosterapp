@@ -31,15 +31,25 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     (async () => {
       setLoadingMyShifts(true);
       try {
-        // Use specific filter for employee to avoid hitting global limits
-        // Fetching 100 most recent/future shifts should be enough to find upcoming ones
-        // Sorting by -date ensures we get the latest dates (future) first
-        const shifts = await Shift.filter({ employee_id: myEmployee.id }, "-date", 100);
+        // Fetch using BOTH the internal UUID and the Business ID to cover all data scenarios
+        const queries = [
+          Shift.filter({ employee_id: myEmployee.id }, "-date", 100)
+        ];
         
+        if (myEmployee.employee_id && myEmployee.employee_id !== myEmployee.id) {
+          queries.push(Shift.filter({ employee_id: myEmployee.employee_id }, "-date", 100));
+        }
+
+        const results = await Promise.all(queries);
+        const allShifts = results.flat();
+        
+        // Deduplicate by ID
+        const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
+
         // Use yesterday to avoid timezone issues excluding today's shifts
         const yesterday = format(addDays(new Date(), -1), 'yyyy-MM-dd');
         
-        const future = shifts
+        const future = uniqueShifts
           .filter(s => s.date >= yesterday && s.status !== 'cancelled')
           .sort((a, b) => a.date.localeCompare(b.date));
           
@@ -62,12 +72,27 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     (async () => {
       setLoadingShifts(true);
       try {
-        // Use specific filter for target employee
-        const shifts = await Shift.filter({ employee_id: targetEmpId }, "-date", 100);
+        // Find the full target employee object to get their business ID
+        const targetEmp = employees?.find(e => e.id === targetEmpId);
+        
+        // Fetch using BOTH UUID and Business ID
+        const queries = [
+          Shift.filter({ employee_id: targetEmpId }, "-date", 100)
+        ];
+
+        if (targetEmp?.employee_id && targetEmp.employee_id !== targetEmpId) {
+          queries.push(Shift.filter({ employee_id: targetEmp.employee_id }, "-date", 100));
+        }
+
+        const results = await Promise.all(queries);
+        const allShifts = results.flat();
+        
+        // Deduplicate
+        const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
         
         const today = format(new Date(), 'yyyy-MM-dd');
         
-        const future = shifts
+        const future = uniqueShifts
           .filter(s => s.date >= today && s.status !== 'cancelled')
           .sort((a, b) => a.date.localeCompare(b.date));
           
@@ -78,7 +103,7 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
         setLoadingShifts(false);
       }
     })();
-  }, [targetEmpId]);
+  }, [targetEmpId, employees]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
