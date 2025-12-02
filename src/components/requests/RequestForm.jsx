@@ -50,50 +50,54 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
           queries.push(Shift.filter({ employee_id: myEmployee.full_name }, "-date", 200));
         }
 
-        const results = await Promise.all(queries);
-        const allShifts = results.flat();
+        const results = await Promise.allSettled(queries);
+        const allShifts = results
+          .filter(r => r.status === 'fulfilled')
+          .map(r => r.value)
+          .flat();
         
-        console.log("Sample dates found (raw):", allShifts.slice(0, 5).map(s => s.date));
-        console.log("All shifts found:", allShifts);
-
         // Deduplicate by ID
         const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
 
-        // Robust Date Parsing Helper
+        // PERMISSIVE Date Parsing Helper
         const parseShiftDate = (dateStr) => {
-          if (!dateStr) return new Date(0); // invalid dates go to past
+          if (!dateStr) return new Date(2100, 0, 1); // Treat missing dates as future so they show up
           
+          let d;
           // Handle ISO YYYY-MM-DD
-          if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) return parseISO(dateStr);
+          if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) d = parseISO(dateStr);
           
           // Handle DD/MM/YYYY
-          if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-            const [d, m, y] = dateStr.split('/');
-            return new Date(y, m - 1, d);
+          else if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            const [day, month, year] = dateStr.split('/');
+            d = new Date(year, month - 1, day);
           }
           
-          // Handle DD-Mon (assume current year or next year if month is earlier than now?)
-          // Actually, assuming current year (2025 based on your data) is safest for now, or extract from creation date if possible.
-          // For now, we'll try to parse "30-Nov" by appending current year if needed, or just let Date.parse handle it if it can (it often can't).
-          if (dateStr.match(/^\d{1,2}-[A-Za-z]{3}$/)) {
+          // Handle DD-Mon
+          else if (dateStr.match(/^\d{1,2}-[A-Za-z]{3}$/)) {
              const year = new Date().getFullYear();
-             return new Date(`${dateStr}-${year}`);
+             d = new Date(`${dateStr}-${year}`);
+          }
+          
+          // Fallback
+          else {
+            d = new Date(dateStr);
           }
 
-          // Fallback to direct Date parsing
-          const d = new Date(dateStr);
-          return isNaN(d.getTime()) ? new Date(0) : d;
+          // If invalid, treat as future (so it appears in list) instead of filtering out
+          return isNaN(d.getTime()) ? new Date(2100, 0, 1) : d;
         };
 
-        const yesterday = addDays(startOfDay(new Date()), -1); // Compare as Date objects
+        // Look back 30 days just to be safe
+        const lookback = addDays(startOfDay(new Date()), -30);
 
         const future = uniqueShifts
           .filter(s => {
             if (s.status === 'cancelled') return false;
             const sDate = parseShiftDate(s.date);
-            return sDate >= yesterday;
+            return sDate >= lookback;
           })
-          .sort((a, b) => parseShiftDate(a.date) - parseShiftDate(b.date)); // Sort by time value
+          .sort((a, b) => parseShiftDate(a.date) - parseShiftDate(b.date));
           
         setMyShifts(future);
       } catch (e) {
@@ -132,35 +136,39 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
           queries.push(Shift.filter({ employee_id: targetEmp.full_name }, "-date", 200));
         }
 
-        const results = await Promise.all(queries);
-        const allShifts = results.flat();
+        const results = await Promise.allSettled(queries);
+        const allShifts = results
+          .filter(r => r.status === 'fulfilled')
+          .map(r => r.value)
+          .flat();
         
         // Deduplicate
         const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
         
-        // Re-use the robust date parser from above (we need to define it outside or copy it)
         const parseShiftDate = (dateStr) => {
-          if (!dateStr) return new Date(0);
-          if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) return parseISO(dateStr);
-          if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-            const [d, m, y] = dateStr.split('/');
-            return new Date(y, m - 1, d);
+          if (!dateStr) return new Date(2100, 0, 1);
+          let d;
+          if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) d = parseISO(dateStr);
+          else if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            const [day, month, year] = dateStr.split('/');
+            d = new Date(year, month - 1, day);
           }
-          if (dateStr.match(/^\d{1,2}-[A-Za-z]{3}$/)) {
+          else if (dateStr.match(/^\d{1,2}-[A-Za-z]{3}$/)) {
              const year = new Date().getFullYear();
-             return new Date(`${dateStr}-${year}`);
+             d = new Date(`${dateStr}-${year}`);
           }
-          const d = new Date(dateStr);
-          return isNaN(d.getTime()) ? new Date(0) : d;
+          else d = new Date(dateStr);
+          return isNaN(d.getTime()) ? new Date(2100, 0, 1) : d;
         };
 
-        const today = startOfDay(new Date());
+        // Look back 7 days for target too, just in case
+        const lookback = addDays(startOfDay(new Date()), -7);
         
         const future = uniqueShifts
           .filter(s => {
              if (s.status === 'cancelled') return false;
              const sDate = parseShiftDate(s.date);
-             return sDate >= today;
+             return sDate >= lookback;
           })
           .sort((a, b) => parseShiftDate(a.date) - parseShiftDate(b.date));
           
