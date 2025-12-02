@@ -7,11 +7,10 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { ShieldAlert, Trash2, Pencil } from "lucide-react";
+import { ShieldAlert, Trash2, Pencil, Sparkles } from "lucide-react";
 import { enqueueEmployeeDelete } from "@/components/utils/deleteQueue";
 import EmployeeDialog from "@/components/team/EmployeeDialog";
 import { base44 } from "@/api/base44Client";
-import { Sparkles } from "lucide-react";
 
 export default function AdminEmployeePermissions() {
   const [me, setMe] = React.useState(null);
@@ -348,6 +347,16 @@ export default function AdminEmployeePermissions() {
             
             <Trash2 className="w-4 h-4 mr-2" />
             Delete {selectedIds.size || ""}
+          </Button>
+
+          <div className="h-6 w-px bg-slate-300 mx-2" />
+
+          <Button
+            className="h-8 bg-indigo-600 hover:bg-indigo-700 text-white"
+            onClick={handleCleanupDuplicates}
+            disabled={cleaning}>
+            <Sparkles className={`w-4 h-4 mr-2 ${cleaning ? 'animate-spin' : ''}`} />
+            {cleaning ? "Cleaning..." : "Cleanup Duplicates"}
           </Button>
         </div>
       </div>
