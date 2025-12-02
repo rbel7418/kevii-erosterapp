@@ -5,8 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowRightCircle, AlertCircle, Clock } from "lucide-react";
-import { format } from "date-fns";
+import { ArrowRightCircle, AlertCircle, Clock, Briefcase, User as UserIcon, Calendar, ArrowRight, MapPin } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 export default function RedeployDialog({ 
   open, 
@@ -67,143 +69,171 @@ export default function RedeployDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Redeploy Staff</DialogTitle>
+      <DialogContent className="max-w-2xl flex flex-col gap-0 p-0 overflow-hidden">
+        <DialogHeader className="px-6 py-4 border-b bg-slate-50/50">
+          <DialogTitle className="flex items-center gap-2 text-xl">
+            <Briefcase className="w-5 h-5 text-sky-600" />
+            Redeploy Staff
+          </DialogTitle>
           <DialogDescription>
-            Move this shift to another department.
+            Move a staff member's shift to another department for cost/resource tracking.
           </DialogDescription>
         </DialogHeader>
 
-        {step === 1 ? (
-          <div className="grid gap-4 py-4">
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm space-y-3 shadow-sm">
-              <div className="grid grid-cols-2 gap-2">
-                <div className="text-slate-500">Staff Member</div>
-                <div className="font-semibold text-slate-900">{employee.full_name}</div>
-                
-                <div className="text-slate-500">Home Ward</div>
-                <div className="font-medium text-slate-900">{homeDeptName}</div>
-                
-                <div className="text-slate-500">Current Allocation</div>
-                <div className="font-medium text-slate-900">{homeDeptName}</div>
-                
-                <div className="text-slate-500">Shift Hours</div>
-                <div className="font-medium text-slate-900">
-                  {shift.start_time && shift.end_time 
-                    ? `${shift.start_time} - ${shift.end_time} (${getDuration().replace(' ', '')})` 
-                    : "Not set"}
+        <div className="p-6 flex flex-col gap-6">
+          {/* Staff & Shift Context Card */}
+          <div className="border rounded-lg p-4 bg-slate-50">
+             <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                   <div className="h-10 w-10 rounded-full bg-white border flex items-center justify-center text-slate-500">
+                      <UserIcon className="w-5 h-5" />
+                   </div>
+                   <div>
+                      <div className="font-semibold text-slate-900">{employee.full_name}</div>
+                      <div className="text-xs text-slate-500 flex items-center gap-1.5">
+                         <Badge variant="outline" className="bg-white text-slate-600 border-slate-200 font-normal">
+                            {homeDeptName}
+                         </Badge>
+                         <span>•</span>
+                         <span>{employee.job_title || "Staff"}</span>
+                      </div>
+                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Redeploy To</Label>
-              <Select value={targetDeptId} onValueChange={setTargetDeptId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select target department" />
-                </SelectTrigger>
-                <SelectContent>
-                  {departments
-                    .filter(d => d.id !== currentDepartment?.id && d.is_active !== false)
-                    .map(d => (
-                      <SelectItem key={d.id} value={d.id}>
-                        {d.name}
-                      </SelectItem>
-                    ))
-                  }
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Start Time</Label>
-                <div className="relative">
-                  <Clock className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500" />
-                  <Input 
-                    type="time" 
-                    value={startTime} 
-                    onChange={e => setStartTime(e.target.value)}
-                    className="pl-9"
-                  />
+                
+                <div className="text-right">
+                   <div className="flex items-center gap-1.5 justify-end mb-1">
+                      <Badge className="bg-sky-600 hover:bg-sky-700 text-white shadow-sm">
+                        {shift.shift_code}
+                      </Badge>
+                   </div>
+                   <div className="text-xs text-slate-500 flex items-center gap-1 justify-end">
+                      <Calendar className="w-3 h-3" />
+                      {shift.date ? format(parseISO(shift.date), "EEE, MMM d") : "No date"}
+                   </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label>End Time</Label>
-                <div className="relative">
-                  <Clock className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500" />
-                  <Input 
-                    type="time" 
-                    value={endTime} 
-                    onChange={e => setEndTime(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Notes (Optional)</Label>
-              <Textarea 
-                value={notes} 
-                onChange={e => setNotes(e.target.value)} 
-                placeholder="Reason for redeployment..."
-                className="h-20"
-              />
-            </div>
+             </div>
           </div>
-        ) : (
-          <div className="grid gap-4 py-4">
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex flex-col items-center text-center space-y-3">
-              <div className="flex items-center gap-3 w-full justify-center">
-                <div className="bg-white px-3 py-1.5 rounded shadow-sm border text-sm font-medium">
-                  {homeDeptName}
-                </div>
-                <ArrowRightCircle className="w-6 h-6 text-blue-500" />
-                <div className="bg-white px-3 py-1.5 rounded shadow-sm border text-sm font-medium text-blue-700 border-blue-200">
-                  {targetDept?.name}
-                </div>
-              </div>
-              
-              <div className="text-sm text-blue-800 max-w-[80%]">
-                Confirm redeployment for <strong>{employee.full_name}</strong>.
-                <br />
-                Shift cost will actully move to <strong>{targetDept?.name}</strong>.
+
+          {step === 1 ? (
+            <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="space-y-3">
+                <Label className="text-base font-semibold text-slate-800">Where are they moving to?</Label>
+                <Select value={targetDeptId} onValueChange={setTargetDeptId}>
+                  <SelectTrigger className="h-11 text-base bg-white">
+                    <div className="flex items-center gap-2 text-slate-600">
+                        <MapPin className="w-4 h-4" />
+                        <SelectValue placeholder="Select target department..." />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {departments
+                      .filter(d => d.id !== currentDepartment?.id && d.is_active !== false)
+                      .map(d => (
+                        <SelectItem key={d.id} value={d.id} className="py-3">
+                          <span className="font-medium">{d.name}</span>
+                        </SelectItem>
+                      ))
+                    }
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="w-full border-t border-blue-200 pt-2 mt-2 text-xs text-blue-600 grid grid-cols-2 gap-2 text-left">
-                <div>
-                  <span className="block opacity-70">New Time:</span>
-                  {startTime} - {endTime} ({getDuration()})
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-slate-700">Start Time</Label>
+                  <div className="relative">
+                    <Clock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                    <Input 
+                      type="time" 
+                      value={startTime} 
+                      onChange={e => setStartTime(e.target.value)}
+                      className="pl-9 h-10 bg-white"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <span className="block opacity-70">Notes:</span>
-                  {notes || "None"}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-slate-700">End Time</Label>
+                  <div className="relative">
+                    <Clock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                    <Input 
+                      type="time" 
+                      value={endTime} 
+                      onChange={e => setEndTime(e.target.value)}
+                      className="pl-9 h-10 bg-white"
+                    />
+                  </div>
+                  <div className="text-xs text-right text-slate-500 font-medium">
+                     Duration: {getDuration()}
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex items-start gap-2 text-xs text-slate-500 bg-slate-50 p-2 rounded">
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-              <p>
-                Shift will disappear from {homeDeptName} and appear in {targetDept?.name} with a redeployment indicator.
-                Manager edits allowed for 48h.
-              </p>
-            </div>
-          </div>
-        )}
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => step === 2 ? setStep(1) : onClose()}>
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-slate-700">Notes (Optional)</Label>
+                <Textarea 
+                  value={notes} 
+                  onChange={e => setNotes(e.target.value)} 
+                  placeholder="Reason for redeployment, specific location details, etc."
+                  className="min-h-[80px] bg-white resize-none"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+               <div className="relative p-6 bg-blue-50/50 border border-blue-100 rounded-xl text-center overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500" />
+                  
+                  <div className="flex items-center justify-center gap-4 mb-6">
+                     <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200 font-semibold text-slate-700">
+                        {homeDeptName}
+                     </div>
+                     <div className="text-blue-500">
+                        <ArrowRightCircle className="w-8 h-8" />
+                     </div>
+                     <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-blue-200 font-semibold text-blue-700 ring-2 ring-blue-50">
+                        {targetDept?.name}
+                     </div>
+                  </div>
+
+                  <div className="space-y-1 mb-4">
+                     <h3 className="text-lg font-semibold text-slate-900">Confirm Redeployment</h3>
+                     <p className="text-slate-500 text-sm max-w-md mx-auto">
+                        This will move the shift cost and visibility to <strong>{targetDept?.name}</strong>. 
+                        The home ward will see a "Redeployed Out" indicator.
+                     </p>
+                  </div>
+
+                  <div className="bg-white/60 rounded-lg p-3 text-sm grid grid-cols-2 gap-4 text-left max-w-sm mx-auto">
+                     <div>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Time</span>
+                        <div className="font-medium text-slate-900">{startTime} - {endTime}</div>
+                     </div>
+                     <div>
+                        <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Duration</span>
+                        <div className="font-medium text-slate-900">{getDuration()}</div>
+                     </div>
+                     {notes && (
+                        <div className="col-span-2 border-t border-slate-200 pt-2 mt-1">
+                           <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Notes</span>
+                           <div className="text-slate-700 italic">"{notes}"</div>
+                        </div>
+                     )}
+                  </div>
+               </div>
+            </div>
+          )}
+        </div>
+
+        <DialogFooter className="px-6 py-4 border-t bg-slate-50/50">
+          <Button variant="outline" onClick={() => step === 2 ? setStep(1) : onClose()} className="mr-auto">
             {step === 2 ? "Back" : "Cancel"}
           </Button>
           {step === 1 ? (
-            <Button onClick={handleNext} disabled={!targetDeptId}>
-              Next
+            <Button onClick={handleNext} disabled={!targetDeptId} className="bg-sky-600 hover:bg-sky-700 text-white shadow-sm px-6">
+              Next <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
-            <Button onClick={handleConfirm} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleConfirm} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm px-6">
               Confirm Redeployment
             </Button>
           )}
