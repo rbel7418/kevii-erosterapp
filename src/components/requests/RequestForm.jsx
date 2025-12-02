@@ -23,26 +23,31 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
   const [targetEmpId, setTargetEmpId] = React.useState("");
   const [targetShiftId, setTargetShiftId] = React.useState("");
   const [loadingShifts, setLoadingShifts] = React.useState(false);
+  const [loadingMyShifts, setLoadingMyShifts] = React.useState(false);
 
   // Fetch my upcoming shifts
   React.useEffect(() => {
     if (!myEmployee) return;
     (async () => {
+      setLoadingMyShifts(true);
       try {
         // Use specific filter for employee to avoid hitting global limits
         // Fetching 100 most recent/future shifts should be enough to find upcoming ones
         // Sorting by -date ensures we get the latest dates (future) first
         const shifts = await Shift.filter({ employee_id: myEmployee.id }, "-date", 100);
         
-        const today = format(new Date(), 'yyyy-MM-dd');
+        // Use yesterday to avoid timezone issues excluding today's shifts
+        const yesterday = format(addDays(new Date(), -1), 'yyyy-MM-dd');
         
         const future = shifts
-          .filter(s => s.date >= today && s.status !== 'cancelled')
+          .filter(s => s.date >= yesterday && s.status !== 'cancelled')
           .sort((a, b) => a.date.localeCompare(b.date));
           
         setMyShifts(future);
       } catch (e) {
         console.error("Failed to load my shifts", e);
+      } finally {
+        setLoadingMyShifts(false);
       }
     })();
   }, [myEmployee]);
@@ -139,13 +144,21 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
             {/* My Shift */}
             <div>
               <div className="text-xs font-medium text-slate-600 mb-1.5">Your Shift to Swap</div>
-              <Select value={myShiftId} onValueChange={setMyShiftId}>
+              <Select value={myShiftId} onValueChange={setMyShiftId} disabled={loadingMyShifts || !myEmployee}>
                 <SelectTrigger className="h-9 bg-white">
-                  <SelectValue placeholder="Select one of your upcoming shifts" />
+                  <SelectValue placeholder={
+                    !myEmployee ? "Employee profile not found" :
+                    loadingMyShifts ? "Loading your shifts..." : 
+                    "Select one of your upcoming shifts"
+                  } />
                 </SelectTrigger>
                 <SelectContent>
-                  {myShifts.length === 0 ? (
-                    <div className="p-2 text-xs text-slate-500">No upcoming shifts found</div>
+                  {loadingMyShifts ? (
+                    <div className="p-2 text-xs text-slate-500 flex items-center gap-2">
+                      <Loader2 className="w-3 h-3 animate-spin" /> Loading...
+                    </div>
+                  ) : myShifts.length === 0 ? (
+                    <div className="p-2 text-xs text-slate-500">No upcoming shifts found (next 100 shifts)</div>
                   ) : (
                     myShifts.map(s => (
                       <SelectItem key={s.id} value={s.id}>
