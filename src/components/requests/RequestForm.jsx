@@ -31,13 +31,20 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     (async () => {
       setLoadingMyShifts(true);
       try {
-        // Fetch using BOTH the internal UUID and the Business ID to cover all data scenarios
+        // AGGRESSIVE SEARCH: Search by UUID, Business ID, Email, and Name to handle any data inconsistency
         const queries = [
-          Shift.filter({ employee_id: myEmployee.id }, "-date", 100)
+          Shift.filter({ employee_id: myEmployee.id }, "-date", 200),
         ];
         
         if (myEmployee.employee_id && myEmployee.employee_id !== myEmployee.id) {
-          queries.push(Shift.filter({ employee_id: myEmployee.employee_id }, "-date", 100));
+          queries.push(Shift.filter({ employee_id: myEmployee.employee_id }, "-date", 200));
+        }
+        // Fallback: some imports might have mapped employee_id to email or name
+        if (myEmployee.user_email) {
+          queries.push(Shift.filter({ employee_id: myEmployee.user_email }, "-date", 200));
+        }
+        if (myEmployee.full_name) {
+          queries.push(Shift.filter({ employee_id: myEmployee.full_name }, "-date", 200));
         }
 
         const results = await Promise.all(queries);
@@ -75,13 +82,19 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
         // Find the full target employee object to get their business ID
         const targetEmp = employees?.find(e => e.id === targetEmpId);
         
-        // Fetch using BOTH UUID and Business ID
+        // AGGRESSIVE SEARCH for target too
         const queries = [
-          Shift.filter({ employee_id: targetEmpId }, "-date", 100)
+          Shift.filter({ employee_id: targetEmpId }, "-date", 200)
         ];
 
         if (targetEmp?.employee_id && targetEmp.employee_id !== targetEmpId) {
-          queries.push(Shift.filter({ employee_id: targetEmp.employee_id }, "-date", 100));
+          queries.push(Shift.filter({ employee_id: targetEmp.employee_id }, "-date", 200));
+        }
+        if (targetEmp?.user_email) {
+          queries.push(Shift.filter({ employee_id: targetEmp.user_email }, "-date", 200));
+        }
+        if (targetEmp?.full_name) {
+          queries.push(Shift.filter({ employee_id: targetEmp.full_name }, "-date", 200));
         }
 
         const results = await Promise.all(queries);
@@ -168,22 +181,27 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
 
             {/* My Shift */}
             <div>
-              <div className="text-xs font-medium text-slate-600 mb-1.5">Your Shift to Swap</div>
+              <div className="text-xs font-medium text-slate-600 mb-1.5">
+                Your Shift to Swap {myEmployee && <span className="text-sky-600 font-normal">- {myEmployee.full_name}</span>}
+              </div>
               <Select value={myShiftId} onValueChange={setMyShiftId} disabled={loadingMyShifts || !myEmployee}>
                 <SelectTrigger className="h-9 bg-white">
                   <SelectValue placeholder={
-                    !myEmployee ? "Employee profile not found" :
-                    loadingMyShifts ? "Loading your shifts..." : 
+                    !myEmployee ? "Employee profile not found for your account" :
+                    loadingMyShifts ? "Scanning for your shifts..." : 
                     "Select one of your upcoming shifts"
                   } />
                 </SelectTrigger>
                 <SelectContent>
                   {loadingMyShifts ? (
                     <div className="p-2 text-xs text-slate-500 flex items-center gap-2">
-                      <Loader2 className="w-3 h-3 animate-spin" /> Loading...
+                      <Loader2 className="w-3 h-3 animate-spin" /> Scanning database...
                     </div>
                   ) : myShifts.length === 0 ? (
-                    <div className="p-2 text-xs text-slate-500">No upcoming shifts found (next 100 shifts)</div>
+                    <div className="p-2 text-xs text-slate-500">
+                      No upcoming shifts found.<br/>
+                      <span className="opacity-70 text-[10px]">Checked ID: {myEmployee?.employee_id} / {myEmployee?.id?.slice(0,5)}...</span>
+                    </div>
                   ) : (
                     myShifts.map(s => (
                       <SelectItem key={s.id} value={s.id}>

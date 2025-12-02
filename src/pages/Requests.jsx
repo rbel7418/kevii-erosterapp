@@ -26,9 +26,16 @@ export default function RequestsPage() {
     (async () => {
       const u = await User.me();
       setMe(u);
-      const emps = await Employee.list();
+      
+      // Fetch ALL employees for the dropdown (increased limit to ensure we see everyone)
+      // AND specifically fetch ME to ensure I am found even if I'm not in the first page of the list
+      const [emps, myEmpList] = await Promise.all([
+        Employee.list("full_name", 1000), 
+        Employee.filter({ user_email: u.email })
+      ]);
+      
       setEmployees(emps || []);
-      const mine = emps.find(e => e.user_email === u.email) || null;
+      const mine = (myEmpList && myEmpList.length > 0) ? myEmpList[0] : (emps.find(e => e.user_email === u.email) || null);
       setMyEmployee(mine);
 
       // Managers/admin see all; staff see their own
