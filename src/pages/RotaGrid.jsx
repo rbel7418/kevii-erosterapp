@@ -565,15 +565,7 @@ export default function RotaGrid() {
        }
        setDefaultViewEnabled(false);
     }
-      if (viewDef.period && viewDef.period !== period) setPeriod(viewDef.period);
-      if (typeof viewDef.showWeekends === "boolean" && viewDef.showWeekends !== showWeekends) setShowWeekends(viewDef.showWeekends);
-      if (typeof viewDef.compactRows === "boolean" && viewDef.compactRows !== compactRows) setCompactRows(viewDef.compactRows);
-      if (viewDef.groupBy && viewDef.groupBy !== groupBy) setGroupBy(viewDef.groupBy);
-      if (typeof viewDef.dmOnlyToggle === "boolean" && viewDef.dmOnlyToggle !== dmOnlyToggle) setDmOnlyToggle(viewDef.dmOnlyToggle);
-      setDefaultViewEnabled(true);
-    } else {
-      setDefaultViewEnabled(false);
-    }
+
 
     // CRITICAL FIX: Restore range lock and custom range
     const rangeLockDef = defaults.rangeLock;
