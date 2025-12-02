@@ -1450,122 +1450,7 @@ export default function Layout({ children, currentPageName }) {
                     </div>
                   </div>
 
-                  {/* Actions Group */}
-                  <div className="flex items-center gap-1 px-1.5 py-1 rounded-lg border ml-auto shrink-0" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
-                    {access !== "staff" &&
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 gap-1 px-2 themed" title="Actions">
-                          <MoreVertical className="w-4 h-4" />
-                          <span className="text-xs font-medium hidden 2xl:inline">Actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="themed">
-                        <DropdownMenuItem
-                          onClick={() => window.location.href = createPageUrl("TabularRoster?start=" + format(rotaState.gridStart, "yyyy-MM-dd") + "&end=" + format(rotaState.gridEnd, "yyyy-MM-dd") + (rotaState.selectedDeptForDialog !== "" ? "&department=" + encodeURIComponent(rotaState.selectedDeptForDialog) : ""))}
-                          disabled={!rotaState.canManage}>
-                          Open grid editor
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={rotaState.handleExportGridTemplate} disabled={!rotaState.canManage}>
-                          Export grid template
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => rotaState.setShowGridReplicaImport(true)} disabled={rotaState.published || !rotaState.canManage}>
-                          Upload grid template
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => rotaState.setShowExport(true)} disabled={!rotaState.canManage}>
-                          Export month…
-                        </DropdownMenuItem>
-                        <DropdownMenuItem disabled={rotaState.published}>
-                          Duplicate month…
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => rotaState.setShowReset(true)}
-                          disabled={!rotaState.canManage}
-                          className="text-red-600">
-                          Hard reset…
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={async () => {
-                            if (confirm("Run cleanup? This will remove all 'invisible' or garbage shifts that may have been imported incorrectly.")) {
-                              const res = await base44.functions.invoke("cleanShifts");
-                              alert(`Cleanup complete.\nDeleted ${res.data.deleted} bad records.`);
-                              window.location.reload();
-                            }
-                          }}
-                          disabled={!rotaState.canManage}
-                          className="text-amber-600">
-                          Cleanup bad data
-                        </DropdownMenuItem>
-
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    }
-
-                    {rotaState.canManage &&
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-8 gap-1 px-2 themed" title="Add">
-                            <Plus className="w-4 h-4" />
-                            <span className="text-xs font-medium hidden 2xl:inline">Add</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="themed">
-                          <DropdownMenuItem
-                            onClick={() => {
-                              if (rotaState.selectedDeptForDialog === "") {
-                                alert("Select a department first");
-                              } else {
-                                rotaState.setShowAddStaff(true);
-                              }
-                            }}
-                            disabled={rotaState.selectedDeptForDialog === ""}>
-                            Add employee
-                          </DropdownMenuItem>
-                          <DropdownMenuItem disabled={rotaState.published}>
-                            New shift…
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => rotaState.setShowImport(true)} disabled={rotaState.published}>
-                            Import (row-based)…
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    }
-
-                    {rotaState.canManage &&
-                      <>
-                        <Button
-                          onClick={rotaState.togglePublish}
-                          size="sm"
-                          className={`${rotaState.published ? "bg-slate-900 hover:bg-slate-800" : "bg-sky-600 hover:bg-sky-700"} h-8 gap-1 px-2 text-white`}
-                          title={rotaState.published ? "Published" : "Publish"}>
-                          <Lock className="w-3.5 h-3.5" />
-                          <span className="text-xs font-medium hidden 2xl:inline">{rotaState.published ? "Published" : "Publish"}</span>
-                        </Button>
-
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 gap-1 px-2 themed"
-                          onClick={() => rotaState.setShowSnapshot(true)}
-                          title="Snapshots">
-                          <Save className="w-3.5 h-3.5" />
-                          <span className="text-xs font-medium hidden 2xl:inline">Snapshot</span>
-                        </Button>
-                      </>
-                    }
-
-                    {access !== "staff" &&
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 gap-1 px-2 themed"
-                      onClick={rotaState.handleReset}
-                      title="Reset view">
-                      <RefreshCw className="w-3.5 h-3.5" />
-                      <span className="text-xs font-medium hidden 2xl:inline">Reset</span>
-                    </Button>
-                    }
-                    </div>
+                  {/* Actions Group Removed */}
                     </div>
                     }
 
@@ -1575,11 +1460,7 @@ export default function Layout({ children, currentPageName }) {
                   <Calculator className="w-4 h-4" />
                 </Button>
 
-                {user && access !== "staff" &&
-                  <span className="px-3 py-1.5 text-xs font-medium rounded-full nowrap hidden lg:inline-flex" style={{ background: 'var(--dm-bg-subtle)', color: 'var(--dm-text-primary)' }}>
-                    {leftLeave} leave left
-                  </span>
-                }
+                {/* Leave counter removed */}
 
                 <Button variant="ghost" className="relative ghost-ink ghost-hover h-9 w-9 p-0 hidden md:inline-flex" onClick={() => setCommsOpen(true)} title="Communications">
                   <Inbox className="w-4 h-4" />
