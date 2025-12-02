@@ -493,13 +493,18 @@ export default function RotaGrid() {
       const existingIds = new Set(filtered.map(e => e.id));
       visitingStaff.forEach(ve => {
         if (!existingIds.has(ve.id)) {
-          filtered.push(ve);
+          // Mark as visiting for UI separation
+          filtered.push({ ...ve, _isVisiting: true });
         }
       });
     }
 
-    // Sort by sort_index (ascending), then by name
+    // Sort by: Visiting last, then sort_index (ascending), then by name
     return filtered.sort((a, b) => {
+      const isVisitA = a._isVisiting ? 1 : 0;
+      const isVisitB = b._isVisiting ? 1 : 0;
+      if (isVisitA !== isVisitB) return isVisitA - isVisitB;
+
       const sortA = typeof a.sort_index === 'number' ? a.sort_index : 999;
       const sortB = typeof b.sort_index === 'number' ? b.sort_index : 999;
 
