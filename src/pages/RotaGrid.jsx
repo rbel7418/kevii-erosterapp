@@ -1318,17 +1318,7 @@ export default function RotaGrid() {
 
             {/* Settings Boxes - All Users */}
             <div className="flex items-center gap-3">
-                {/* Department Default Box */}
-                <div className="px-3 py-2 rounded-lg border" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
-                  <label className="inline-flex items-center gap-2 cursor-pointer">
-                    <Checkbox
-                    checked={defaultDeptEnabled}
-                    onCheckedChange={(v) => persistDeptDefault(Boolean(v))} />
-                    <span className="text-xs font-medium uppercase">Department Default</span>
-                  </label>
-                </div>
-
-                {/* View Default Box */}
+                {/* View Default Box (Controls both view and department filter persistence) */}
                 <div className="px-3 py-2 rounded-lg border" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
                   <label className="inline-flex items-center gap-2 cursor-pointer">
                     <Checkbox
@@ -1337,7 +1327,7 @@ export default function RotaGrid() {
                     <span className="text-xs font-medium uppercase">View as Default</span>
                   </label>
                 </div>
-                </div>
+            </div>
 
             {/* Quick Filters Box */}
             <div className="px-3 py-2 rounded-lg border" style={{ background: 'var(--dm-bg-subtle)', borderColor: 'var(--dm-border)' }}>
