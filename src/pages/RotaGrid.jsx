@@ -462,12 +462,14 @@ export default function RotaGrid() {
 
 
   const filteredEmp = React.useMemo(() => {
-    let filtered;
+    let homeStaff = [];
+    let visitors = [];
+
     // Filter by department
     if (selectedDepts.includes("all") || selectedDepts.length === 0) {
       // Show Permanent staff from all active departments
       // Also include non-Permanent if they have a sort_index < 999 (implies manual sorting/importance)
-      filtered = employees.filter((e) => {
+      homeStaff = employees.filter((e) => {
         if (e.is_active === false) return false;
         if (!activeDeptIds.has(e.department_id)) return false;
 
@@ -478,7 +480,7 @@ export default function RotaGrid() {
       });
     } else {
       // Show Permanent staff from selected departments
-      filtered = employees.filter((e) => {
+      homeStaff = employees.filter((e) => {
         if (e.is_active === false) return false;
         if (!selectedDepts.includes(e.department_id)) return false;
 
@@ -488,25 +490,30 @@ export default function RotaGrid() {
         return e.contract_type === "Permanent";
       });
       
-      // ADD VISITING STAFF
-      // We append them to the list so they show up in the grid
-      const existingIds = new Set(filtered.map(e => e.id));
+      // Identify Visiting Staff
+      const existingIds = new Set(homeStaff.map(e => e.id));
       visitingStaff.forEach(ve => {
         if (!existingIds.has(ve.id)) {
-          filtered.push(ve);
+          visitors.push({ ...ve, isVisiting: true });
         }
       });
     }
 
-    // Sort by sort_index (ascending), then by name
-    return filtered.sort((a, b) => {
+    // Sort function
+    const sorter = (a, b) => {
       const sortA = typeof a.sort_index === 'number' ? a.sort_index : 999;
       const sortB = typeof b.sort_index === 'number' ? b.sort_index : 999;
 
       if (sortA !== sortB) return sortA - sortB;
-
       return (a.full_name || "").localeCompare(b.full_name || "");
-    });
+    };
+
+    // Sort independently
+    homeStaff.sort(sorter);
+    visitors.sort(sorter);
+
+    // Return combined list: Home staff first, then Visitors
+    return [...homeStaff, ...visitors];
   }, [employees, selectedDepts, activeDeptIds, visitingStaff]);
 
   const filteredEmpIds = React.useMemo(() => {
@@ -1646,8 +1653,22 @@ export default function RotaGrid() {
                         </td>
                       </tr>
                   }
-                    {group.employees.map((emp) =>
-                  <tr key={emp.id} className={`hover:bg-slate-50`} style={{ height: compactRows ? '23px' : '48px' }}>
+                    {group.employees.map((emp, empIdx) => {
+                      const isVisitingTransition = emp.isVisiting && (empIdx === 0 || !group.employees[empIdx - 1].isVisiting);
+                      
+                      return (
+                        <React.Fragment key={emp.id}>
+                          {isVisitingTransition && (
+                            <tr>
+                              <td 
+                                colSpan={visibleDays.length + 1} 
+                                className="bg-slate-100/50 px-3 py-2 text-xs font-bold text-slate-500 border border-slate-300 border-l-4 border-l-blue-400"
+                              >
+                                Temporary Staffing
+                              </td>
+                            </tr>
+                          )}
+                          <tr className={`hover:bg-slate-50 ${emp.isVisiting ? 'bg-blue-50/10' : ''}`} style={{ height: compactRows ? '23px' : '48px' }}>
                         <td className={`sticky left-0 z-10 bg-white border border-slate-300 text-xs font-medium text-slate-900 ${compactRows ? 'px-2 py-0.5' : 'px-3 py-1.5'}`}>
                           <div className="flex items-center justify-between gap-2">
                             <div className="flex-1 min-w-0">
@@ -1690,24 +1711,16 @@ export default function RotaGrid() {
                         const homeDeptId = emp.department_id;
                         const shiftDeptId = shift.department_id;
                         
-                        // Check if we are in a context where we see the Target Dept specifically
-                        // e.g. We filtered for Ward 3 (Target) and NOT Ward 2 (Home)
-                        // Or "Visiting Staff" logic brought this row here.
-                        
-                        // If the current row context (emp) is being shown because they are visiting:
-                        // How do we know? Check if the employee is in the `visitingStaff` list?
-                        // Simpler: Check selectedDepts.
-                        
                         const viewingHome = selectedDepts.includes(homeDeptId) || selectedDepts.includes("all");
-                        const viewingTarget = selectedDepts.includes(shiftDeptId); // strict check for target if not "all"
+                        const viewingTarget = selectedDepts.includes(shiftDeptId); 
                         
-                        // If "all" is selected, viewingTarget is conceptually true, but viewingHome is also true.
-                        // In "All" view, we want to show the "Out" arrow because they are listed under their Home Dept (usually).
-                        
-                        if (viewingTarget && !viewingHome) {
+                        // Logic Update: If the employee is VISITING (i.e. shown in Temporary Staffing section), 
+                        // we always want to show "IN" status for the shifts that brought them here.
+                        if (emp.isVisiting && shiftDeptId !== homeDeptId && selectedDepts.includes(shiftDeptId)) {
+                           redeployStatus = 'in';
+                        } else if (viewingTarget && !viewingHome) {
                            redeployStatus = 'in';
                         } else {
-                           // Default to 'out' if we are viewing Home or All
                            redeployStatus = 'out';
                         }
                       }
@@ -1764,7 +1777,9 @@ export default function RotaGrid() {
 
                     })}
                       </tr>
-                  )}
+                        </React.Fragment>
+                      );
+                    })}
                   </React.Fragment>
                 )}
               </tbody>

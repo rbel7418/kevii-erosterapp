@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { colorForCode, textColorForBg, darkenHex, getActivePaletteName, getActivePaletteVariant, getCustomPalette, PALETTES } from "@/components/utils/colors";
 import { Input } from "@/components/ui/input";
 import { ShiftCode, Shift } from "@/entities/all";
-import { ArrowRightCircle, ArrowUpCircle } from "lucide-react";
+import { ArrowRightCircle, Handshake } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -363,7 +363,7 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
       }}
       title={`${code}${shift?.start_time && shift?.end_time ? ` • ${shift.start_time}-${shift.end_time}` : ""}${shift?.has_comments ? " • Has manager comments" : ""}`}
     >
-      {redeployStatus === 'in' && <ArrowUpCircle className="w-3 h-3 mr-1 text-blue-600" />}
+      {redeployStatus === 'in' && <Handshake className="w-3 h-3 mr-1 text-blue-600" />}
       {code}
     </div>
   );
