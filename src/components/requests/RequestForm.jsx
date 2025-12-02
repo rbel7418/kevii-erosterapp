@@ -31,33 +31,29 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     (async () => {
       setLoadingMyShifts(true);
       try {
-        console.log("myEmployee.id", myEmployee.id);
-        console.log("myEmployee full object", myEmployee);
-
-        // AGGRESSIVE SEARCH: Search by UUID, Business ID, Email, and Name to handle any data inconsistency
-        const queries = [
-          Shift.filter({ employee_id: myEmployee.id }, "-date", 200),
-        ];
+        // BRUTE FORCE STRATEGY: Fetch large batch of recent shifts and filter in-memory
+        // This guarantees we match exactly how the RotaGrid works (which also fetches list and filters locally)
+        // avoiding any potential issues with backend filtering or exact field matching.
+        const allRecentShifts = await Shift.list("-date", 1000);
         
-        if (myEmployee.employee_id && myEmployee.employee_id !== myEmployee.id) {
-          queries.push(Shift.filter({ employee_id: myEmployee.employee_id }, "-date", 200));
-        }
-        // Fallback: some imports might have mapped employee_id to email or name
-        if (myEmployee.user_email) {
-          queries.push(Shift.filter({ employee_id: myEmployee.user_email }, "-date", 200));
-        }
-        if (myEmployee.full_name) {
-          queries.push(Shift.filter({ employee_id: myEmployee.full_name }, "-date", 200));
-        }
-
-        const results = await Promise.allSettled(queries);
-        const allShifts = results
-          .filter(r => r.status === 'fulfilled')
-          .map(r => r.value)
-          .flat();
+        // Build a set of all possible identifiers for me
+        const myIdentifiers = new Set();
+        if (myEmployee.id) myIdentifiers.add(myEmployee.id);
+        if (myEmployee.employee_id) myIdentifiers.add(myEmployee.employee_id);
+        if (myEmployee.user_email) myIdentifiers.add(myEmployee.user_email);
+        if (myEmployee.full_name) myIdentifiers.add(myEmployee.full_name);
         
+        // Also add fuzzy variants (trimmed)
+        [...myIdentifiers].forEach(id => {
+            if (typeof id === 'string') myIdentifiers.add(id.trim());
+        });
+
+        const matchedShifts = allRecentShifts.filter(s => {
+            return myIdentifiers.has(s.employee_id) || myIdentifiers.has(String(s.employee_id).trim());
+        });
+
         // Deduplicate by ID
-        const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
+        const uniqueShifts = Array.from(new Map(matchedShifts.map(s => [s.id, s])).values());
 
         // PERMISSIVE Date Parsing Helper
         const parseShiftDate = (dateStr) => {
@@ -118,32 +114,27 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     (async () => {
       setLoadingShifts(true);
       try {
-        // Find the full target employee object to get their business ID
         const targetEmp = employees?.find(e => e.id === targetEmpId);
         
-        // AGGRESSIVE SEARCH for target too
-        const queries = [
-          Shift.filter({ employee_id: targetEmpId }, "-date", 200)
-        ];
+        // BRUTE FORCE STRATEGY for target as well
+        const allRecentShifts = await Shift.list("-date", 1000);
 
-        if (targetEmp?.employee_id && targetEmp.employee_id !== targetEmpId) {
-          queries.push(Shift.filter({ employee_id: targetEmp.employee_id }, "-date", 200));
-        }
-        if (targetEmp?.user_email) {
-          queries.push(Shift.filter({ employee_id: targetEmp.user_email }, "-date", 200));
-        }
-        if (targetEmp?.full_name) {
-          queries.push(Shift.filter({ employee_id: targetEmp.full_name }, "-date", 200));
-        }
-
-        const results = await Promise.allSettled(queries);
-        const allShifts = results
-          .filter(r => r.status === 'fulfilled')
-          .map(r => r.value)
-          .flat();
+        const targetIdentifiers = new Set();
+        if (targetEmpId) targetIdentifiers.add(targetEmpId);
+        if (targetEmp?.employee_id) targetIdentifiers.add(targetEmp.employee_id);
+        if (targetEmp?.user_email) targetIdentifiers.add(targetEmp.user_email);
+        if (targetEmp?.full_name) targetIdentifiers.add(targetEmp.full_name);
         
+        [...targetIdentifiers].forEach(id => {
+            if (typeof id === 'string') targetIdentifiers.add(id.trim());
+        });
+
+        const matchedShifts = allRecentShifts.filter(s => {
+            return targetIdentifiers.has(s.employee_id) || targetIdentifiers.has(String(s.employee_id).trim());
+        });
+
         // Deduplicate
-        const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
+        const uniqueShifts = Array.from(new Map(matchedShifts.map(s => [s.id, s])).values());
         
         const parseShiftDate = (dateStr) => {
           if (!dateStr) return new Date(2100, 0, 1);
