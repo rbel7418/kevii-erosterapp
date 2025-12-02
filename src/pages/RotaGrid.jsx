@@ -1238,11 +1238,13 @@ export default function RotaGrid() {
     
     const homeDept = departments.find(d => d.id === employee.department_id);
     
+    const targetDept = departments.find(d => d.id === targetDeptId);
     const meta = {
       initiated_by: currentUser.email,
       initiated_at: new Date().toISOString(),
       from_dept_id: employee.department_id,
       from_dept_name: homeDept?.name || "Unknown",
+      to_dept_name: targetDept?.name || "Unknown",
       original_shift_code: shift.shift_code,
       start_time: startTime,
       end_time: endTime,
