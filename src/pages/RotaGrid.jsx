@@ -1199,7 +1199,7 @@ export default function RotaGrid() {
   React.useEffect(() => {
     window._rotaGridState = {
       selectedDepts,
-      setSelectedDepts,
+      setSelectedDepts: handleSelectedDeptsChange,
       deptOptions,
       period,
       setPeriod,
