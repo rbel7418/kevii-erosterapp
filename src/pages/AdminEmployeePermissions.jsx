@@ -33,7 +33,6 @@ export default function AdminEmployeePermissions() {
   const [savingId, setSavingId] = React.useState(null);
   const [selectedIds, setSelectedIds] = React.useState(new Set());
   const [deleting, setDeleting] = React.useState(false);
-  const [cleaning, setCleaning] = React.useState(false);
 
   const [showEmpDialog, setShowEmpDialog] = React.useState(false);
   const [empEditing, setEmpEditing] = React.useState(null);
@@ -182,31 +181,6 @@ export default function AdminEmployeePermissions() {
     }
   };
 
-  const handleCleanupDuplicates = async () => {
-    if (!window.confirm("This will scan for duplicate employees (same name) and remove the ones with placeholder/invalid emails, keeping the best record. Continue?")) {
-      return;
-    }
-
-    setCleaning(true);
-    try {
-      const res = await base44.functions.invoke("cleanupDuplicates");
-      if (res.data.success) {
-        setStatusMessage(res.data.message);
-        window.alert(res.data.message + "\n\nRefreshing list...");
-        // Refresh list
-        const emps = await Employee.list();
-        setEmployees(emps || []);
-      } else {
-        window.alert("Cleanup failed: " + (res.data.message || "Unknown error"));
-      }
-    } catch (e) {
-      console.error(e);
-      window.alert("Error running cleanup: " + e.message);
-    } finally {
-      setCleaning(false);
-    }
-  };
-
   const saveRole = async (emp, mode) => {
     setSavingId(emp.id);
 
@@ -349,15 +323,6 @@ export default function AdminEmployeePermissions() {
             Delete {selectedIds.size || ""}
           </Button>
 
-          <div className="h-6 w-px bg-slate-300 mx-2" />
-
-          <Button
-            className="h-8 bg-indigo-600 hover:bg-indigo-700 text-white"
-            onClick={handleCleanupDuplicates}
-            disabled={cleaning}>
-            <Sparkles className={`w-4 h-4 mr-2 ${cleaning ? 'animate-spin' : ''}`} />
-            {cleaning ? "Cleaning..." : "Cleanup Duplicates"}
-          </Button>
         </div>
       </div>
 
