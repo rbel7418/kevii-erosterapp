@@ -29,16 +29,15 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     if (!myEmployee) return;
     (async () => {
       try {
-        // Simple filter: shifts from today onwards
-        // Note: Real app might need pagination or date range limits (e.g. next 3 months)
+        // Use specific filter for employee to avoid hitting global limits
+        // Fetching 100 most recent/future shifts should be enough to find upcoming ones
+        // Sorting by -date ensures we get the latest dates (future) first
+        const shifts = await Shift.filter({ employee_id: myEmployee.id }, "-date", 100);
+        
         const today = format(new Date(), 'yyyy-MM-dd');
-        const shifts = await Shift.list(); // Fetching all might be heavy, ideally .filter({ date: { $gte: today } }) but API might not support mongo query syntax fully yet, using list + filter js side for safety or basic filter
-        // Assuming .filter works with simple key-value or list returns all. 
-        // Let's try list and filter in JS to be safe with small dataset, or use filter if supported.
-        // Using basic filter with date check in JS
         
         const future = shifts
-          .filter(s => s.employee_id === myEmployee.id && s.date >= today && s.status !== 'cancelled')
+          .filter(s => s.date >= today && s.status !== 'cancelled')
           .sort((a, b) => a.date.localeCompare(b.date));
           
         setMyShifts(future);
@@ -58,11 +57,15 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     (async () => {
       setLoadingShifts(true);
       try {
+        // Use specific filter for target employee
+        const shifts = await Shift.filter({ employee_id: targetEmpId }, "-date", 100);
+        
         const today = format(new Date(), 'yyyy-MM-dd');
-        const shifts = await Shift.list();
+        
         const future = shifts
-          .filter(s => s.employee_id === targetEmpId && s.date >= today && s.status !== 'cancelled')
+          .filter(s => s.date >= today && s.status !== 'cancelled')
           .sort((a, b) => a.date.localeCompare(b.date));
+          
         setTargetShifts(future);
       } catch (e) {
         console.error("Failed to load target shifts", e);
