@@ -444,7 +444,7 @@ export default function RotaGrid() {
       e.is_active !== false && selectedDepts.includes(e.department_id)
     ).map(e => e.id));
 
-    const visitingShiftMap = new Map(); // empId -> shift
+    const visitingMap = new Map(); // empId -> visitingDeptId
 
     shifts.forEach(s => {
       if (!dateSet.has(s.date)) return;
@@ -452,11 +452,14 @@ export default function RotaGrid() {
       if (homeEmpIds.has(s.employee_id)) return; // Already a home employee
       
       // This is a visiting employee
-      visitingShiftMap.set(s.employee_id, true);
+      visitingMap.set(s.employee_id, s.department_id);
     });
 
-    // Get the actual employee objects
-    const visitingEmps = employees.filter(e => visitingShiftMap.has(e.id));
+    // Get the actual employee objects and attach the visiting dept ID
+    const visitingEmps = employees
+      .filter(e => visitingMap.has(e.id))
+      .map(e => ({ ...e, visitingDeptId: visitingMap.get(e.id) }));
+      
     return visitingEmps;
   }, [shifts, employees, selectedDepts, visibleDays]);
 
@@ -1279,7 +1282,10 @@ export default function RotaGrid() {
     } else if (groupBy === "department") {
       const map = {};
       filteredEmp.forEach((e) => {
-        const deptId = e.department_id || "no_dept";
+        // Group visitors into their VISITING department (target), not their Home department
+        // This keeps them in the relevant list view
+        const deptId = (e.isVisiting && e.visitingDeptId) ? e.visitingDeptId : (e.department_id || "no_dept");
+        
         if (!map[deptId]) map[deptId] = [];
         map[deptId].push(e);
       });
@@ -1644,15 +1650,14 @@ export default function RotaGrid() {
               <tbody>
                 {grouped.map((group, gIdx) =>
                 <React.Fragment key={gIdx}>
-                    {group.label &&
-                  <tr>
+                    {group.label && !(selectedDepts.length === 1 && selectedDepts[0] !== "all" && grouped.length === 1) && (
+                      <tr>
                         <td
-                      colSpan={visibleDays.length + 1} className="bg-gray-900 text-blue-50 px-3 py-2 text-xs font-bold border border-slate-300">
-
+                          colSpan={visibleDays.length + 1} className="bg-gray-900 text-blue-50 px-3 py-2 text-xs font-bold border border-slate-300">
                           {group.label}
                         </td>
                       </tr>
-                  }
+                    )}
                     {group.employees.map((emp, empIdx) => {
                       const isVisitingTransition = emp.isVisiting && (empIdx === 0 || !group.employees[empIdx - 1].isVisiting);
                       
