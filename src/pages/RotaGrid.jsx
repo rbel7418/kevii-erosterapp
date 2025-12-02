@@ -1711,8 +1711,8 @@ export default function RotaGrid() {
                       
                       // HIDE IRRELEVANT SHIFTS FOR VISITING STAFF
                       // If this is a visiting staff member (Temporary Staffing), only show shifts relevant to the current view.
-                      // i.e., hide their home shifts or shifts in other wards.
-                      if (emp.isVisiting && shift && !selectedDepts.includes(shift.department_id)) {
+                      const isShiftInView = selectedDepts.includes("all") || selectedDepts.includes(shift?.department_id);
+                      if (emp.isVisiting && shift && !isShiftInView) {
                         rawCode = "";
                       }
 
@@ -1724,14 +1724,15 @@ export default function RotaGrid() {
                         const homeDeptId = emp.department_id;
                         const shiftDeptId = shift.department_id;
                         
-                        const viewingHome = selectedDepts.includes(homeDeptId) || selectedDepts.includes("all");
-                        const viewingTarget = selectedDepts.includes(shiftDeptId); 
+                        const viewingHome = selectedDepts.includes("all") || selectedDepts.includes(homeDeptId);
+                        const viewingTarget = selectedDepts.includes("all") || selectedDepts.includes(shiftDeptId);
                         
-                        // Logic Update: If the employee is VISITING (i.e. shown in Temporary Staffing section), 
-                        // we always want to show "IN" status for the shifts that brought them here.
-                        if (emp.isVisiting && shiftDeptId !== homeDeptId && selectedDepts.includes(shiftDeptId)) {
+                        // If I am visiting (Temporary Staffing), I am by definition here because of a redeployment IN
+                        if (emp.isVisiting && shiftDeptId !== homeDeptId && isShiftInView) {
                            redeployStatus = 'in';
-                        } else if (viewingTarget && !viewingHome) {
+                        } 
+                        // Otherwise standard logic
+                        else if (viewingTarget && !viewingHome) {
                            redeployStatus = 'in';
                         } else {
                            redeployStatus = 'out';

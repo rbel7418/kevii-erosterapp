@@ -364,9 +364,12 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
       title={`${code}${shift?.start_time && shift?.end_time ? ` • ${shift.start_time}-${shift.end_time}` : ""}${shift?.has_comments ? " • Has manager comments" : ""}`}
     >
       {redeployStatus === 'in' && <Handshake className="w-3 h-3 mr-1 text-blue-600" />}
-      {code}
-    </div>
-  );
+      {redeployStatus === 'in' && shift.start_time && shift.end_time 
+        ? `${shift.start_time}-${shift.end_time}` 
+        : code
+      }
+      </div>
+      );
 
   // Check for 48h lock on redeployed shifts
   const isRedeployLocked = React.useMemo(() => {
