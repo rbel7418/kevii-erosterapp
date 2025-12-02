@@ -1085,6 +1085,10 @@ export default function RotaGrid() {
   };
 
   const canManage = currentUser?.role === "admin";
+  const access = React.useMemo(() => {
+    if (currentUser?.role === "admin") return "admin";
+    return currentUser?.access_level || "staff";
+  }, [currentUser]);
 
   const shiftsByEmpDate = React.useMemo(() => {
     const m = {};
