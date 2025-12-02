@@ -1448,9 +1448,18 @@ export default function Layout({ children, currentPageName }) {
                         className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-slate-300 scale-75" />
                       <Lock className={`w-3.5 h-3.5 ${rotaState.rangeLocked ? 'text-green-600' : 'text-slate-400'}`} />
                     </div>
-                  </div>
+                    </div>
 
-                  {/* Actions Group Removed */}
+                    {rotaState.canManage && (
+                    <Button
+                      onClick={rotaState.togglePublish}
+                      size="sm"
+                      className={`${rotaState.published ? "bg-slate-900 hover:bg-slate-800" : "bg-sky-600 hover:bg-sky-700"} h-8 gap-1 px-2 text-white shrink-0`}
+                      title={rotaState.published ? "Published" : "Publish"}>
+                      <Lock className="w-3.5 h-3.5" />
+                      <span className="text-xs font-medium hidden 2xl:inline">{rotaState.published ? "Published" : "Publish"}</span>
+                    </Button>
+                    )}
                     </div>
                     }
 

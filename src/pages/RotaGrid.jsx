@@ -1503,26 +1503,15 @@ export default function RotaGrid() {
               )}
 
               {canManage && (
-                <>
-                  <Button
-                    onClick={togglePublish}
-                    size="sm"
-                    className={`${published ? "bg-slate-900 hover:bg-slate-800" : "bg-sky-600 hover:bg-sky-700"} h-8 gap-1 px-2 text-white`}
-                    title={published ? "Published" : "Publish"}>
-                    <Lock className="w-3.5 h-3.5" />
-                    <span className="text-xs font-medium">{published ? "Published" : "Publish"}</span>
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 gap-1 px-2 themed"
-                    onClick={() => setShowSnapshot(true)}
-                    title="Snapshots">
-                    <Save className="w-3.5 h-3.5" />
-                    <span className="text-xs font-medium">Snapshot</span>
-                  </Button>
-                </>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 gap-1 px-2 themed"
+                  onClick={() => setShowSnapshot(true)}
+                  title="Snapshots">
+                  <Save className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">Snapshot</span>
+                </Button>
               )}
 
               {access !== "staff" && (
