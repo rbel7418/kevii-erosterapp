@@ -59,12 +59,41 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
         // Deduplicate by ID
         const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
 
-        // Use yesterday to avoid timezone issues excluding today's shifts
-        const yesterday = format(addDays(new Date(), -1), 'yyyy-MM-dd');
-        
+        // Robust Date Parsing Helper
+        const parseShiftDate = (dateStr) => {
+          if (!dateStr) return new Date(0); // invalid dates go to past
+          
+          // Handle ISO YYYY-MM-DD
+          if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) return parseISO(dateStr);
+          
+          // Handle DD/MM/YYYY
+          if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            const [d, m, y] = dateStr.split('/');
+            return new Date(y, m - 1, d);
+          }
+          
+          // Handle DD-Mon (assume current year or next year if month is earlier than now?)
+          // Actually, assuming current year (2025 based on your data) is safest for now, or extract from creation date if possible.
+          // For now, we'll try to parse "30-Nov" by appending current year if needed, or just let Date.parse handle it if it can (it often can't).
+          if (dateStr.match(/^\d{1,2}-[A-Za-z]{3}$/)) {
+             const year = new Date().getFullYear();
+             return new Date(`${dateStr}-${year}`);
+          }
+
+          // Fallback to direct Date parsing
+          const d = new Date(dateStr);
+          return isNaN(d.getTime()) ? new Date(0) : d;
+        };
+
+        const yesterday = addDays(startOfDay(new Date()), -1); // Compare as Date objects
+
         const future = uniqueShifts
-          .filter(s => s.date >= yesterday && s.status !== 'cancelled')
-          .sort((a, b) => a.date.localeCompare(b.date));
+          .filter(s => {
+            if (s.status === 'cancelled') return false;
+            const sDate = parseShiftDate(s.date);
+            return sDate >= yesterday;
+          })
+          .sort((a, b) => parseShiftDate(a.date) - parseShiftDate(b.date)); // Sort by time value
           
         setMyShifts(future);
       } catch (e) {
@@ -109,11 +138,31 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
         // Deduplicate
         const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
         
-        const today = format(new Date(), 'yyyy-MM-dd');
+        // Re-use the robust date parser from above (we need to define it outside or copy it)
+        const parseShiftDate = (dateStr) => {
+          if (!dateStr) return new Date(0);
+          if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) return parseISO(dateStr);
+          if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            const [d, m, y] = dateStr.split('/');
+            return new Date(y, m - 1, d);
+          }
+          if (dateStr.match(/^\d{1,2}-[A-Za-z]{3}$/)) {
+             const year = new Date().getFullYear();
+             return new Date(`${dateStr}-${year}`);
+          }
+          const d = new Date(dateStr);
+          return isNaN(d.getTime()) ? new Date(0) : d;
+        };
+
+        const today = startOfDay(new Date());
         
         const future = uniqueShifts
-          .filter(s => s.date >= today && s.status !== 'cancelled')
-          .sort((a, b) => a.date.localeCompare(b.date));
+          .filter(s => {
+             if (s.status === 'cancelled') return false;
+             const sDate = parseShiftDate(s.date);
+             return sDate >= today;
+          })
+          .sort((a, b) => parseShiftDate(a.date) - parseShiftDate(b.date));
           
         setTargetShifts(future);
       } catch (e) {
