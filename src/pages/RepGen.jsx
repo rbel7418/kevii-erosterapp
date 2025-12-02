@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Download, Plus, Filter, Play, RefreshCcw, ChevronLeft, ChevronRight, TrendingUp, Info, X } from "lucide-react";
-import { Shift, Employee, Department, Role, WardCensus } from "@/entities/all";
+import { Shift, Employee, Department, Role, WardCensus, ShiftCode } from "@/entities/all";
 import { PTListAdmission } from "@/entities/PTListAdmission";
 import { calcShiftHoursSafe } from "@/components/utils/time";
 import { HealthBanner } from "@/components/common/HealthWidget";
@@ -30,6 +30,13 @@ const CATALOG = [
     description: "Tabular roster with employee, date, shift, hours, cost.",
     defaultColumns: ["date", "dept", "employee_id", "name", "role", "shift", "hours", "cost"],
     source: "staff",
+  },
+  {
+    id: "redeployment-analysis",
+    label: "Staffing • Redeployment",
+    description: "Analysis of staff movements between wards.",
+    defaultColumns: ["date", "employee", "home_dept", "deployed_to", "shift", "hours", "notes"],
+    source: "redeployment",
   },
   {
     id: "finance-hours",
@@ -71,6 +78,7 @@ const CATALOG = [
 
 const SOURCE_COLUMNS = {
   staff: ["date", "dept", "employee_id", "name", "role", "shift", "hours", "cost", "notes"],
+  redeployment: ["date", "employee", "home_dept", "deployed_to", "shift", "hours", "notes"],
   finance: ["date", "dept", "pay_code", "hours", "cost"],
   beds: ["date", "ward", "patients_day", "patients_night"],
   ptlist: [
@@ -250,6 +258,9 @@ export default function RepGen() {
   };
 
   const [deptFilter, setDeptFilter] = useState("all");
+  const [employeeFilter, setEmployeeFilter] = useState("all");
+  const [shiftCodeFilter, setShiftCodeFilter] = useState("all");
+  const [redeployFilter, setRedeployFilter] = useState("all"); // all, redeployed, home
   const [query, setQuery] = useState("");
 
   // Data
@@ -257,6 +268,7 @@ export default function RepGen() {
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [shiftCodes, setShiftCodes] = useState([]);
   const [census, setCensus] = useState([]);
   const [ptlist, setPtlist] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -307,13 +319,14 @@ export default function RepGen() {
   const load = async () => {
     setLoading(true);
     try {
-      const [sh, emps, depts, rl, wc, pl] = await Promise.all([
+      const [sh, emps, depts, rl, wc, pl, sc] = await Promise.all([
         Shift.list("-date", 2000).catch(() => []),
         Employee.list().catch(() => []),
         Department.list().catch(() => [],),
         Role.list().catch(() => []),
         WardCensus.list("-date", 1000).catch(() => []),
         PTListAdmission.list("-admission_date", 5000).catch(() => []),
+        ShiftCode.list().catch(() => []),
       ]);
       setShifts(sh || []);
       setEmployees(emps || []);
@@ -321,6 +334,7 @@ export default function RepGen() {
       setRoles(rl || []);
       setCensus(wc || []);
       setPtlist(pl || []);
+      setShiftCodes(sc || []);
     } finally {
       setLoading(false);
     }
@@ -352,14 +366,26 @@ export default function RepGen() {
     return d >= startDate && d <= endDate;
   };
 
+  const matchesFilters = (s) => {
+    if (!s) return false;
+    const dKey = String(s.date || "").slice(0, 10);
+    if (!inDateRange(dKey)) return false;
+    
+    if (deptFilter !== "all" && s.department_id !== deptFilter) return false;
+    if (employeeFilter !== "all" && s.employee_id !== employeeFilter) return false;
+    if (shiftCodeFilter !== "all" && s.shift_code !== shiftCodeFilter) return false;
+    
+    if (redeployFilter === "redeployed" && !s.is_redeployed) return false;
+    if (redeployFilter === "home" && s.is_redeployed) return false;
+
+    return true;
+  };
+
   // STAFF rows (safe)
   const staffRows = useMemo(() => {
     const rows = [];
     (shifts || []).forEach((s) => {
-      if (!s) return;
-      const dKey = String(s.date || "").slice(0, 10);
-      if (!inDateRange(dKey)) return;
-      if (deptFilter !== "all" && s.department_id !== deptFilter) return;
+      if (!matchesFilters(s)) return;
 
       const emp = s.employee_id ? empById[s.employee_id] : null;
       const role = s.role_id ? roleById[s.role_id] : null;
@@ -369,7 +395,7 @@ export default function RepGen() {
       const cost = Math.round((Number.isFinite(hrs) ? hrs : 0) * rate);
 
       rows.push({
-        date: dKey,
+        date: String(s.date || "").slice(0, 10),
         dept: dept?.name || "",
         employee_id: emp?.employee_id || "",
         name: emp?.full_name || emp?.user_email || "",
@@ -381,24 +407,48 @@ export default function RepGen() {
       });
     });
     return applyQuery(rows, query);
-  }, [shifts, employees, departments, roles, startDate, endDate, deptFilter, query, empById, roleById, deptById]);
+  }, [shifts, employees, departments, roles, startDate, endDate, deptFilter, employeeFilter, shiftCodeFilter, redeployFilter, query, empById, roleById, deptById]);
+
+  // REDEPLOYMENT rows
+  const redeploymentRows = useMemo(() => {
+    const rows = [];
+    (shifts || []).forEach((s) => {
+      if (!matchesFilters(s)) return;
+      if (!s.is_redeployed && redeployFilter !== "home") {
+        if (!s.is_redeployed) return; 
+      }
+
+      const emp = s.employee_id ? empById[s.employee_id] : null;
+      const toDept = s.department_id ? deptById[s.department_id] : null;
+      const fromDept = s.redeployed_from_id ? deptById[s.redeployed_from_id] : null;
+      const hrs = Number(calcShiftHoursSafe(s, 0));
+
+      rows.push({
+        date: String(s.date || "").slice(0, 10),
+        employee: emp?.full_name || "",
+        home_dept: fromDept?.name || "Unknown",
+        deployed_to: toDept?.name || "Unknown",
+        shift: s.shift_code || "",
+        hours: Number.isFinite(hrs) ? Number(hrs.toFixed(2)) : 0,
+        notes: s.redeploy_meta?.notes || s.notes || "",
+      });
+    });
+    return applyQuery(rows, query);
+  }, [shifts, employees, departments, startDate, endDate, deptFilter, employeeFilter, shiftCodeFilter, redeployFilter, query, empById, deptById]);
 
   // FINANCE rows (safe)
   const financeRows = useMemo(() => {
     const map = new Map(); // key: date|dept|role
     (shifts || []).forEach((s) => {
-      if (!s) return;
-      const dKey = String(s.date || "").slice(0, 10);
-      if (!inDateRange(dKey)) return;
-      if (deptFilter !== "all" && s.department_id !== deptFilter) return;
+      if (!matchesFilters(s)) return;
 
       const role = s.role_id ? roleById[s.role_id] : null;
       const dept = s.department_id ? deptById[s.department_id] : null;
       const hrs = Number(calcShiftHoursSafe(s, 0));
       const rate = Number(role?.hourly_rate || 0);
-      const key = `${dKey}|${dept?.name || ""}|${role?.name || "Unknown"}`;
+      const key = `${String(s.date).slice(0,10)}|${dept?.name || ""}|${role?.name || "Unknown"}`;
       const prev = map.get(key) || {
-        date: dKey,
+        date: String(s.date).slice(0,10),
         dept: dept?.name || "",
         pay_code: role?.name || "Unknown",
         hours: 0,
@@ -414,7 +464,7 @@ export default function RepGen() {
       cost: Math.round(r.cost),
     }));
     return applyQuery(rows, query);
-  }, [shifts, departments, roles, startDate, endDate, deptFilter, query, roleById, deptById]);
+  }, [shifts, departments, roles, startDate, endDate, deptFilter, employeeFilter, shiftCodeFilter, redeployFilter, query, roleById, deptById]);
 
   // BEDS rows (safe)
   const bedRows = useMemo(() => {
@@ -477,10 +527,11 @@ export default function RepGen() {
 
   const dataByComp = useMemo(() => ({
     "staffing-rota": staffRows,
+    "redeployment-analysis": redeploymentRows,
     "finance-hours": financeRows,
     "flow-census": bedRows,
     "ptlist-admissions": ptRows,
-  }), [staffRows, financeRows, bedRows, ptRows]);
+  }), [staffRows, redeploymentRows, financeRows, bedRows, ptRows]);
 
   // Safer search filter
   function applyQuery(rows, q) {
@@ -506,6 +557,18 @@ export default function RepGen() {
       headcount: new Set(rows.map(r => r?.employee_id || r?.name).filter(Boolean)).size
     };
   }, [staffRows]);
+
+  const redeploymentSummary = useMemo(() => {
+    const rows = (redeploymentRows || []).filter(Boolean);
+    const hoursArr = rows.map(r => Number(r?.hours)).filter(Number.isFinite);
+    return {
+      movements: rows.length,
+      totalHours: sum(hoursArr),
+      avgHours: hoursArr.length ? sum(hoursArr) / hoursArr.length : 0,
+      uniqueStaff: new Set(rows.map(r => r?.employee).filter(Boolean)).size,
+      uniqueDestinations: new Set(rows.map(r => r?.deployed_to).filter(Boolean)).size
+    };
+  }, [redeploymentRows]);
 
   const financeSummary = useMemo(() => {
     const rows = (financeRows || []).filter(Boolean);
@@ -572,6 +635,26 @@ export default function RepGen() {
       cost: Math.round(map[d]?.cost ?? 0)
     }));
   }, [shifts, startDate, endDate, deptFilter, roleById, empById, daysInRange]);
+
+  const redeploymentDaily = useMemo(() => {
+    const map = {};
+    daysInRange.forEach(d => (map[d] = { d, count: 0 }));
+    (shifts || []).forEach(s => {
+      if (!s) return;
+      const dKey = String(s.date || "").slice(0, 10);
+      if (dKey < startDate || dKey > endDate) return;
+      // Only count if it's a redeployed shift AND matches general filters (excluding redeployFilter itself)
+      if (s.is_redeployed && inDateRange(dKey) && (deptFilter === "all" || s.department_id === deptFilter) && (employeeFilter === "all" || s.employee_id === employeeFilter) && (shiftCodeFilter === "all" || s.shift_code === shiftCodeFilter)) {
+        if (!map[dKey]) map[dKey] = { d: dKey, count: 0 };
+        map[dKey].count += 1;
+      }
+    });
+    return daysInRange.map(d => ({
+      d,
+      count: map[d]?.count ?? 0
+    }));
+  }, [shifts, startDate, endDate, deptFilter, employeeFilter, shiftCodeFilter, daysInRange, inDateRange]);
+
 
   const financeDaily = useMemo(() => {
     const map = {};
@@ -897,7 +980,6 @@ export default function RepGen() {
               </div>
               <div>
                 <Label className="text-xs text-slate-600">Department</Label>
-                {/* ... keep existing code (Department Select) ... */}
                 <Select value={deptFilter} onValueChange={setDeptFilter}>
                   <SelectTrigger><SelectValue placeholder="All departments" /></SelectTrigger>
                   <SelectContent>
@@ -906,17 +988,47 @@ export default function RepGen() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="md:col-span-1"> {/* Adjusted from md:col-span-2 to md:col-span-1 to fit 7 columns */}
+              
+              <div>
+                <Label className="text-xs text-slate-600">Employee</Label>
+                <Select value={employeeFilter} onValueChange={setEmployeeFilter}>
+                  <SelectTrigger><SelectValue placeholder="All employees" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    {employees.map(e => <SelectItem key={e.id} value={e.id}>{e.full_name || e.user_email}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label className="text-xs text-slate-600">Shift Code</Label>
+                <Select value={shiftCodeFilter} onValueChange={setShiftCodeFilter}>
+                  <SelectTrigger><SelectValue placeholder="All codes" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    {shiftCodes.map(sc => <SelectItem key={sc.id} value={sc.code}>{sc.code}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label className="text-xs text-slate-600">Redeployment</Label>
+                <Select value={redeployFilter} onValueChange={setRedeployFilter}>
+                  <SelectTrigger><SelectValue placeholder="All" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Shifts</SelectItem>
+                    <SelectItem value="redeployed">Redeployed Only</SelectItem>
+                    <SelectItem value="home">Home Dept Only</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="md:col-span-1">
                 <Label className="text-xs text-slate-600">Search</Label>
                 <div className="flex gap-2">
                   <Input placeholder="Filter rows…" value={query} onChange={(e) => setQuery(e.target.value)} />
                   <Button variant="outline" onClick={() => setQuery("")}><Filter className="w-4 h-4" /></Button>
                 </div>
-              </div>
-              <div className="flex items-end">
-                <Button variant="outline" onClick={() => setComponentsOpen(true)} className="w-full">
-                  Manage components
-                </Button>
               </div>
             </div>
           </CardContent>
@@ -983,6 +1095,16 @@ export default function RepGen() {
                             { k: "Avg hrs/shift", v: fmt(staffSummary.avgHours), series: avgHoursSeries },
                             { k: "Cost", v: "£" + fmt(staffSummary.cost, 0), series: staffDaily.map(x => ({ d: x.d, v: x.cost })), unit: "£" },
                             { k: "Headcount", v: staffSummary.headcount, series: [] }
+                          ];
+                        }
+                        if (id === "redeployment-analysis") {
+                          const redeploySeries = redeploymentDaily.map(x => ({ d: x.d, v: x.count }));
+                          return [
+                            { k: "Movements", v: redeploymentSummary.movements, series: redeploySeries },
+                            { k: "Total Hours", v: fmt(redeploymentSummary.totalHours), series: [] },
+                            { k: "Avg Shift", v: fmt(redeploymentSummary.avgHours), series: [] },
+                            { k: "Unique Staff", v: redeploymentSummary.uniqueStaff, series: [] },
+                            { k: "Destinations", v: redeploymentSummary.uniqueDestinations, series: [] }
                           ];
                         }
                         if (id === "finance-hours") {
