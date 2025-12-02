@@ -1708,11 +1708,19 @@ export default function RotaGrid() {
                       {
                         rawCode = "";
                       }
+                      
+                      // HIDE IRRELEVANT SHIFTS FOR VISITING STAFF
+                      // If this is a visiting staff member (Temporary Staffing), only show shifts relevant to the current view.
+                      // i.e., hide their home shifts or shifts in other wards.
+                      if (emp.isVisiting && shift && !selectedDepts.includes(shift.department_id)) {
+                        rawCode = "";
+                      }
+
                       const code = rawCode;
 
                       // Determine Redeploy Status
                       let redeployStatus = null; // null, 'out', 'in'
-                      if (shift && shift.is_redeployed) {
+                      if (shift && shift.is_redeployed && code) {
                         const homeDeptId = emp.department_id;
                         const shiftDeptId = shift.department_id;
                         
