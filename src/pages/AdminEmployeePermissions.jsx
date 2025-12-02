@@ -55,6 +55,18 @@ export default function AdminEmployeePermissions() {
         setUsers(us || []);
         setRoles(rs || []);
         setDepartments(ds || []);
+
+        // Auto-cleanup trigger
+        if (!sessionStorage.getItem('duplicates_cleaned')) {
+          sessionStorage.setItem('duplicates_cleaned', '1');
+          base44.functions.invoke("cleanupDuplicates").then(res => {
+            if (res.data?.deletedCount > 0) {
+              window.alert(`Database Cleanup Report:\n\nFound and removed ${res.data.deletedCount} duplicate employee records with placeholder/missing emails.`);
+              // Refresh list
+              Employee.list().then(fresh => setEmployees(fresh || []));
+            }
+          }).catch(e => console.error("Cleanup check failed", e));
+        }
       }
     })();
   }, []);
