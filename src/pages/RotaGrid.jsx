@@ -38,6 +38,7 @@ import { Switch } from "@/components/ui/switch";
 import SnapshotDialog from "@/components/schedule/SnapshotDialog";
 import { emailPrefix } from "@/components/utils/strings";
 import RedeployDialog from "@/components/roster/RedeployDialog";
+import RedeployDetailsDialog from "@/components/roster/RedeployDetailsDialog";
 
 
 function ExportDialog({ open, onClose, startDate, endDate, departmentId, shifts }) {
