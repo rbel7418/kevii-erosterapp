@@ -11,8 +11,7 @@ const TOOLS = [
 { name: "Sickness Log", page: "Attendance", icon: Activity, color: "#ef4444" },
 { name: "Unplanned Admissions", page: "InteractiveBI", icon: TrendingUp, color: "#10b981" },
 { name: "Silver/Gold Report", page: "Reports", icon: FileText, color: "#f59e0b" },
-{ name: "Refused Admissions", page: "InteractiveBI", icon: AlertCircle, color: "#ec4899" },
-{ name: "Bulk Email Update", page: "BulkEmailUpdate", icon: FileText, color: "#6366f1" }];
+{ name: "Refused Admissions", page: "InteractiveBI", icon: AlertCircle, color: "#ec4899" }];
 
 
 function ToolIcon({ tool, onClick }) {

@@ -1626,6 +1626,7 @@ export default function Layout({ children, currentPageName }) {
                       Upload Template
                     </DropdownMenuItem>
                     }
+
                     <DropdownMenuItem onClick={() => window.location.href = createPageUrl("Compliance")}>
                       <ShieldCheck className="w-4 h-4 mr-2" />
                       Compliance

@@ -41,7 +41,6 @@ import TrainingRotaGrid from './pages/TrainingRotaGrid';
 import TrainingToolLauncher from './pages/TrainingToolLauncher';
 import TrainingRequests from './pages/TrainingRequests';
 import TrainingAdminHub from './pages/TrainingAdminHub';
-import BulkEmailUpdate from './pages/BulkEmailUpdate';
 import __Layout from './Layout.jsx';
 
 
@@ -89,7 +88,6 @@ export const PAGES = {
     "TrainingToolLauncher": TrainingToolLauncher,
     "TrainingRequests": TrainingRequests,
     "TrainingAdminHub": TrainingAdminHub,
-    "BulkEmailUpdate": BulkEmailUpdate,
 }
 
 export const pagesConfig = {
