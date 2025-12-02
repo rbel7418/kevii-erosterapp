@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { ShieldAlert, Trash2, Pencil, Sparkles } from "lucide-react";
+import { ShieldAlert, Trash2, Pencil } from "lucide-react";
 import { enqueueEmployeeDelete } from "@/components/utils/deleteQueue";
 import EmployeeDialog from "@/components/team/EmployeeDialog";
 import { base44 } from "@/api/base44Client";
@@ -55,17 +55,21 @@ export default function AdminEmployeePermissions() {
         setUsers(us || []);
         setRoles(rs || []);
         setDepartments(ds || []);
-
+        
         // Auto-cleanup trigger
         if (!sessionStorage.getItem('duplicates_cleaned')) {
           sessionStorage.setItem('duplicates_cleaned', '1');
-          base44.functions.invoke("cleanupDuplicates").then(res => {
+          try {
+            const res = await base44.functions.invoke("cleanupDuplicates");
             if (res.data?.deletedCount > 0) {
               window.alert(`Database Cleanup Report:\n\nFound and removed ${res.data.deletedCount} duplicate employee records with placeholder/missing emails.`);
               // Refresh list
-              Employee.list().then(fresh => setEmployees(fresh || []));
+              const fresh = await Employee.list();
+              setEmployees(fresh || []);
             }
-          }).catch(e => console.error("Cleanup check failed", e));
+          } catch (e) {
+            console.error("Cleanup check failed", e);
+          }
         }
       }
     })();
@@ -334,7 +338,6 @@ export default function AdminEmployeePermissions() {
             <Trash2 className="w-4 h-4 mr-2" />
             Delete {selectedIds.size || ""}
           </Button>
-
         </div>
       </div>
 
