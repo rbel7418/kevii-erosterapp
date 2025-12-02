@@ -31,6 +31,9 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
     (async () => {
       setLoadingMyShifts(true);
       try {
+        console.log("myEmployee.id", myEmployee.id);
+        console.log("myEmployee full object", myEmployee);
+
         // AGGRESSIVE SEARCH: Search by UUID, Business ID, Email, and Name to handle any data inconsistency
         const queries = [
           Shift.filter({ employee_id: myEmployee.id }, "-date", 200),
@@ -50,6 +53,9 @@ export default function RequestForm({ submitting, onSubmit, myEmployee, employee
         const results = await Promise.all(queries);
         const allShifts = results.flat();
         
+        console.log("Sample dates found (raw):", allShifts.slice(0, 5).map(s => s.date));
+        console.log("All shifts found:", allShifts);
+
         // Deduplicate by ID
         const uniqueShifts = Array.from(new Map(allShifts.map(s => [s.id, s])).values());
 
