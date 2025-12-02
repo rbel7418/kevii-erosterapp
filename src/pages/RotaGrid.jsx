@@ -1651,10 +1651,23 @@ export default function RotaGrid() {
                         </td>
                       </tr>
                   }
-                    {group.employees.map((emp) =>
-                  <tr key={emp.id} className={`hover:bg-slate-50`} style={{ height: compactRows ? '23px' : '48px' }}>
-                        <td className={`sticky left-0 z-10 bg-white border border-slate-300 text-xs font-medium text-slate-900 ${compactRows ? 'px-2 py-0.5' : 'px-3 py-1.5'}`}>
-                          <div className="flex items-center justify-between gap-2">
+                    {group.employees.map((emp, empIdx) => {
+                      const showSpacer = emp._isVisiting && (!group.employees[empIdx - 1] || !group.employees[empIdx - 1]._isVisiting);
+                      return (
+                        <React.Fragment key={emp.id}>
+                          {showSpacer && (
+                            <tr>
+                              <td 
+                                colSpan={visibleDays.length + 1} 
+                                className="bg-slate-800 text-white px-3 py-1.5 text-xs font-bold border border-slate-300"
+                              >
+                                Temporary Staffing
+                              </td>
+                            </tr>
+                          )}
+                          <tr className={`hover:bg-slate-50`} style={{ height: compactRows ? '23px' : '48px' }}>
+                            <td className={`sticky left-0 z-10 bg-white border border-slate-300 text-xs font-medium text-slate-900 ${compactRows ? 'px-2 py-0.5' : 'px-3 py-1.5'}`}>
+                              <div className="flex items-center justify-between gap-2">
                             <div className="flex-1 min-w-0">
                               <div className="text-gray-700 font-semi truncate" style={compactRows ? { fontSize: '13px', lineHeight: '14px' } : {}}>{emp.full_name || emailPrefix(emp.email)}</div>
                               {!compactRows &&
@@ -1768,8 +1781,10 @@ export default function RotaGrid() {
                             </td>);
 
                     })}
-                      </tr>
-                  )}
+                          </tr>
+                        </React.Fragment>
+                      );
+                    })}
                   </React.Fragment>
                 )}
               </tbody>
