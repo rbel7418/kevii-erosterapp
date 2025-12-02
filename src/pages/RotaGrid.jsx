@@ -37,6 +37,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import SnapshotDialog from "@/components/schedule/SnapshotDialog";
 import { emailPrefix } from "@/components/utils/strings";
+import RedeployDialog from "@/components/roster/RedeployDialog";
 
 
 function ExportDialog({ open, onClose, startDate, endDate, departmentId, shifts }) {
@@ -429,6 +430,37 @@ export default function RotaGrid() {
     return "";
   }, [selectedDepts]);
 
+  // Calculate Visiting Staff (Redeployed IN)
+  const visitingStaff = React.useMemo(() => {
+    if (selectedDepts.includes("all") || selectedDepts.length === 0) return [];
+    
+    // Find shifts that are IN selected departments, but belong to employees NOT in selected departments
+    // We need to scan ALL shifts in the period, not just visible ones (because visible ones are filtered by filteredEmpIds)
+    
+    const dateSet = new Set(visibleDays.map((d) => format(d, "yyyy-MM-dd")));
+    
+    // Get IDs of home staff
+    const homeEmpIds = new Set(employees.filter(e => 
+      e.is_active !== false && selectedDepts.includes(e.department_id)
+    ).map(e => e.id));
+
+    const visitingShiftMap = new Map(); // empId -> shift
+
+    shifts.forEach(s => {
+      if (!dateSet.has(s.date)) return;
+      if (!selectedDepts.includes(s.department_id)) return; // Shift must be in this dept
+      if (homeEmpIds.has(s.employee_id)) return; // Already a home employee
+      
+      // This is a visiting employee
+      visitingShiftMap.set(s.employee_id, true);
+    });
+
+    // Get the actual employee objects
+    const visitingEmps = employees.filter(e => visitingShiftMap.has(e.id));
+    return visitingEmps;
+  }, [shifts, employees, selectedDepts, visibleDays]);
+
+
   const filteredEmp = React.useMemo(() => {
     let filtered;
     // Filter by department
@@ -455,6 +487,15 @@ export default function RotaGrid() {
 
         return e.contract_type === "Permanent";
       });
+      
+      // ADD VISITING STAFF
+      // We append them to the list so they show up in the grid
+      const existingIds = new Set(filtered.map(e => e.id));
+      visitingStaff.forEach(ve => {
+        if (!existingIds.has(ve.id)) {
+          filtered.push(ve);
+        }
+      });
     }
 
     // Sort by sort_index (ascending), then by name
@@ -466,7 +507,7 @@ export default function RotaGrid() {
 
       return (a.full_name || "").localeCompare(b.full_name || "");
     });
-  }, [employees, selectedDepts, activeDeptIds]);
+  }, [employees, selectedDepts, activeDeptIds, visitingStaff]);
 
   const filteredEmpIds = React.useMemo(() => {
     return new Set(filteredEmp.map((e) => e.id));
@@ -476,6 +517,9 @@ export default function RotaGrid() {
     const dateSet = new Set(visibleDays.map((d) => format(d, "yyyy-MM-dd")));
     return shifts.filter((s) => {
       if (!dateSet.has(s.date)) return false;
+      // Show if:
+      // 1. Belongs to a filtered employee (Home or Visiting)
+      // 2. OR if it's a "Redeployed Out" shift from a Home employee (the shift dept ID will be different, but emp ID matches)
       if (!filteredEmpIds.has(s.employee_id)) return false;
       return true;
     });
@@ -491,6 +535,8 @@ export default function RotaGrid() {
   const [showSnapshot, setShowSnapshot] = React.useState(false);
   const [showGridReplicaImport, setShowGridReplicaImport] = React.useState(false);
   const [showAddStaff, setShowAddStaff] = React.useState(false);
+  const [redeployData, setRedeployData] = React.useState(null); // { shift, employee }
+  const [redeployInfoShift, setRedeployInfoShift] = React.useState(null);
 
   const [activePaletteName, setActivePaletteName] = React.useState("classic");
   const [activePaletteVariant, setActivePaletteVariant] = React.useState(0);
@@ -1186,6 +1232,38 @@ export default function RotaGrid() {
     setEmployees(updatedEmp || []);
   };
 
+  const handleRedeployConfirm = async ({ targetDeptId, startTime, endTime, notes }) => {
+    if (!redeployData) return;
+    const { shift, employee } = redeployData;
+    
+    const homeDept = departments.find(d => d.id === employee.department_id);
+    
+    const meta = {
+      initiated_by: currentUser.email,
+      initiated_at: new Date().toISOString(),
+      from_dept_id: employee.department_id,
+      from_dept_name: homeDept?.name || "Unknown",
+      original_shift_code: shift.shift_code,
+      start_time: startTime,
+      end_time: endTime,
+      notes: notes
+    };
+
+    await Shift.update(shift.id, {
+      department_id: targetDeptId,
+      redeployed_from_id: employee.department_id,
+      is_redeployed: true,
+      redeploy_meta: meta,
+      start_time: startTime,
+      end_time: endTime,
+      notes: notes ? (shift.notes ? shift.notes + "\nRedeploy: " + notes : "Redeploy: " + notes) : shift.notes
+    });
+
+    const updated = await Shift.list();
+    setShifts(updated || []);
+    setRedeployData(null);
+  };
+
   const grouped = React.useMemo(() => {
     if (groupBy === "none") {
       return [{ label: null, employees: filteredEmp }];
@@ -1596,7 +1674,6 @@ export default function RotaGrid() {
                       const shift = shiftsByEmpDate[key];
 
                       let rawCode = shift ? String(shift.shift_code || "").trim() : "";
-                      // Filter out garbage so the + button appears
                       if (rawCode && (
                       /[\uFFFD\u0000-\u001F\u007F-\u009F]/.test(rawCode) ||
                       ["?", "-", ".", "+", "UNDEFINED", "NULL", "NAN", "◇", "DIV", "HTML", "BODY", "SPAN"].some((g) => rawCode.toUpperCase().includes(g))))
@@ -1604,6 +1681,92 @@ export default function RotaGrid() {
                         rawCode = "";
                       }
                       const code = rawCode;
+
+                      // Determine Redeploy Status
+                      let redeployStatus = null; // null, 'out', 'in'
+                      if (shift) {
+                        const homeDeptId = emp.department_id;
+                        const shiftDeptId = shift.department_id;
+                        
+                        // Are we viewing the home dept?
+                        const viewingHome = selectedDepts.includes(homeDeptId) || selectedDepts.includes("all");
+                        const viewingTarget = selectedDepts.includes(shiftDeptId) || selectedDepts.includes("all");
+                        
+                        if (shift.is_redeployed) {
+                           if (viewingHome && shiftDeptId !== homeDeptId) {
+                             // We are in Home Ward, but shift is in Target Ward -> OUT
+                             redeployStatus = 'out';
+                             // BUT: If we are viewing "All", we might see the shift in its actual place if grouped by Dept?
+                             // If grouped by Dept, the row belongs to Home Dept.
+                             // The shift physically exists in Target Dept.
+                             // We want to show the arrow in the HOME row.
+                           } else if (shiftDeptId !== homeDeptId) {
+                             // We are likely in Target Ward view (since we see the shift)
+                             redeployStatus = 'in';
+                           }
+                        } else {
+                          // Even if not marked is_redeployed, if dept mismatch it effectively is?
+                          // Ideally rely on is_redeployed flag for explicit intent
+                          if (shiftDeptId !== homeDeptId && homeDeptId) {
+                             // It's a shift in another dept
+                             if (viewingHome && !viewingTarget) redeployStatus = 'out'; // Should not happen if filtering is strict, but logic holds
+                             else redeployStatus = 'in';
+                          }
+                        }
+                        
+                        // Fix logic for "Redeployed Out":
+                        // If I am Employee of Ward 2. Shift is in Ward 3.
+                        // Row is Ward 2 (Home).
+                        // I want to see "Arrow Right" in this cell.
+                        // However, visibleShifts filters by date.
+                        // The shift object HAS department_id = Ward 3.
+                        // So we need to pass this info to ShiftChip.
+                        
+                        if (shiftDeptId !== emp.department_id) {
+                           // Shift is not in home dept.
+                           // If the current view context (selectedDepts) includes Home Dept, we treat as Out?
+                           // Wait, if "All" is selected, we see everyone.
+                           // If we group by Department, the employee appears under "Ward 2".
+                           // The shift is in Ward 3.
+                           // We want to show "Arrow Right" in the Ward 2 row?
+                           // Or do we want to show the shift in Ward 3 row (if employee was listed there)?
+                           // The requirement says: "Ward 2 shows arrow right... Ward 3 shows arrow up".
+                           // So we need TWO indications if viewing both.
+                           
+                           // Current Grid implementation lists Employee ONCE (usually).
+                           // If grouped by Dept, Employee appears under their Home Dept.
+                           // So we see Ward 2 -> Employee -> Cell.
+                           // In this cell, we see the shift.
+                           // If the shift is in Ward 3, we should show "Redeployed Out" (Arrow Right).
+                           
+                           // BUT, what about Ward 3 view?
+                           // If we filter just Ward 3.
+                           // The employee is "Visiting".
+                           // They appear in the list.
+                           // They show the shift.
+                           // It should show "Redeployed In" (Arrow Up).
+                           
+                           // So status depends on the CONTEXT of the ROW (emp.department_id) vs SHIFT (shift.department_id).
+                           // Actually, `filteredEmp` places the employee.
+                           // If the employee is in the list because they are Home:
+                           if (emp.department_id && selectedDepts.includes(emp.department_id)) {
+                              // Viewing Home context
+                              if (shift.department_id !== emp.department_id) redeployStatus = 'out';
+                           } 
+                           // If employee is in the list because they are Visiting:
+                           else {
+                              // Viewing Target context
+                              redeployStatus = 'in';
+                           }
+                           
+                           // Edge case: "All" selected.
+                           // Employee is listed once under Home Dept.
+                           // We see "Redeployed Out" arrow.
+                           // We DO NOT see the shift in Ward 3 separately unless the employee is listed TWICE?
+                           // Grid usually unique by Employee ID.
+                           // So in "All" view, we just see "Redeployed Out". This seems acceptable.
+                        }
+                      }
 
                       return (
                         <td
@@ -1615,6 +1778,9 @@ export default function RotaGrid() {
                             shift={shift}
                             canManage={true}
                             locked={false}
+                            redeployStatus={redeployStatus}
+                            onRedeploy={() => setRedeployData({ shift, employee: emp })}
+                            onRedeployInfo={(s) => setRedeployInfoShift(s)}
                             onChanged={async () => {
                               const updated = await Shift.list();
                               setShifts(updated || []);
@@ -1637,6 +1803,8 @@ export default function RotaGrid() {
                             shift={shift}
                             canManage={false}
                             locked={published}
+                            redeployStatus={redeployStatus}
+                            onRedeployInfo={(s) => setRedeployInfoShift(s)}
                             onChanged={async () => {
                               const updated = await Shift.list();
                               setShifts(updated || []);
@@ -1710,6 +1878,61 @@ export default function RotaGrid() {
         }} />
 
       }
+
+      {redeployData && (
+        <RedeployDialog
+          open={!!redeployData}
+          onClose={() => setRedeployData(null)}
+          shift={redeployData.shift}
+          employee={redeployData.employee}
+          currentDepartment={departments.find(d => d.id === redeployData.employee.department_id)}
+          departments={departments}
+          onConfirm={handleRedeployConfirm}
+        />
+      )}
+      
+      <Dialog open={!!redeployInfoShift} onOpenChange={() => setRedeployInfoShift(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Redeployment Details</DialogTitle>
+          </DialogHeader>
+          {redeployInfoShift && (
+             <div className="space-y-4 py-2">
+                <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-sm space-y-2">
+                   <div className="grid grid-cols-3 gap-2">
+                      <div className="text-slate-500">Status</div>
+                      <div className="col-span-2 font-medium text-blue-700">Redeployed Out</div>
+                      
+                      <div className="text-slate-500">To Ward</div>
+                      <div className="col-span-2 font-medium">{
+                         departments.find(d => d.id === redeployInfoShift.department_id)?.name || 'Unknown'
+                      }</div>
+
+                      <div className="text-slate-500">Shift Code</div>
+                      <div className="col-span-2 font-medium">{redeployInfoShift.shift_code}</div>
+                      
+                      <div className="text-slate-500">Time</div>
+                      <div className="col-span-2">{redeployInfoShift.start_time} - {redeployInfoShift.end_time}</div>
+
+                      {redeployInfoShift.redeploy_meta?.notes && (
+                        <>
+                          <div className="text-slate-500">Notes</div>
+                          <div className="col-span-2 italic">"{redeployInfoShift.redeploy_meta.notes}"</div>
+                        </>
+                      )}
+                      
+                      <div className="text-slate-500">Initiated By</div>
+                      <div className="col-span-2 text-xs">{redeployInfoShift.redeploy_meta?.initiated_by}</div>
+                   </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={() => setRedeployInfoShift(null)}>Close</Button>
+                </DialogFooter>
+             </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
     </div>);
 
 }
