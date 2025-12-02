@@ -362,16 +362,10 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
         fontFamily: "'Aptos Display', ui-sans-serif, system-ui"
       }}
       title={`${code}${shift?.start_time && shift?.end_time ? ` • ${shift.start_time}-${shift.end_time}` : ""}${shift?.has_comments ? " • Has manager comments" : ""}`}
-      >
-      {redeployStatus === 'in' && (
-        <img 
-          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68ef9390a80590292eec4f23/d3d77629f_image.png" 
-          alt="Redeployed In"
-          className="w-3 h-3 mr-1 object-contain" 
-        />
-      )}
+    >
+      {redeployStatus === 'in' && <ArrowUpCircle className="w-3 h-3 mr-1 text-blue-600" />}
       {code}
-      </div>
+    </div>
   );
 
   // Check for 48h lock on redeployed shifts
