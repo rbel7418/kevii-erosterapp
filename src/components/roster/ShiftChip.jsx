@@ -405,11 +405,23 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
     );
   }
 
+  // For Incoming Redeployments: Click opens info/edit dialog, NOT the code dropdown
+  if (redeployStatus === 'in') {
+    return (
+      <button 
+        className="absolute inset-0 ring-2 ring-blue-500 ring-inset z-10"
+        onClick={(e) => { e.stopPropagation(); onRedeployInfo && onRedeployInfo(shift); }}
+      >
+        {Chip}
+      </button>
+    );
+  }
+
   return (
     <>
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
-          <button className={`absolute inset-0 ${redeployStatus === 'in' ? 'ring-2 ring-blue-500 ring-inset z-10' : ''}`}>
+          <button className="absolute inset-0">
             {Chip}
           </button>
         </DropdownMenuTrigger>
