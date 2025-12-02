@@ -1662,7 +1662,7 @@ export default function RotaGrid() {
                             <tr>
                               <td 
                                 colSpan={visibleDays.length + 1} 
-                                className="bg-slate-100/50 px-3 py-2 text-xs font-bold text-slate-500 border border-slate-300 border-l-4 border-l-blue-400"
+                                className="bg-slate-400 px-3 py-1.5 text-xs font-bold text-white border-y border-slate-400"
                               >
                                 Temporary Staffing
                               </td>
