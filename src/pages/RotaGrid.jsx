@@ -612,17 +612,55 @@ export default function RotaGrid() {
       groupBy,
       dmOnlyToggle
     };
+    // Also persist department settings when View Default is toggled
+    const department = {
+      enabled,
+      ids: selectedDepts
+    };
+    
     const next = {
       ...(currentUser?.settings || {}),
       defaults: {
         ...(currentUser?.settings?.defaults || {}),
-        view
+        view,
+        department
       }
     };
     await User.updateMyUserData({ settings: next });
     setCurrentUser((u) => ({ ...(u || {}), settings: next }));
     setDefaultViewEnabled(enabled);
-  }, [currentUser, period, showWeekends, compactRows, groupBy, dmOnlyToggle]);
+    setDefaultDeptEnabled(enabled);
+  }, [currentUser, period, showWeekends, compactRows, groupBy, dmOnlyToggle, selectedDepts]);
+
+  const handleSelectedDeptsChange = React.useCallback((updaterOrValue) => {
+    setSelectedDepts((prev) => {
+      const next = typeof updaterOrValue === 'function' ? updaterOrValue(prev) : updaterOrValue;
+      
+      if (defaultViewEnabled && currentUser) {
+         setTimeout(() => {
+             const department = { enabled: true, ids: next };
+             const view = {
+               enabled: true,
+               period,
+               showWeekends,
+               compactRows,
+               groupBy,
+               dmOnlyToggle
+             };
+             const nextSettings = {
+               ...(currentUser.settings || {}),
+               defaults: {
+                 ...(currentUser.settings?.defaults || {}),
+                 department,
+                 view
+               }
+             };
+             User.updateMyUserData({ settings: nextSettings }).catch(console.error);
+         }, 0);
+      }
+      return next;
+    });
+  }, [defaultViewEnabled, currentUser, period, showWeekends, compactRows, groupBy, dmOnlyToggle]);
 
   // Smart handlers that auto-persist when default view is enabled
   const handleCompactRowsChange = React.useCallback(async (newValue) => {
