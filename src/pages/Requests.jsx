@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Mail, ClipboardList, Check, X, RefreshCw, ExternalLink } from "lucide-react";
 import RequestForm from "@/components/requests/RequestForm";
 import { format, parseISO } from "date-fns";
-import { withRetry } from "@/components/utils/withRetry"; // ADD: use retry and keep UI responsive
+import { withRetry } from "@/components/utils/withRetry";
 
 export default function RequestsPage() {
   const [me, setMe] = React.useState(null);
