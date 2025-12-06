@@ -30,7 +30,8 @@ import {
   MoreVertical,
   Plus,
   Save,
-  RefreshCw
+  RefreshCw,
+  Zap
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { User } from "@/entities/User";
