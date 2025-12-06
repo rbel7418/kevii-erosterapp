@@ -574,11 +574,13 @@ export default function RotaGrid() {
       try {
         const d = await Department.list();
         setDepartments((prev) => {
+          // Simple check on length or JSON string
+          // We prioritize published_months changes
           if (JSON.stringify(prev) !== JSON.stringify(d)) return d || [];
           return prev;
         });
       } catch (e) { console.error("Poll error", e); }
-    }, 5000);
+    }, 3000); // Increased frequency to 3s for better responsiveness
     return () => clearInterval(interval);
   }, []);
 
@@ -1226,9 +1228,18 @@ export default function RotaGrid() {
   }, [visibleShifts]);
 
   const handleAddShift = async (empId, date, code) => {
-    if (published) {
-      alert("This roster is published. Unpublish to make changes.");
-      return;
+    // Check per-department publish status for the target date
+    const emp = employees.find(e => e.id === empId);
+    if (emp) {
+      const monthKey = format(date, "yyyy-MM");
+      if (publishedMonthsByDept[emp.department_id]?.has(monthKey)) {
+        alert("This department's roster is published for this month. Unpublish to make changes.");
+        return;
+      }
+    } else if (published) {
+       // Fallback to global check if emp not found (shouldn't happen)
+       alert("This roster is published. Unpublish to make changes.");
+       return;
     }
     const dateStr = format(date, "yyyy-MM-dd");
     const key = `${empId}_${dateStr}`;
@@ -1730,6 +1741,13 @@ export default function RotaGrid() {
 
                       const code = rawCode;
 
+                      // Check if this specific employee's department is published for this month
+                      // This allows mixed views (All Depts) to respect individual department locks
+                      const monthKey = format(day, "yyyy-MM");
+                      const empDeptId = emp.department_id;
+                      const isDeptPublished = publishedMonthsByDept[empDeptId]?.has(monthKey);
+                      const isCellLocked = isDeptPublished;
+
                       // Determine Redeploy Status
                       let redeployStatus = null; // null, 'out', 'in'
                       if (shift && shift.is_redeployed && code) {
@@ -1755,7 +1773,7 @@ export default function RotaGrid() {
                         <td
                           key={dateStr} className="bg-white p-0 text-center rounded-none border border-slate-300 hover:bg-slate-50 relative">
                           
-                              {canManage && !published ?
+                              {canManage && !isCellLocked ?
                           code ?
                           <ShiftChip
                             shift={shift}
@@ -1784,8 +1802,8 @@ export default function RotaGrid() {
                           code ?
                           <ShiftChip
                             shift={shift}
-                            canManage={false}
-                            locked={published}
+                            canManage={canManage} // Pass canManage to allow comments even if locked
+                            locked={true} // Explicitly locked because isCellLocked is true
                             redeployStatus={redeployStatus}
                             onRedeployInfo={(s) => setRedeployInfoShift(s)}
                             onChanged={async () => {
