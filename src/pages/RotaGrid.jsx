@@ -665,8 +665,7 @@ export default function RotaGrid() {
   }, [currentUser]);
 
   React.useEffect(() => {
-    const canManage = currentUser?.role === "admin";
-    if (!canManage || !departments.length) return;
+    if (!departments.length) return;
 
     const month = format(gridStart, "yyyy-MM");
     let isPublished = false;
@@ -1211,7 +1210,7 @@ export default function RotaGrid() {
     alert(`${data.deleted} shifts deleted.`);
   };
 
-  const canManage = currentUser?.role === "admin";
+  const canManage = currentUser?.role === "admin" || currentUser?.access_level === "manager";
   const access = React.useMemo(() => {
     if (currentUser?.role === "admin") return "admin";
     return currentUser?.access_level || "staff";
