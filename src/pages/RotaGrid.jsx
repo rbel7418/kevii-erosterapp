@@ -568,6 +568,18 @@ export default function RotaGrid() {
       setShiftCodes(sc || []);
       setLoading(false);
     })();
+
+    // Poll for updates (publish status sync)
+    const interval = setInterval(async () => {
+      try {
+        const d = await Department.list();
+        setDepartments((prev) => {
+          if (JSON.stringify(prev) !== JSON.stringify(d)) return d || [];
+          return prev;
+        });
+      } catch (e) { console.error("Poll error", e); }
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   React.useEffect(() => {
