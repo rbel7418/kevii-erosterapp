@@ -1450,7 +1450,7 @@ export default function Layout({ children, currentPageName }) {
                     </div>
                     </div>
 
-                    {rotaState.canManage && (
+                    {rotaState.canManage ? (
                     <Button
                       onClick={rotaState.togglePublish}
                       size="sm"
@@ -1459,6 +1459,11 @@ export default function Layout({ children, currentPageName }) {
                       <Lock className="w-3.5 h-3.5" />
                       <span className="text-xs font-medium hidden 2xl:inline">{rotaState.published ? "Published" : "Publish"}</span>
                     </Button>
+                    ) : (
+                      <div className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-xs font-bold border select-none ${rotaState.published ? "bg-slate-100 border-slate-200 text-slate-600" : "bg-amber-50 border-amber-200 text-amber-700"}`}>
+                        {rotaState.published ? <Lock className="w-3.5 h-3.5" /> : <Zap className="w-3.5 h-3.5" />}
+                        <span className="hidden md:inline">{rotaState.published ? "PUBLISHED" : "DRAFT"}</span>
+                      </div>
                     )}
                     </div>
                     }
