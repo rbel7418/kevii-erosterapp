@@ -1696,43 +1696,7 @@ export default function Layout({ children, currentPageName }) {
       <div className="flex-1 pb-16 md:pb-0 themed flex flex-col">
         {!authChecked ?
           <div className="h-full flex-1 flex items-center justify-center p-8 text-slate-500 text-sm">Loading…</div> :
-          !user ?
-            <div className="min-h-[80vh] flex-1 flex items-center justify-center p-6 bg-gradient-to-br from-slate-50 to-blue-50 relative overflow-hidden">
-              <div className="w-full max-w-5xl relative z-10 grid grid-cols-1 md:grid-cols-5 gap-6 items-center">
-                <div className="md:col-span-2 flex flex-col items-center md:items-start text-center md:text-left">
-                  <img src={orgLogo || LOGO_FALLBACK} alt="Brand" className="w-[260px] md:w-[320px] h-auto mb-4" />
-                  <div className="text-slate-700 max-w-sm">
-                    A simple way to view schedules, manage rotas, and keep teams aligned.
-                  </div>
-                  <div className="mt-3 text-xs text-slate-500">
-                    Official access portal: erosterapp.bellezas.co.uk
-                  </div>
-                </div>
-
-                <div className="md:col-span-3">
-                  <div className="bg-white/90 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-lg p-6 md:p-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl md:text-2xl font-semibold text-slate-900">Welcome</h2>
-                      <img src={WATERMARK_LOGO} alt="Hospital crest" className="h-10 w-auto opacity-80" />
-                    </div>
-                    <p className="text-sm text-slate-600 mb-6">
-                      Sign in to access your schedules, team tools, and announcements.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <Button onClick={() => User.login()} className="bg-indigo-600 hover:bg-indigo-700">
-                        Sign In
-                      </Button>
-                      <Button variant="outline" onClick={() => User.login()} className="border-slate-300">
-                        Create Account
-                      </Button>
-                    </div>
-                    <div className="mt-4 text-xs text-slate-500">
-                      Need help? Use your work email to sign in.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> :
+          !user ? null :
             user.status && user.status !== "approved" || user.domain_valid === false ?
               <PendingApproval email={user.email} allowedDomain={ALLOWED_DOMAIN} status={user.status || "pending"} onLogout={signOut} /> :
 
