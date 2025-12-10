@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { colorForCode, textColorForBg, darkenHex, getActivePaletteName, getActivePaletteVariant, getCustomPalette, PALETTES } from "@/components/utils/colors";
 import { Input } from "@/components/ui/input";
 import { ShiftCode, Shift } from "@/entities/all";
-import { ArrowRightCircle, ArrowUpCircle } from "lucide-react";
+// Icons removed per user request
 import {
   Tooltip,
   TooltipContent,
@@ -352,6 +352,34 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
   // However, keeping the variable `borderCol` doesn't hurt, it just won't be used in the `style` prop for the chip.
   const borderCol = darkenHex(solid, 0.25);
 
+  // Display logic for redeployed shifts
+  const displayContent = React.useMemo(() => {
+    // For incoming redeployments: show original shift code or time range
+    if (redeployStatus === 'in') {
+      const originalCode = shift.redeploy_meta?.original_shift_code;
+      // If full shift redeployment (no split times), show original shift code
+      if (originalCode && (!shift.start_time || !shift.end_time)) {
+        return originalCode;
+      }
+      // Otherwise show time range
+      if (shift.start_time && shift.end_time) {
+        return `${shift.start_time}-${shift.end_time}`;
+      }
+      return originalCode || code;
+    }
+    
+    // For outgoing redeployments: show time range if available
+    if (redeployStatus === 'out') {
+      if (shift.start_time && shift.end_time) {
+        return `${shift.start_time}-${shift.end_time}`;
+      }
+      return code;
+    }
+    
+    // Normal shifts: show code
+    return code;
+  }, [redeployStatus, shift, code]);
+
   // ABSOLUTE ZERO SPACING - Fill entire parent container
   const Chip = (
     <div
@@ -363,13 +391,9 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
       }}
       title={`${code}${shift?.start_time && shift?.end_time ? ` • ${shift.start_time}-${shift.end_time}` : ""}${shift?.has_comments ? " • Has manager comments" : ""}`}
     >
-      {redeployStatus === 'in' && <ArrowUpCircle className="w-3 h-3 mr-1 text-blue-600" />}
-      {redeployStatus === 'in' && shift.start_time && shift.end_time 
-        ? `${shift.start_time}-${shift.end_time}` 
-        : code
-      }
-      </div>
-      );
+      {displayContent}
+    </div>
+  );
 
   // Check for 48h lock on redeployed shifts
   const isRedeployLocked = React.useMemo(() => {
@@ -391,10 +415,15 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
         <Tooltip>
           <TooltipTrigger asChild>
             <button 
-              className="absolute inset-0 flex items-center justify-center bg-blue-50 hover:bg-blue-100 transition-colors"
+              className="absolute inset-0 flex items-center justify-center"
               onClick={(e) => { e.stopPropagation(); onRedeployInfo && onRedeployInfo(shift); }}
+              style={{
+                backgroundColor: solid,
+                color: textCol,
+                fontFamily: "'Aptos Display', ui-sans-serif, system-ui"
+              }}
             >
-              <ArrowRightCircle className="w-5 h-5 text-blue-600" />
+              <span className="font-bold text-[12px]">{displayContent}</span>
             </button>
           </TooltipTrigger>
           <TooltipContent>
@@ -409,7 +438,8 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
   if (redeployStatus === 'in') {
     return (
       <button 
-        className="absolute inset-0 ring-2 ring-blue-500 ring-inset z-10"
+        className="absolute inset-0 ring-2 ring-inset z-10"
+        style={{ ringColor: solid }}
         onClick={(e) => { e.stopPropagation(); onRedeployInfo && onRedeployInfo(shift); }}
       >
         {Chip}
