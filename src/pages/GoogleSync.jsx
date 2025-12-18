@@ -45,7 +45,12 @@ export default function GoogleSync() {
       });
       setLog(JSON.stringify(data, null, 2));
     } catch (e) {
-      setLog(String(e?.message || e));
+      const respData = e?.response?.data;
+      if (respData !== undefined) {
+        setLog(typeof respData === 'string' ? respData : JSON.stringify(respData, null, 2));
+      } else {
+        setLog(String(e?.message || e));
+      }
     } finally {
       setBusy(false);
     }
