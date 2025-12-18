@@ -1,93 +1,97 @@
-import OpenShifts from './pages/OpenShifts';
-import Team from './pages/Team';
-import LeaveRequests from './pages/LeaveRequests';
-import Settings from './pages/Settings';
-import Reports from './pages/Reports';
-import ShiftMap from './pages/ShiftMap';
-import EmployeeSchedule from './pages/EmployeeSchedule';
-import TabularRoster from './pages/TabularRoster';
-import UserAdmin from './pages/UserAdmin';
-import RotaGrid from './pages/RotaGrid';
-import DepartmentMonth from './pages/DepartmentMonth';
+import ActivityKPIs from './pages/ActivityKPIs';
+import AdminEmployeePermissions from './pages/AdminEmployeePermissions';
+import AdminHub from './pages/AdminHub';
+import AdminPagesPermissions from './pages/AdminPagesPermissions';
+import Announcements from './pages/Announcements';
+import AppWiki from './pages/AppWiki';
 import Attendance from './pages/Attendance';
 import Availability from './pages/Availability';
+import Branding from './pages/Branding';
+import Chat from './pages/Chat';
+import Compliance from './pages/Compliance';
+import DMReport from './pages/DMReport';
+import DepartmentAdmin from './pages/DepartmentAdmin';
+import DepartmentMonth from './pages/DepartmentMonth';
 import DesignPreview from './pages/DesignPreview';
 import EmployeeProfile from './pages/EmployeeProfile';
-import ActivityKPIs from './pages/ActivityKPIs';
-import Requests from './pages/Requests';
-import Branding from './pages/Branding';
-import InteractiveBI from './pages/InteractiveBI';
-import DepartmentAdmin from './pages/DepartmentAdmin';
-import AdminPagesPermissions from './pages/AdminPagesPermissions';
-import AdminEmployeePermissions from './pages/AdminEmployeePermissions';
-import WhatsAppNotifier from './pages/WhatsAppNotifier';
-import MobileHome from './pages/MobileHome';
-import Announcements from './pages/Announcements';
-import Chat from './pages/Chat';
-import Messaging from './pages/Messaging';
-import UserLanding from './pages/UserLanding';
-import RepGen from './pages/RepGen';
-import AdminHub from './pages/AdminHub';
-import AppWiki from './pages/AppWiki';
-import UserApprovals from './pages/UserApprovals';
-import Compliance from './pages/Compliance';
+import EmployeeSchedule from './pages/EmployeeSchedule';
+import Home from './pages/Home';
 import IPCTrainingDB from './pages/IPCTrainingDB';
-import TrainingDashboard from './pages/TrainingDashboard';
+import InteractiveBI from './pages/InteractiveBI';
+import LeaveRequests from './pages/LeaveRequests';
+import Messaging from './pages/Messaging';
+import MobileHome from './pages/MobileHome';
+import OpenShifts from './pages/OpenShifts';
+import RepGen from './pages/RepGen';
+import Reports from './pages/Reports';
+import Requests from './pages/Requests';
 import RiskRegister from './pages/RiskRegister';
-import UploadTemplate from './pages/UploadTemplate';
+import RotaGrid from './pages/RotaGrid';
+import Settings from './pages/Settings';
+import ShiftMap from './pages/ShiftMap';
+import TabularRoster from './pages/TabularRoster';
+import Team from './pages/Team';
 import ToolLauncher from './pages/ToolLauncher';
-import DMReport from './pages/DMReport';
+import TrainingAdminHub from './pages/TrainingAdminHub';
+import TrainingDashboard from './pages/TrainingDashboard';
+import TrainingRequests from './pages/TrainingRequests';
 import TrainingRotaGrid from './pages/TrainingRotaGrid';
 import TrainingToolLauncher from './pages/TrainingToolLauncher';
-import TrainingRequests from './pages/TrainingRequests';
-import TrainingAdminHub from './pages/TrainingAdminHub';
+import UploadTemplate from './pages/UploadTemplate';
+import UserAdmin from './pages/UserAdmin';
+import UserApprovals from './pages/UserApprovals';
+import UserLanding from './pages/UserLanding';
+import WhatsAppNotifier from './pages/WhatsAppNotifier';
+import GoogleSync from './pages/GoogleSync';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "OpenShifts": OpenShifts,
-    "Team": Team,
-    "LeaveRequests": LeaveRequests,
-    "Settings": Settings,
-    "Reports": Reports,
-    "ShiftMap": ShiftMap,
-    "EmployeeSchedule": EmployeeSchedule,
-    "TabularRoster": TabularRoster,
-    "UserAdmin": UserAdmin,
-    "RotaGrid": RotaGrid,
-    "DepartmentMonth": DepartmentMonth,
+    "ActivityKPIs": ActivityKPIs,
+    "AdminEmployeePermissions": AdminEmployeePermissions,
+    "AdminHub": AdminHub,
+    "AdminPagesPermissions": AdminPagesPermissions,
+    "Announcements": Announcements,
+    "AppWiki": AppWiki,
     "Attendance": Attendance,
     "Availability": Availability,
+    "Branding": Branding,
+    "Chat": Chat,
+    "Compliance": Compliance,
+    "DMReport": DMReport,
+    "DepartmentAdmin": DepartmentAdmin,
+    "DepartmentMonth": DepartmentMonth,
     "DesignPreview": DesignPreview,
     "EmployeeProfile": EmployeeProfile,
-    "ActivityKPIs": ActivityKPIs,
-    "Requests": Requests,
-    "Branding": Branding,
-    "InteractiveBI": InteractiveBI,
-    "DepartmentAdmin": DepartmentAdmin,
-    "AdminPagesPermissions": AdminPagesPermissions,
-    "AdminEmployeePermissions": AdminEmployeePermissions,
-    "WhatsAppNotifier": WhatsAppNotifier,
-    "MobileHome": MobileHome,
-    "Announcements": Announcements,
-    "Chat": Chat,
-    "Messaging": Messaging,
-    "UserLanding": UserLanding,
-    "RepGen": RepGen,
-    "AdminHub": AdminHub,
-    "AppWiki": AppWiki,
-    "UserApprovals": UserApprovals,
-    "Compliance": Compliance,
+    "EmployeeSchedule": EmployeeSchedule,
+    "Home": Home,
     "IPCTrainingDB": IPCTrainingDB,
-    "TrainingDashboard": TrainingDashboard,
+    "InteractiveBI": InteractiveBI,
+    "LeaveRequests": LeaveRequests,
+    "Messaging": Messaging,
+    "MobileHome": MobileHome,
+    "OpenShifts": OpenShifts,
+    "RepGen": RepGen,
+    "Reports": Reports,
+    "Requests": Requests,
     "RiskRegister": RiskRegister,
-    "UploadTemplate": UploadTemplate,
+    "RotaGrid": RotaGrid,
+    "Settings": Settings,
+    "ShiftMap": ShiftMap,
+    "TabularRoster": TabularRoster,
+    "Team": Team,
     "ToolLauncher": ToolLauncher,
-    "DMReport": DMReport,
+    "TrainingAdminHub": TrainingAdminHub,
+    "TrainingDashboard": TrainingDashboard,
+    "TrainingRequests": TrainingRequests,
     "TrainingRotaGrid": TrainingRotaGrid,
     "TrainingToolLauncher": TrainingToolLauncher,
-    "TrainingRequests": TrainingRequests,
-    "TrainingAdminHub": TrainingAdminHub,
+    "UploadTemplate": UploadTemplate,
+    "UserAdmin": UserAdmin,
+    "UserApprovals": UserApprovals,
+    "UserLanding": UserLanding,
+    "WhatsAppNotifier": WhatsAppNotifier,
+    "GoogleSync": GoogleSync,
 }
 
 export const pagesConfig = {
