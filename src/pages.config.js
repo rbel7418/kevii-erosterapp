@@ -15,6 +15,7 @@ import DepartmentMonth from './pages/DepartmentMonth';
 import DesignPreview from './pages/DesignPreview';
 import EmployeeProfile from './pages/EmployeeProfile';
 import EmployeeSchedule from './pages/EmployeeSchedule';
+import GoogleSync from './pages/GoogleSync';
 import Home from './pages/Home';
 import IPCTrainingDB from './pages/IPCTrainingDB';
 import InteractiveBI from './pages/InteractiveBI';
@@ -42,7 +43,7 @@ import UserAdmin from './pages/UserAdmin';
 import UserApprovals from './pages/UserApprovals';
 import UserLanding from './pages/UserLanding';
 import WhatsAppNotifier from './pages/WhatsAppNotifier';
-import GoogleSync from './pages/GoogleSync';
+import SheetsConsole from './pages/SheetsConsole';
 import __Layout from './Layout.jsx';
 
 
@@ -64,6 +65,7 @@ export const PAGES = {
     "DesignPreview": DesignPreview,
     "EmployeeProfile": EmployeeProfile,
     "EmployeeSchedule": EmployeeSchedule,
+    "GoogleSync": GoogleSync,
     "Home": Home,
     "IPCTrainingDB": IPCTrainingDB,
     "InteractiveBI": InteractiveBI,
@@ -91,7 +93,7 @@ export const PAGES = {
     "UserApprovals": UserApprovals,
     "UserLanding": UserLanding,
     "WhatsAppNotifier": WhatsAppNotifier,
-    "GoogleSync": GoogleSync,
+    "SheetsConsole": SheetsConsole,
 }
 
 export const pagesConfig = {
