@@ -492,8 +492,8 @@ export default function Layout({ children, currentPageName }) {
   }, [computedNav]);
 
   const filteredNav = React.useMemo(() => {
-    return computedNav.filter((n) => n.access.includes(access) && canRoleSee(n.to, "page"));
-  }, [computedNav, canRoleSee, access]);
+    return withSheets.filter((n) => n.access.includes(access) && canRoleSee(n.to, "page"));
+  }, [withSheets, canRoleSee, access]);
 
   const visibleNav = filteredNav.filter((n) => n.access.includes(access));
   const isActive = (to) => location.pathname + location.search === createPageUrl(to);
