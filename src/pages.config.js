@@ -29,6 +29,7 @@ import Requests from './pages/Requests';
 import RiskRegister from './pages/RiskRegister';
 import RotaGrid from './pages/RotaGrid';
 import Settings from './pages/Settings';
+import SheetsConsole from './pages/SheetsConsole';
 import ShiftMap from './pages/ShiftMap';
 import TabularRoster from './pages/TabularRoster';
 import Team from './pages/Team';
@@ -43,7 +44,6 @@ import UserAdmin from './pages/UserAdmin';
 import UserApprovals from './pages/UserApprovals';
 import UserLanding from './pages/UserLanding';
 import WhatsAppNotifier from './pages/WhatsAppNotifier';
-import SheetsConsole from './pages/SheetsConsole';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +79,7 @@ export const PAGES = {
     "RiskRegister": RiskRegister,
     "RotaGrid": RotaGrid,
     "Settings": Settings,
+    "SheetsConsole": SheetsConsole,
     "ShiftMap": ShiftMap,
     "TabularRoster": TabularRoster,
     "Team": Team,
@@ -93,7 +94,6 @@ export const PAGES = {
     "UserApprovals": UserApprovals,
     "UserLanding": UserLanding,
     "WhatsAppNotifier": WhatsAppNotifier,
-    "SheetsConsole": SheetsConsole,
 }
 
 export const pagesConfig = {
