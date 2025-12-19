@@ -7,9 +7,12 @@ import { format } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { googleSheetsSync } from "@/functions/googleSheetsSync";
 import { Maximize2, Minimize2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 export default function GoogleSync() {
-  const [spreadsheetId, setSpreadsheetId] = React.useState("");
+  const [spreadsheetId, setSpreadsheetId] = React.useState(() => {
+    try { return localStorage.getItem('gs_spreadsheet_id') || ""; } catch { return ""; }
+  });
   const [sheetName, setSheetName] = React.useState("Rota");
   const [departments, setDepartments] = React.useState([]);
   const [departmentId, setDepartmentId] = React.useState("");
@@ -27,6 +30,14 @@ export default function GoogleSync() {
   });
   const [embedFull, setEmbedFull] = React.useState(false);
 
+  // Locks
+  const [lockId, setLockId] = React.useState(() => {
+    try { return localStorage.getItem('gs_id_locked') === '1'; } catch { return false; }
+  });
+  const [lockEmbed, setLockEmbed] = React.useState(() => {
+    try { return localStorage.getItem('gs_embed_locked') === '1'; } catch { return false; }
+  });
+
   React.useEffect(() => {
     (async () => {
       try {
@@ -39,6 +50,22 @@ export default function GoogleSync() {
   }, []);
 
   const today = format(new Date(), "yyyy-MM-dd");
+
+  // Persist locks and values
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('gs_id_locked', lockId ? '1' : '0');
+      if (lockId) localStorage.setItem('gs_spreadsheet_id', spreadsheetId);
+      else localStorage.removeItem('gs_spreadsheet_id');
+    } catch {}
+  }, [lockId, spreadsheetId]);
+
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('gs_embed_locked', lockEmbed ? '1' : '0');
+      if (lockEmbed) localStorage.setItem('gs_embed_url', embedUrl || "");
+    } catch {}
+  }, [lockEmbed, embedUrl]);
 
   const run = async (action, replaceMode) => {
     setBusy(true);
@@ -95,12 +122,22 @@ export default function GoogleSync() {
       <div>
         <h1 className="text-2xl font-bold">Google Sheets Sync</h1>
         <p className="text-slate-600">Import from and export to your Google Sheet (two-way sync). Use one tab per department for best results.</p>
+        <div className="mt-2 flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <Switch checked={lockId} onCheckedChange={setLockId} />
+            <span className="text-sm">{lockId ? 'ID locked' : 'Lock Sheet ID'}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch checked={lockEmbed} onCheckedChange={setLockEmbed} />
+            <span className="text-sm">{lockEmbed ? 'Link locked' : 'Lock Embed Link'}</span>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label>Spreadsheet ID</Label>
-          <Input placeholder="1kl4QY3qpfr1aBb_RGHmEh4G1VBlP--RglUpB_Erb-sA" value={spreadsheetId} onChange={(e)=>setSpreadsheetId(e.target.value)} />
+          <Input placeholder="1kl4QY3qpfr1aBb_RGHmEh4G1VBlP--RglUpB_Erb-sA" value={spreadsheetId} onChange={(e)=>setSpreadsheetId(e.target.value)} disabled={lockId} />
           <p className="text-xs text-slate-500 mt-1">From your sheet URL: docs.google.com/spreadsheets/d/<strong>ID</strong>/edit</p>
         </div>
         <div>
@@ -153,20 +190,23 @@ export default function GoogleSync() {
             value={embedInput}
             onChange={(e) => setEmbedInput(e.target.value)}
             className="flex-1 min-w-[260px]"
+            disabled={lockEmbed}
           />
           <Button
-            onClick={() => {
-              const u = normalizeEmbed(embedInput);
-              setEmbedUrl(u);
-              try { localStorage.setItem('gs_embed_url', u); } catch {}
-            }}
-          >
+             onClick={() => {
+               const u = normalizeEmbed(embedInput);
+               setEmbedUrl(u);
+               try { if (lockEmbed) localStorage.setItem('gs_embed_url', u); } catch {}
+             }}
+             disabled={lockEmbed}
+           >
             Show
           </Button>
           <Button
-            variant="outline"
-            onClick={() => { setEmbedInput(""); setEmbedUrl(""); try { localStorage.removeItem('gs_embed_url'); } catch {} }}
-          >
+             variant="outline"
+             onClick={() => { setEmbedInput(""); setEmbedUrl(""); try { if (!lockEmbed) localStorage.removeItem('gs_embed_url'); } catch {} }}
+             disabled={lockEmbed}
+           >
             Clear
           </Button>
         </div>
