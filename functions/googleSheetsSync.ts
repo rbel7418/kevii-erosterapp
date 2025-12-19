@@ -91,6 +91,15 @@ Deno.serve(async (req) => {
     const dateEnd = payload.date_end ? String(payload.date_end) : undefined;
     const replaceMode = (payload.replaceMode === 'replaceAll') ? 'replaceAll' : 'append';
 
+    // Optional overrides from client
+    const headerRowIndex = Number(payload.header_row_index || 0) || undefined; // 1-based
+    const nameColIndex = Number(payload.name_col_index || 0) || undefined;     // 1-based
+    const rowsStart = Number(payload.rows_start || 0) || undefined;            // 1-based
+    const rowsEnd = Number(payload.rows_end || 0) || undefined;                // 1-based
+
+    // Compute 0-based name column index (default A)
+    const nameColIdx = (nameColIndex && nameColIndex > 0) ? (nameColIndex - 1) : 0;
+
     if (!spreadsheetId) return json({ error: 'spreadsheetId required' }, { status: 400 });
     if (!sheetName) return json({ error: 'sheetName required' }, { status: 400 });
 
@@ -139,17 +148,19 @@ Deno.serve(async (req) => {
       const values = await readSheet(spreadsheetId, sheetName, sheetsToken);
       if (!values.length) return json({ error: 'Sheet is empty' }, { status: 400 });
 
-      // Find header row: choose the first row that has >=2 parseable date cells
-      let headerRowIdx = 0;
-      for (let i=0; i<Math.min(values.length, 10); i++) {
-        const row = values[i] || [];
-        let parsed = 0;
-        for (let c=1; c<row.length; c++) if (parseHeaderDate(row[c])) parsed++;
-        if (parsed >= 2) { headerRowIdx = i; break; }
+      // Header row selection: use provided index if given, else auto-detect
+      let headerRowIdx = (headerRowIndex && headerRowIndex > 0) ? (headerRowIndex - 1) : 0;
+      if (!(headerRowIndex && headerRowIndex > 0)) {
+        for (let i=0; i<Math.min(values.length, 10); i++) {
+          const row = values[i] || [];
+          let parsed = 0;
+          for (let c = nameColIdx + 1; c < row.length; c++) if (parseHeaderDate(row[c])) parsed++;
+          if (parsed >= 2) { headerRowIdx = i; break; }
+        }
       }
       const header = values[headerRowIdx] || [];
       const dateCols = [];
-      for (let c=1; c<header.length; c++) {
+      for (let c = nameColIdx + 1; c < header.length; c++) {
         const d = parseHeaderDate(header[c]);
         if (d) dateCols.push({ c, d });
       }
@@ -196,17 +207,19 @@ Deno.serve(async (req) => {
       let created = 0, updated = 0, skipped = 0;
       const skipDetails = [];
 
-      for (let r = headerRowIdx + 1; r < values.length; r++) {
+      const rStartIndex = (rowsStart && rowsStart > 0) ? (rowsStart - 1) : (headerRowIdx + 1);
+      const rEndIndex = (rowsEnd && rowsEnd > 0) ? Math.min(values.length - 1, rowsEnd - 1) : (values.length - 1);
+      for (let r = rStartIndex; r <= rEndIndex; r++) {
         const row = values[r] || [];
-        const rawName = normalizeName(row[0]);
-        if (!rawName) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[0] || '', reason: 'blank_name' }); continue; }
+        const rawName = normalizeName(row[nameColIdx]);
+        if (!rawName) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'blank_name' }); continue; }
 
         // Try exact ID match first if cell includes an ID in square brackets e.g., "Name [EMP001]"
         let emp = null;
-        const idMatch = /\[(.+?)\]/.exec(row[0] || '');
+        const idMatch = /\[(.+?)\]/.exec(row[nameColIdx] || '');
         if (idMatch) emp = byId.get(String(idMatch[1]).toLowerCase());
         if (!emp) emp = byName.get(rawName.toLowerCase()) || null;
-        if (!emp) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[0] || '', reason: 'employee_not_found' }); continue; }
+        if (!emp) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'employee_not_found' }); continue; }
 
         for (const { c, d } of dateCols) {
           const cell = String(row[c] || '').trim();
@@ -242,7 +255,7 @@ Deno.serve(async (req) => {
         }
       }
 
-      return json({ success: true, created, updated, skipped, header: headerInfo, skip_details: skipDetails });
+      return json({ success: true, created, updated, skipped, header: headerInfo, rows_processed: { from: rStartIndex + 1, to: rEndIndex + 1 }, skip_details: skipDetails });
     }
 
     return json({ error: 'Unknown action' }, { status: 400 });

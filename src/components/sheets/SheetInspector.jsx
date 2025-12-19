@@ -33,8 +33,12 @@ export default function SheetInspector({ spreadsheetId: initialId = "", sheetNam
   const [spreadsheetId, setSpreadsheetId] = React.useState(() => initialId || (typeof localStorage !== "undefined" ? localStorage.getItem("gs_spreadsheet_id") || "" : ""));
   const [sheetName, setSheetName] = React.useState(initialTab || "Rota");
   const [headerYear, setHeaderYear] = React.useState(new Date().getFullYear());
-  const [headerRowIndex, setHeaderRowIndex] = React.useState(1); // 1-based
-  const [nameColIndex, setNameColIndex] = React.useState(1); // 1-based (A=1)
+  const [headerRowIndex, setHeaderRowIndex] = React.useState(() => {
+    try { const v = parseInt(localStorage.getItem('gs_header_row_index') || '1', 10); return isNaN(v) ? 1 : v; } catch { return 1; }
+  }); // 1-based
+  const [nameColIndex, setNameColIndex] = React.useState(() => {
+    try { const v = parseInt(localStorage.getItem('gs_name_col_index') || '1', 10); return isNaN(v) ? 1 : v; } catch { return 1; }
+  }); // 1-based (A=1)
 
   const [loading, setLoading] = React.useState(false);
   const [headers, setHeaders] = React.useState([]); // [{text, parsed, col, letter}]
@@ -73,6 +77,13 @@ export default function SheetInspector({ spreadsheetId: initialId = "", sheetNam
     } catch {}
     return null;
   }, [headerYear]);
+
+  React.useEffect(() => {
+    try { localStorage.setItem('gs_header_row_index', String(headerRowIndex)); } catch {}
+  }, [headerRowIndex]);
+  React.useEffect(() => {
+    try { localStorage.setItem('gs_name_col_index', String(nameColIndex)); } catch {}
+  }, [nameColIndex]);
 
   const load = async () => {
     if (!spreadsheetId || !sheetName) return;

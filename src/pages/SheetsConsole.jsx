@@ -98,6 +98,8 @@ export default function SheetsConsole() {
     setBusy(true);
     setLog("");
     try {
+      const hdr = Number((() => { try { return localStorage.getItem('gs_header_row_index'); } catch { return null; } })() || 0) || undefined;
+      const nci = Number((() => { try { return localStorage.getItem('gs_name_col_index'); } catch { return null; } })() || 0) || undefined;
       const { data } = await googleSheetsSync({
         action: "import",
         spreadsheetId,
@@ -105,9 +107,12 @@ export default function SheetsConsole() {
         department_id: departmentId || undefined,
         date_start: range.start,
         date_end: range.end,
+        header_row_index: hdr,
+        name_col_index: nci,
         replaceMode: mode
       });
       setLog(JSON.stringify(data, null, 2));
+      setParsed(data);
     } catch (e) {
       const resp = e?.response?.data;
       setLog(resp ? (typeof resp === "string" ? resp : JSON.stringify(resp, null, 2)) : String(e?.message || e));
