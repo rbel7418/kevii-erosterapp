@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { format } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { googleSheetsSync } from "@/functions/googleSheetsSync";
+import { Maximize2, Minimize2 } from "lucide-react";
 
 export default function GoogleSync() {
   const [spreadsheetId, setSpreadsheetId] = React.useState("");
@@ -16,6 +17,15 @@ export default function GoogleSync() {
   const [end, setEnd] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [log, setLog] = React.useState("");
+
+  // Embed published Google Sheet
+  const [embedInput, setEmbedInput] = React.useState(() => {
+    try { return localStorage.getItem('gs_embed_url') || ""; } catch { return ""; }
+  });
+  const [embedUrl, setEmbedUrl] = React.useState(() => {
+    try { return localStorage.getItem('gs_embed_url') || ""; } catch { return ""; }
+  });
+  const [embedFull, setEmbedFull] = React.useState(false);
 
   React.useEffect(() => {
     (async () => {
@@ -53,8 +63,32 @@ export default function GoogleSync() {
       }
     } finally {
       setBusy(false);
-    }
-  };
+      }
+      };
+
+      // Normalize pasted URL or iframe into an embeddable URL
+      const normalizeEmbed = (raw) => {
+      if (!raw) return "";
+      const str = String(raw).trim();
+      // If it's an iframe snippet, extract src
+      const m = str.match(/src=["']([^"']+)["']/i);
+      const url = m ? m[1] : str;
+      try {
+      const u = new URL(url);
+      // If it's a docs URL, try to coerce to pubhtml viewer
+      if (u.hostname.includes('docs.google.com')) {
+        const parts = u.pathname.split('/');
+        const idIdx = parts.indexOf('d');
+        const id = idIdx !== -1 ? parts[idIdx + 1] : null;
+        if (id) {
+          return `https://docs.google.com/spreadsheets/d/${id}/pubhtml?widget=true&headers=false`;
+        }
+      }
+      return url;
+      } catch {
+      return url; // fallback
+      }
+      };
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-6">
@@ -109,6 +143,62 @@ export default function GoogleSync() {
         <Label>Result</Label>
         <pre className="mt-2 bg-slate-50 border rounded-md p-3 text-xs overflow-auto max-h-80">{log || '—'}</pre>
       </div>
+
+      {/* Embed Published Google Sheet */}
+      <div className="mt-6 space-y-2">
+        <Label>Embed published Google Sheet</Label>
+        <div className="flex gap-2 flex-wrap">
+          <Input
+            placeholder="Paste published URL or <iframe ...> code"
+            value={embedInput}
+            onChange={(e) => setEmbedInput(e.target.value)}
+            className="flex-1 min-w-[260px]"
+          />
+          <Button
+            onClick={() => {
+              const u = normalizeEmbed(embedInput);
+              setEmbedUrl(u);
+              try { localStorage.setItem('gs_embed_url', u); } catch {}
+            }}
+          >
+            Show
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => { setEmbedInput(""); setEmbedUrl(""); try { localStorage.removeItem('gs_embed_url'); } catch {} }}
+          >
+            Clear
+          </Button>
+        </div>
+
+        {embedUrl && (
+          <div className="relative border rounded-lg overflow-hidden bg-white">
+            <div className="absolute top-2 right-2 z-10 flex gap-2">
+              <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => setEmbedFull(!embedFull)} title={embedFull ? 'Minimize' : 'Maximize'}>
+                {embedFull ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              </Button>
+            </div>
+            <iframe
+              src={embedUrl}
+              className="w-full"
+              style={{ height: '60vh' }}
+              frameBorder="0"
+              allowFullScreen
+            />
+          </div>
+        )}
+      </div>
+
+      {embedFull && embedUrl && (
+        <div className="fixed inset-0 z-[100] bg-black/70">
+          <div className="absolute top-3 right-3">
+            <Button size="icon" className="h-10 w-10 bg-white" onClick={() => setEmbedFull(false)} title="Exit fullscreen">
+              <Minimize2 className="w-5 h-5 text-slate-700" />
+            </Button>
+          </div>
+          <iframe src={embedUrl} className="absolute inset-0 w-full h-full" frameBorder="0" allowFullScreen />
+        </div>
+      )}
 
       <div className="text-xs text-slate-500">
         <p><strong>Expected sheet layout:</strong> first row contains dates across columns (e.g., 1-Dec, 2-Dec…), first column contains staff names. Non-empty cells are treated as shift codes.</p>
