@@ -6,7 +6,8 @@ function json(data, init = {}) {
 }
 
 // Google Sheets REST helpers
-async function gsFetch(url, method, token, body) {
+function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+async function gsFetch(url, method, token, body, attempt = 0) {
   const res = await fetch(url, {
     method,
     headers: {
@@ -17,7 +18,21 @@ async function gsFetch(url, method, token, body) {
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`Google API ${method} ${url} failed: ${res.status} ${text}`);
+    const status = res.status;
+    const shouldRetry = (
+      status === 429 ||
+      status >= 500 ||
+      (status === 403 && /rateLimitExceeded|userRateLimitExceeded/i.test(text))
+    );
+    if (shouldRetry && attempt < 5) {
+      const retryAfter = parseInt(res.headers.get('retry-after') || '', 10);
+      const backoff = Number.isFinite(retryAfter) && retryAfter > 0
+        ? retryAfter * 1000
+        : Math.min(30000, Math.pow(2, attempt) * 500 + Math.random() * 300);
+      await sleep(backoff);
+      return gsFetch(url, method, token, body, attempt + 1);
+    }
+    throw new Error(`Google API ${method} ${url} failed: ${status} ${text}`);
   }
   const ct = res.headers.get('content-type') || '';
   if (ct.includes('application/json')) return res.json();
