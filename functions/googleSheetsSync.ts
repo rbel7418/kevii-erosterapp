@@ -4,8 +4,16 @@ function json(data, init = {}) { return Response.json(data, init); }
 
 // --- Google Sheets helpers ---
 function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+let __gapiLast = 0;
+async function paceGapi(minGap = 350) {
+  const now = Date.now();
+  const wait = __gapiLast + minGap - now;
+  if (wait > 0) await sleep(wait);
+  __gapiLast = Date.now();
+}
 
 async function gapi(url, method, token, body, attempt = 0) {
+  await paceGapi(350);
   const res = await fetch(url, {
     method,
     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },

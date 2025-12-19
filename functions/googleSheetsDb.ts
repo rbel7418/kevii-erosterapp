@@ -5,9 +5,20 @@ function json(data, init = {}) {
   return Response.json(data, init);
 }
 
+// Lightweight pacing to avoid hammering Google APIs
+let __gsLast = 0;
+function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+async function paceGs(minGap = 350) {
+  const now = Date.now();
+  const wait = __gsLast + minGap - now;
+  if (wait > 0) await sleep(wait);
+  __gsLast = Date.now();
+}
+
 // Google Sheets REST helpers
 function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
 async function gsFetch(url, method, token, body, attempt = 0) {
+  await paceGs(350);
   const res = await fetch(url, {
     method,
     headers: {
