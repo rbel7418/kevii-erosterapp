@@ -33,6 +33,8 @@ export default function SheetInspector({ spreadsheetId: initialId = "", sheetNam
   const [spreadsheetId, setSpreadsheetId] = React.useState(() => initialId || (typeof localStorage !== "undefined" ? localStorage.getItem("gs_spreadsheet_id") || "" : ""));
   const [sheetName, setSheetName] = React.useState(initialTab || "Rota");
   const [headerYear, setHeaderYear] = React.useState(new Date().getFullYear());
+  const [headerRowIndex, setHeaderRowIndex] = React.useState(1); // 1-based
+  const [nameColIndex, setNameColIndex] = React.useState(1); // 1-based (A=1)
 
   const [loading, setLoading] = React.useState(false);
   const [headers, setHeaders] = React.useState([]); // [{text, parsed, col, letter}]
@@ -85,15 +87,17 @@ export default function SheetInspector({ spreadsheetId: initialId = "", sheetNam
       });
       const raw = Array.isArray(data?.raw) ? data.raw : [];
       setRawRows(raw);
-      const headerRow = raw[0] || [];
+      const hrIdx = Math.max(1, headerRowIndex) - 1; // 0-based
+      const headerRow = raw[hrIdx] || [];
       const hdrs = headerRow.map((text, idx) => ({ text, parsed: parseHeader(text), col: idx + 1, letter: colLetter(idx) }));
       setHeaders(hdrs);
-      const nm = raw.slice(1).map((row, i) => {
-        const cell = row?.[0] ?? "";
-        return { text: cell, row: i + 2, cleaned: cleanName(cell), idHint: extractIdInBrackets(cell) };
+      const nameIdx = Math.max(1, nameColIndex) - 1;
+      const nm = raw.slice(hrIdx + 1).map((row, i) => {
+        const cell = row?.[nameIdx] ?? "";
+        return { text: cell, row: hrIdx + 2 + i, cleaned: cleanName(cell), idHint: extractIdInBrackets(cell) };
       });
       setNames(nm);
-      setNotes(`Loaded ${raw.length} rows, ${headerRow.length} columns. Parsed ${hdrs.filter(h=>h.parsed).length} date headers.`);
+      setNotes(`Loaded ${raw.length} rows, ${headerRow.length} columns. Parsed ${hdrs.filter(h=>h.parsed).length} date headers. Using header row #${headerRowIndex}, names column ${colLetter(nameIdx)}.`);
     } catch (e) {
       setNotes(String(e?.response?.data || e?.message || e));
     } finally {
@@ -144,9 +148,17 @@ export default function SheetInspector({ spreadsheetId: initialId = "", sheetNam
     <Card className="p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold">Sheet Inspector</h2>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Label className="text-xs">Header Year</Label>
           <Input type="number" className="w-24 h-8" value={headerYear} onChange={(e)=>setHeaderYear(Number(e.target.value)||new Date().getFullYear())} />
+          <Label className="text-xs">Header Row</Label>
+          <Input type="number" className="w-20 h-8" value={headerRowIndex} onChange={(e)=>setHeaderRowIndex(Math.max(1, Number(e.target.value)||1))} />
+          <Label className="text-xs">Name Column</Label>
+          <Input className="w-20 h-8" value={colLetter(Math.max(1, nameColIndex)-1)} onChange={(e)=>{
+            const v = String(e.target.value||'A').toUpperCase().replace(/[^A-Z]/g,'');
+            const idx = Math.max(1, v.charCodeAt(0) - 64);
+            setNameColIndex(idx);
+          }} />
           <Button size="sm" onClick={load} disabled={!spreadsheetId || !sheetName || loading}>{loading ? "Loading…" : "Load"}</Button>
         </div>
       </div>
@@ -215,8 +227,9 @@ export default function SheetInspector({ spreadsheetId: initialId = "", sheetNam
           <div className="mt-3 text-sm">
             {result ? (
               result.ok ? (
-                <div className="p-2 rounded border bg-green-50 text-green-700">
-                  Target cell: <strong>{result.a1}</strong> (col {result.colLetter}, row {result.row})
+                <div className="p-2 rounded border bg-green-50 text-green-700 flex items-center gap-3">
+                  <span>Target cell: <strong>{result.a1}</strong> (col {result.colLetter}, row {result.row})</span>
+                  <Button size="sm" variant="outline" onClick={() => navigator.clipboard.writeText(result.a1)}>Copy</Button>
                 </div>
               ) : (
                 <div className="p-2 rounded border bg-amber-50 text-amber-700">
