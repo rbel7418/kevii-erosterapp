@@ -101,9 +101,11 @@ Deno.serve(async (req) => {
           .map((b) => ({ start: Number(b.start)||0, end: Number(b.end)||0 }))
           .filter((b) => b.start > 0 && b.end > 0 && b.end >= b.start)
       : [];
+    const empIdColIndex = Number(payload.emp_id_col_index || 0) || undefined; // 1-based
 
     // Compute 0-based name column index (default A)
     const nameColIdx = (nameColIndex && nameColIndex > 0) ? (nameColIndex - 1) : 0;
+    const empIdColIdx = (empIdColIndex && empIdColIndex > 0) ? (empIdColIndex - 1) : undefined;
 
     if (!spreadsheetId) return json({ error: 'spreadsheetId required' }, { status: 400 });
     if (!sheetName) return json({ error: 'sheetName required' }, { status: 400 });
@@ -174,6 +176,7 @@ Deno.serve(async (req) => {
       const headerInfo = {
         headerRowIndex: headerRowIdx + 1,
         nameColIndex: nameColIdx + 1,
+        empIdColIndex: empIdColIdx != null ? (empIdColIdx + 1) : null,
         dateCols: dateCols.map(dc => ({ colIndex: dc.c + 1, date: dc.d, header: String(header[dc.c] || '') }))
       };
 
@@ -217,14 +220,20 @@ Deno.serve(async (req) => {
       const applyRow = async (r) => {
         const row = values[r] || [];
         const rawName = normalizeName(row[nameColIdx]);
-        if (!rawName) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'blank_name' }); return; }
+        if (!rawName) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', empIdCell: empIdColIdx!==undefined ? (row[empIdColIdx] || '') : undefined, reason: 'blank_name' }); return; }
 
         // Try exact ID match first if cell includes an ID in square brackets e.g., "Name [EMP001]"
         let emp = null;
-        const idMatch = /\[(.+?)\]/.exec(row[nameColIdx] || '');
-        if (idMatch) emp = byId.get(String(idMatch[1]).toLowerCase());
+        if (empIdColIdx !== undefined) {
+          const idCell = String(row[empIdColIdx] || '').trim().toLowerCase();
+          if (idCell) emp = byId.get(idCell) || null;
+        }
+        if (!emp) {
+          const idMatch = /\[(.+?)\]/.exec(row[nameColIdx] || '');
+          if (idMatch) emp = byId.get(String(idMatch[1]).toLowerCase());
+        }
         if (!emp) emp = byName.get(rawName.toLowerCase()) || null;
-        if (!emp) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'employee_not_found' }); return; }
+        if (!emp) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', empIdCell: empIdColIdx!==undefined ? (row[empIdColIdx] || '') : undefined, reason: 'employee_not_found' }); return; }
 
         for (const { c, d } of dateCols) {
           const cell = String(row[c] || '').trim();

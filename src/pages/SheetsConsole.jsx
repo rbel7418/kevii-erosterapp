@@ -34,18 +34,21 @@ export default function SheetsConsole() {
     'Ward 2': {
       header_row_index: 3,
       name_col_index: 1,
+      emp_id_col_index: 39, // AM
       row_blocks: [ { start: 4, end: 17 }, { start: 20, end: 22 } ],
       grid: 'B4:AC25'
     },
     'Ward 3': {
       header_row_index: 3,
       name_col_index: 1,
+      emp_id_col_index: 39, // AM
       row_blocks: [ { start: 4, end: 21 }, { start: 24, end: 28 } ],
       grid: 'B4:AC31'
     },
     'ECU': {
       header_row_index: 3,
       name_col_index: 1,
+      emp_id_col_index: 40, // AN
       row_blocks: [ { start: 4, end: 8 }, { start: 11, end: 12 } ],
       grid: 'B4:AC14'
     }
@@ -134,6 +137,7 @@ export default function SheetsConsole() {
         name_col_index: nci,
         replaceMode: mode
       };
+      if (cfg?.emp_id_col_index) payload.emp_id_col_index = cfg.emp_id_col_index;
       if (cfg?.row_blocks) payload.row_blocks = cfg.row_blocks;
       const { data } = await googleSheetsSync(payload);
       setLog(JSON.stringify(data, null, 2));
@@ -276,7 +280,7 @@ export default function SheetsConsole() {
                 </div>
                 <p className="text-xs text-slate-500">Import uses codes from your sheet to create/update shifts for selected range and (optionally) department.</p>
                 {(() => { const dept = departments.find(d => d.id === departmentId); const cfg = dept ? ROW_CONFIG[dept.name] : null; return cfg ? (
-                  <p className="text-xs text-slate-600 mt-1">Using rows {cfg.row_blocks.map(b=>`A${b.start}:A${b.end}`).join(' + ')} and grid {cfg.grid} for {dept.name}.</p>
+                  <p className="text-xs text-slate-600 mt-1">Using rows {cfg.row_blocks.map(b=>`A${b.start}:A${b.end}`).join(' + ')}; ID col {cfg.emp_id_col_index ? (cfg.emp_id_col_index === 39 ? 'AM' : (cfg.emp_id_col_index === 40 ? 'AN' : cfg.emp_id_col_index)) : '—'}; grid {cfg.grid} for {dept.name}.</p>
                 ) : null; })()}
               </div>
             )}
