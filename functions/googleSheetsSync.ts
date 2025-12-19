@@ -155,6 +155,11 @@ Deno.serve(async (req) => {
       }
       if (!dateCols.length) return json({ error: 'No date columns found in header' }, { status: 400 });
 
+      const headerInfo = {
+        headerRowIndex: headerRowIdx + 1,
+        dateCols: dateCols.map(dc => ({ colIndex: dc.c + 1, date: dc.d, header: String(header[dc.c] || '') }))
+      };
+
       // Build employee lookup by full_name (normalized) and by employee_id
       const allEmployees = await base44.entities.Employee.list();
       const byName = new Map();
@@ -189,18 +194,19 @@ Deno.serve(async (req) => {
       }
 
       let created = 0, updated = 0, skipped = 0;
+      const skipDetails = [];
 
       for (let r = headerRowIdx + 1; r < values.length; r++) {
         const row = values[r] || [];
         const rawName = normalizeName(row[0]);
-        if (!rawName) { skipped++; continue; }
+        if (!rawName) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[0] || '', reason: 'blank_name' }); continue; }
 
         // Try exact ID match first if cell includes an ID in square brackets e.g., "Name [EMP001]"
         let emp = null;
         const idMatch = /\[(.+?)\]/.exec(row[0] || '');
         if (idMatch) emp = byId.get(String(idMatch[1]).toLowerCase());
         if (!emp) emp = byName.get(rawName.toLowerCase()) || null;
-        if (!emp) { skipped++; continue; }
+        if (!emp) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[0] || '', reason: 'employee_not_found' }); continue; }
 
         for (const { c, d } of dateCols) {
           const cell = String(row[c] || '').trim();
@@ -236,7 +242,7 @@ Deno.serve(async (req) => {
         }
       }
 
-      return json({ success: true, created, updated, skipped });
+      return json({ success: true, created, updated, skipped, header: headerInfo, skip_details: skipDetails });
     }
 
     return json({ error: 'Unknown action' }, { status: 400 });
