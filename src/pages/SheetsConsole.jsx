@@ -181,8 +181,18 @@ export default function SheetsConsole() {
             {step === "tabs" && (
               <div className="space-y-3">
                 <div>
-                  <Label>Sheet (Tab) Name</Label>
-                  <Input placeholder="Rota" value={sheetName} onChange={(e) => setSheetName(e.target.value)} />
+                  <Label>Department (sheet tab)</Label>
+                  <Select value={departmentId} onValueChange={(v) => { setDepartmentId(v); const d = departments.find(d => d.id === v); setSheetName(d ? d.name : ""); }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pick department (tab)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {departments.map((d) => (
+                        <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-slate-500 mt-1">Tab name follows the selected department.</p>
                 </div>
                 <div className="flex gap-2">
                   <Button onClick={loadPreview} disabled={!canPreview || busy} variant="outline" className="gap-2">
@@ -203,8 +213,8 @@ export default function SheetsConsole() {
                   />
                 </div>
                 <div>
-                  <Label>Department (optional)</Label>
-                  <Select value={departmentId} onValueChange={setDepartmentId}>
+                  <Label>Department</Label>
+                  <Select value={departmentId} onValueChange={(v) => { setDepartmentId(v); const d = departments.find(d => d.id === v); setSheetName(d ? d.name : ""); }}>
                     <SelectTrigger>
                       <SelectValue placeholder="All departments" />
                     </SelectTrigger>
