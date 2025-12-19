@@ -68,26 +68,38 @@ export default function GoogleSync() {
 
       // Normalize pasted URL or iframe into an embeddable URL
       const normalizeEmbed = (raw) => {
-      if (!raw) return "";
-      const str = String(raw).trim();
-      // If it's an iframe snippet, extract src
-      const m = str.match(/src=["']([^"']+)["']/i);
-      const url = m ? m[1] : str;
-      try {
-      const u = new URL(url);
-      // If it's a docs URL, try to coerce to pubhtml viewer
-      if (u.hostname.includes('docs.google.com')) {
-        const parts = u.pathname.split('/');
-        const idIdx = parts.indexOf('d');
-        const id = idIdx !== -1 ? parts[idIdx + 1] : null;
-        if (id) {
-          return `https://docs.google.com/spreadsheets/d/${id}/pubhtml?widget=true&headers=false`;
+        if (!raw) return "";
+        const str = String(raw).trim();
+        // If it's an iframe snippet, extract src
+        const m = str.match(/src=["']([^"']+)["']/i);
+        const url = m ? m[1] : str;
+        try {
+          const u = new URL(url);
+          if (!u.hostname.includes('docs.google.com')) return url; // Non-Google URL: leave as-is
+
+          // If it's already a published view (contains /pubhtml) or d/e/2PACX format, keep it
+          const path = u.pathname;
+          const isPublished = /\/pubhtml$/i.test(path) || path.includes('/spreadsheets/d/e/');
+          if (isPublished) {
+            // Ensure nice viewer params
+            const base = `${u.origin}${u.pathname}`;
+            const qp = new URLSearchParams(u.search);
+            if (!qp.has('widget')) qp.set('widget', 'true');
+            if (!qp.has('headers')) qp.set('headers', 'false');
+            return `${base}?${qp.toString()}`;
+          }
+
+          // Else: standard doc link /spreadsheets/d/{ID}/edit -> convert to pubhtml
+          const parts = path.split('/');
+          const dIdx = parts.indexOf('d');
+          const id = dIdx !== -1 ? parts[dIdx + 1] : null;
+          if (id) {
+            return `https://docs.google.com/spreadsheets/d/${id}/pubhtml?widget=true&headers=false`;
+          }
+          return url;
+        } catch {
+          return url; // fallback
         }
-      }
-      return url;
-      } catch {
-      return url; // fallback
-      }
       };
 
   return (
