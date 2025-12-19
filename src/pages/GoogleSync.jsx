@@ -8,6 +8,7 @@ import { base44 } from "@/api/base44Client";
 import { googleSheetsSync } from "@/functions/googleSheetsSync";
 import { Maximize2, Minimize2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import SheetInspector from "@/components/sheets/SheetInspector";
 
 export default function GoogleSync() {
   const [spreadsheetId, setSpreadsheetId] = React.useState(() => {
@@ -239,6 +240,10 @@ export default function GoogleSync() {
           <iframe src={embedUrl} className="absolute inset-0 w-full h-full" frameBorder="0" allowFullScreen />
         </div>
       )}
+
+      <div className="mt-8">
+        <SheetInspector spreadsheetId={spreadsheetId} sheetName={sheetName} />
+      </div>
 
       <div className="text-xs text-slate-500">
         <p><strong>Expected sheet layout:</strong> first row contains dates across columns (e.g., 1-Dec, 2-Dec…), first column contains staff names. Non-empty cells are treated as shift codes.</p>
