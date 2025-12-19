@@ -14,6 +14,7 @@ import { withRetry } from "@/components/utils/withRetry";
 import { enqueueShiftDelete } from "@/components/utils/deleteQueue";
 import { base44 } from "@/api/base44Client";
 import { LIVE_SHEET_SPREADSHEET_ID } from "@/components/utils/liveSheetConfig";
+import { enqueueSheetPush } from "@/components/utils/sheetsPushQueue";
 // Pencil icon is no longer used in the redesigned menu items
 import ShiftCommentsDialog from "./ShiftCommentsDialog";
 import { User } from "@/entities/User";
@@ -150,14 +151,13 @@ async function pushLiveToSheet({ shift, newCode }) {
     const deptName = await getDepartmentNameById(shift.department_id);
     const sheetName = toSheetName(deptName);
     if (!sheetName) return;
-    await base44.functions.invoke("liveSheetSync", {
-      action: "pushShift",
-      spreadsheetId: LIVE_SHEET_SPREADSHEET_ID,
-      sheetName,
-      date: shift.date,
-      code: newCode == null ? "" : String(newCode),
-      employeeId: shift.employee_id
-    });
+    await enqueueSheetPush({
+          spreadsheetId: LIVE_SHEET_SPREADSHEET_ID,
+          sheetName,
+          date: shift.date,
+          code: newCode == null ? "" : String(newCode),
+          employeeId: shift.employee_id
+        });
   } catch (e) {
     console.warn("Live sheet push failed:", e?.message || e);
   }
