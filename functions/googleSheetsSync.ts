@@ -96,6 +96,11 @@ Deno.serve(async (req) => {
     const nameColIndex = Number(payload.name_col_index || 0) || undefined;     // 1-based
     const rowsStart = Number(payload.rows_start || 0) || undefined;            // 1-based
     const rowsEnd = Number(payload.rows_end || 0) || undefined;                // 1-based
+    const rowBlocks = Array.isArray(payload.row_blocks)
+      ? payload.row_blocks
+          .map((b) => ({ start: Number(b.start)||0, end: Number(b.end)||0 }))
+          .filter((b) => b.start > 0 && b.end > 0 && b.end >= b.start)
+      : [];
 
     // Compute 0-based name column index (default A)
     const nameColIdx = (nameColIndex && nameColIndex > 0) ? (nameColIndex - 1) : 0;
@@ -168,6 +173,7 @@ Deno.serve(async (req) => {
 
       const headerInfo = {
         headerRowIndex: headerRowIdx + 1,
+        nameColIndex: nameColIdx + 1,
         dateCols: dateCols.map(dc => ({ colIndex: dc.c + 1, date: dc.d, header: String(header[dc.c] || '') }))
       };
 
@@ -207,19 +213,18 @@ Deno.serve(async (req) => {
       let created = 0, updated = 0, skipped = 0;
       const skipDetails = [];
 
-      const rStartIndex = (rowsStart && rowsStart > 0) ? (rowsStart - 1) : (headerRowIdx + 1);
-      const rEndIndex = (rowsEnd && rowsEnd > 0) ? Math.min(values.length - 1, rowsEnd - 1) : (values.length - 1);
-      for (let r = rStartIndex; r <= rEndIndex; r++) {
+      const processedBlocks = [];
+      const applyRow = async (r) => {
         const row = values[r] || [];
         const rawName = normalizeName(row[nameColIdx]);
-        if (!rawName) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'blank_name' }); continue; }
+        if (!rawName) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'blank_name' }); return; }
 
         // Try exact ID match first if cell includes an ID in square brackets e.g., "Name [EMP001]"
         let emp = null;
         const idMatch = /\[(.+?)\]/.exec(row[nameColIdx] || '');
         if (idMatch) emp = byId.get(String(idMatch[1]).toLowerCase());
         if (!emp) emp = byName.get(rawName.toLowerCase()) || null;
-        if (!emp) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'employee_not_found' }); continue; }
+        if (!emp) { skipped++; skipDetails.push({ row: r + 1, nameCell: row[nameColIdx] || '', reason: 'employee_not_found' }); return; }
 
         for (const { c, d } of dateCols) {
           const cell = String(row[c] || '').trim();
@@ -253,9 +258,27 @@ Deno.serve(async (req) => {
             created++;
           }
         }
+      };
+
+      if (rowBlocks.length) {
+        for (const b of rowBlocks) {
+          const startIdx = Math.max(0, b.start - 1);
+          const endIdx = Math.min(values.length - 1, b.end - 1);
+          processedBlocks.push({ from: startIdx + 1, to: endIdx + 1 });
+          for (let r = startIdx; r <= endIdx; r++) {
+            await applyRow(r);
+          }
+        }
+      } else {
+        const rStartIndex = (rowsStart && rowsStart > 0) ? (rowsStart - 1) : (headerRowIdx + 1);
+        const rEndIndex = (rowsEnd && rowsEnd > 0) ? Math.min(values.length - 1, rowsEnd - 1) : (values.length - 1);
+        processedBlocks.push({ from: rStartIndex + 1, to: rEndIndex + 1 });
+        for (let r = rStartIndex; r <= rEndIndex; r++) {
+          await applyRow(r);
+        }
       }
 
-      return json({ success: true, created, updated, skipped, header: headerInfo, rows_processed: { from: rStartIndex + 1, to: rEndIndex + 1 }, skip_details: skipDetails });
+      return json({ success: true, created, updated, skipped, header: headerInfo, rows_processed: processedBlocks, skip_details: skipDetails });
     }
 
     return json({ error: 'Unknown action' }, { status: 400 });

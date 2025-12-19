@@ -30,6 +30,27 @@ export default function SheetsConsole() {
   const [parsed, setParsed] = React.useState(null);
   const [preview, setPreview] = React.useState({ headers: [], rows: [] });
 
+  const ROW_CONFIG = React.useMemo(() => ({
+    'Ward 2': {
+      header_row_index: 3,
+      name_col_index: 1,
+      row_blocks: [ { start: 4, end: 17 }, { start: 20, end: 22 } ],
+      grid: 'B4:AC25'
+    },
+    'Ward 3': {
+      header_row_index: 3,
+      name_col_index: 1,
+      row_blocks: [ { start: 4, end: 21 }, { start: 24, end: 28 } ],
+      grid: 'B4:AC31'
+    },
+    'ECU': {
+      header_row_index: 3,
+      name_col_index: 1,
+      row_blocks: [ { start: 4, end: 8 }, { start: 11, end: 12 } ],
+      grid: 'B4:AC14'
+    }
+  }), []);
+
   // Load departments once
   React.useEffect(() => {
     (async () => {
@@ -43,7 +64,7 @@ export default function SheetsConsole() {
   }, []);
 
   const canPreview = spreadsheetId && sheetName;
-  const canRun = spreadsheetId && sheetName && range.start && range.end;
+  const canRun = spreadsheetId && sheetName && range.start && range.end && (!!departmentId);
 
   const loadPreview = async () => {
     if (!canPreview) return;
@@ -98,9 +119,11 @@ export default function SheetsConsole() {
     setBusy(true);
     setLog("");
     try {
-      const hdr = Number((() => { try { return localStorage.getItem('gs_header_row_index'); } catch { return null; } })() || 0) || undefined;
-      const nci = Number((() => { try { return localStorage.getItem('gs_name_col_index'); } catch { return null; } })() || 0) || undefined;
-      const { data } = await googleSheetsSync({
+      const dept = departments.find(d => d.id === departmentId);
+      const cfg = dept ? ROW_CONFIG[dept.name] : null;
+      const hdr = cfg?.header_row_index || Number((() => { try { return localStorage.getItem('gs_header_row_index'); } catch { return null; } })() || 0) || undefined;
+      const nci = cfg?.name_col_index || Number((() => { try { return localStorage.getItem('gs_name_col_index'); } catch { return null; } })() || 0) || undefined;
+      const payload = {
         action: "import",
         spreadsheetId,
         sheetName,
@@ -110,7 +133,9 @@ export default function SheetsConsole() {
         header_row_index: hdr,
         name_col_index: nci,
         replaceMode: mode
-      });
+      };
+      if (cfg?.row_blocks) payload.row_blocks = cfg.row_blocks;
+      const { data } = await googleSheetsSync(payload);
       setLog(JSON.stringify(data, null, 2));
       setParsed(data);
     } catch (e) {
@@ -250,6 +275,9 @@ export default function SheetsConsole() {
                   </Button>
                 </div>
                 <p className="text-xs text-slate-500">Import uses codes from your sheet to create/update shifts for selected range and (optionally) department.</p>
+                {(() => { const dept = departments.find(d => d.id === departmentId); const cfg = dept ? ROW_CONFIG[dept.name] : null; return cfg ? (
+                  <p className="text-xs text-slate-600 mt-1">Using rows {cfg.row_blocks.map(b=>`A${b.start}:A${b.end}`).join(' + ')} and grid {cfg.grid} for {dept.name}.</p>
+                ) : null; })()}
               </div>
             )}
           </div>
@@ -303,6 +331,9 @@ export default function SheetsConsole() {
               </Button>
             </div>
             <pre className="bg-slate-50 border rounded-md p-3 text-xs overflow-auto max-h-72 whitespace-pre-wrap">{log || "—"}</pre>
+            {parsed?.rows_processed?.length ? (
+              <div className="mt-2 text-xs text-slate-600">Processed rows: {parsed.rows_processed.map(b => `${b.from}-${b.to}`).join(', ')}</div>
+            ) : null}
             {parsed?.skip_details?.length ? (
               <div className="mt-2 text-xs">
                 <div className="font-medium">Skipped details</div>
