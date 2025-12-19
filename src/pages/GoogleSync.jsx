@@ -146,8 +146,8 @@ export default function GoogleSync() {
           <Input placeholder="Rota" value={sheetName} onChange={(e)=>setSheetName(e.target.value)} />
         </div>
         <div>
-          <Label>Department (optional)</Label>
-          <Select value={departmentId} onValueChange={setDepartmentId}>
+          <Label>Department (used as Sheet tab)</Label>
+          <Select value={departmentId} onValueChange={(v)=>{ setDepartmentId(v); const d = departments.find(d=>d.id===v); setSheetName(d ? d.name : ""); }}>
             <SelectTrigger>
               <SelectValue placeholder="All departments" />
             </SelectTrigger>
