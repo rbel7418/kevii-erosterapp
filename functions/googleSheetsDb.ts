@@ -19,16 +19,14 @@ async function gsFetch(url, method, token, body, attempt = 0) {
   if (!res.ok) {
     const text = await res.text().catch(() => '');
     const status = res.status;
-    const shouldRetry = (
-      status === 429 ||
-      status >= 500 ||
-      (status === 403 && /rateLimitExceeded|userRateLimitExceeded/i.test(text))
-    );
-    if (shouldRetry && attempt < 5) {
+    const rateLimited = /rateLimitExceeded|userRateLimitExceeded/i.test(text);
+    const shouldRetry = (status === 429) || (status >= 500) || (status === 403 && rateLimited);
+    if (shouldRetry && attempt < 8) {
       const retryAfter = parseInt(res.headers.get('retry-after') || '', 10);
+      const base = rateLimited ? 3000 : 800; // ms
       const backoff = Number.isFinite(retryAfter) && retryAfter > 0
         ? retryAfter * 1000
-        : Math.min(30000, Math.pow(2, attempt) * 500 + Math.random() * 300);
+        : Math.min(60000, Math.pow(2, attempt) * base + Math.random() * 500);
       await sleep(backoff);
       return gsFetch(url, method, token, body, attempt + 1);
     }

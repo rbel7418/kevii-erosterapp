@@ -339,40 +339,40 @@ export default function SheetsConsole() {
               <div className="mt-2 text-xs text-slate-600">Processed rows: {parsed.rows_processed.map(b => `${b.from}-${b.to}`).join(', ')}</div>
             ) : null}
             {parsed?.skip_details?.length ? (
-              <div className="mt-2 text-xs">
-                <div className="font-medium">Skipped details</div>
-                <div className="mt-1 flex gap-2 flex-wrap">
-                  {Object.entries(parsed.skip_details.reduce((a, it) => { a[it.reason] = (a[it.reason]||0)+1; return a; }, {})).map(([k,v]) => (
-                    <span key={k} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 border text-slate-700">{k}: {v}</span>
-                  ))}
-                </div>
-                <div className="mt-2 max-h-40 overflow-auto border rounded">
-                  <table className="w-full text-[11px]">
-                    <thead>
-                      <tr>
-                        <th className="px-2 py-1 text-left">Row</th>
-                        <th className="px-2 py-1 text-left">Name cell</th>
-                        <th className="px-2 py-1 text-left">Reason</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {parsed.skip_details.slice(0, 100).map((s, i) => (
-                        <tr key={i} className="odd:bg-white even:bg-slate-50">
-                          <td className="px-2 py-1">{s.row}</td>
-                          <td className="px-2 py-1">{s.nameCell}</td>
-                          <td className="px-2 py-1">{s.reason}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                {parsed.header && (
-                  <div className="mt-2 text-slate-600">
-                    Header row: #{parsed.header.headerRowIndex}; dates found: {parsed.header.dateCols?.length || 0}
-                  </div>
-                )}
-                <div className="mt-1 text-slate-500">Tip: Make sure sheet names match Employee full_name or add [EMPID] in the name cell (e.g., "Jane Doe [EMP001]").</div>
-              </div>
+             <div className="mt-2 text-xs">
+               <div className="font-medium">Skipped details</div>
+               <div className="mt-1 flex gap-2 flex-wrap">
+                 {Object.entries(parsed.skip_details.reduce((a, it) => { a[it.reason] = (a[it.reason]||0)+1; return a; }, {})).map(([k,v]) => (
+                   <span key={k} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 border text-slate-700">{k}: {v}</span>
+                 ))}
+               </div>
+               <div className="mt-2 max-h-40 overflow-auto border rounded">
+                 <table className="w-full text-[11px]">
+                   <thead>
+                     <tr>
+                       <th className="px-2 py-1 text-left">Row</th>
+                       <th className="px-2 py-1 text-left">Name cell</th>
+                       <th className="px-2 py-1 text-left">Reason</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     {parsed.skip_details.slice(0, 100).map((s, i) => (
+                       <tr key={i} className="odd:bg-white even:bg-slate-50">
+                         <td className="px-2 py-1">{s.row}</td>
+                         <td className="px-2 py-1">{s.nameCell}</td>
+                         <td className="px-2 py-1">{s.reason}</td>
+                       </tr>
+                     ))}
+                   </tbody>
+                 </table>
+               </div>
+               {parsed.header && (
+                 <div className="mt-2 text-slate-600">
+                   Header row: #{parsed.header.headerRowIndex}; dates found: {parsed.header.dateCols?.length || 0}{parsed.header.empIdColIndex ? `; ID col: ${parsed.header.empIdColIndex}` : ''}
+                 </div>
+               )}
+               <div className="mt-1 text-slate-500">Tip: Make sure sheet names match Employee full_name or add [EMPID] in the name cell (e.g., "Jane Doe [EMP001]"). If rate-limited, wait ~30–60s and retry.</div>
+             </div>
             ) : null}
           </Card>
         </div>
