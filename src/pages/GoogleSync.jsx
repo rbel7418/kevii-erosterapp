@@ -141,11 +141,7 @@ export default function GoogleSync() {
           <Input placeholder="1kl4QY3qpfr1aBb_RGHmEh4G1VBlP--RglUpB_Erb-sA" value={spreadsheetId} onChange={(e)=>setSpreadsheetId(e.target.value)} disabled={lockId} />
           <p className="text-xs text-slate-500 mt-1">From your sheet URL: docs.google.com/spreadsheets/d/<strong>ID</strong>/edit</p>
         </div>
-        <div>
-          <Label>Sheet (Tab) Name</Label>
-          <Input placeholder="Rota" value={sheetName} onChange={(e)=>setSheetName(e.target.value)} />
-        </div>
-        <div>
+              <div>
           <Label>Department (used as Sheet tab)</Label>
           <Select value={departmentId} onValueChange={(v)=>{ setDepartmentId(v); const d = departments.find(d=>d.id===v); setSheetName(d ? d.name : ""); }}>
             <SelectTrigger>
