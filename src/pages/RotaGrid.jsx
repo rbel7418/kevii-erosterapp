@@ -1255,9 +1255,29 @@ export default function RotaGrid() {
       const data = { employee_id: empId, date: dateStr, shift_code: code };
       await enqueueShiftCreate(data);
     }
+    // Live push if configured
+    try {
+      if (LIVE_SHEET_SPREADSHEET_ID) {
+        const emp = employees.find(e => e.id === empId);
+        const dept = departments.find(d => d.id === emp?.department_id);
+        const sheetName = (dept?.name || '').toLowerCase().includes('ward 2') ? 'Ward 2' :
+                          (dept?.name || '').toLowerCase().includes('ward 3') ? 'Ward 3' :
+                          (dept?.name || '').toLowerCase().includes('ecu') ? 'ECU' : dept?.name || '';
+        if (sheetName) {
+          await base44.functions.invoke('liveSheetSync', {
+            action: 'pushShift',
+            spreadsheetId: LIVE_SHEET_SPREADSHEET_ID,
+            sheetName,
+            date: dateStr,
+            code: code || '',
+            employeeId: empId
+          });
+        }
+      }
+    } catch (e) { console.warn('Live sheet push failed:', e?.message || e); }
     const updated = await Shift.list();
     setShifts(updated || []);
-  };
+    };
 
   const handleRemoveEmployee = async (empId) => {
     if (!confirm("Remove this employee from their department?")) return;
