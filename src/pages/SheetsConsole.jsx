@@ -48,7 +48,7 @@ export default function SheetsConsole() {
     'ECU': {
       header_row_index: 3,
       name_col_index: 1,
-      emp_id_col_index: 40, // AN
+      emp_id_col_index: 39, // AM
       row_blocks: [ { start: 4, end: 8 }, { start: 11, end: 12 } ],
       grid: 'B4:AC14'
     }
