@@ -13,8 +13,6 @@ import {
 import { withRetry } from "@/components/utils/withRetry";
 import { enqueueShiftDelete } from "@/components/utils/deleteQueue";
 import { base44 } from "@/api/base44Client";
-import { LIVE_SHEET_SPREADSHEET_ID } from "@/components/utils/liveSheetConfig";
-import { enqueueSheetPush } from "@/components/utils/sheetsPushQueue";
 // Pencil icon is no longer used in the redesigned menu items
 import ShiftCommentsDialog from "./ShiftCommentsDialog";
 import { User } from "@/entities/User";
@@ -121,48 +119,7 @@ function useShiftCodeUpdate(callback) {
     return () => GLOBAL_LISTENERS.codeUpdate.delete(cb);
   }, []);
 }
-// ---------------------------------
-// Live Sheet Sync helpers
-const _deptNameCache = new Map();
-async function getDepartmentNameById(id) {
-  if (!id) return "";
-  if (_deptNameCache.has(id)) return _deptNameCache.get(id);
-  try {
-    const rows = await (await import("@/entities/Department")).then(m => m.Department.filter({ id }));
-    const name = rows?.[0]?.name || "";
-    _deptNameCache.set(id, name);
-    return name;
-  } catch {
-    return "";
-  }
-}
-function toSheetName(name) {
-  const s = String(name || "").toLowerCase();
-  if (!s) return "";
-  if (s.includes("ward 2") || s.includes("ward two") || s === "w2") return "Ward 2";
-  if (s.includes("ward 3") || s.includes("ward three") || s === "w3") return "Ward 3";
-  if (s.includes("ecu") || s.includes("enhanced care unit")) return "ECU";
-  // Fallback: title-case original
-  return name;
-}
-async function pushLiveToSheet({ shift, newCode }) {
-  try {
-    if (!LIVE_SHEET_SPREADSHEET_ID) return; // not configured
-    const deptName = await getDepartmentNameById(shift.department_id);
-    const sheetName = toSheetName(deptName);
-    if (!sheetName) return;
-    await enqueueSheetPush({
-          spreadsheetId: LIVE_SHEET_SPREADSHEET_ID,
-          sheetName,
-          date: shift.date,
-          code: newCode == null ? "" : String(newCode),
-          employeeId: shift.employee_id
-        });
-  } catch (e) {
-    console.warn("Live sheet push failed:", e?.message || e);
-  }
-}
-// ---------------------------------
+
 
 async function getShiftCodesCached(force = false) {
   const now = Date.now();
@@ -344,8 +301,6 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
     if (!shift.end_time && defaults.end) patch.end_time = defaults.end;
     if ((shift.break_minutes == null || shift.break_minutes === 0) && defaults.brk != null) patch.break_minutes = defaults.brk;
     await Shift.update(shift.id, patch);
-    // Live push to Google Sheet
-    pushLiveToSheet({ shift, newCode });
     onChanged?.();
     setMenuOpen(false);
     setMenuView("root");
@@ -355,8 +310,6 @@ export default function ShiftChip({ shift, canManage, locked, onChanged, codes: 
   const removeShift = async () => {
     if (!confirm("Remove this shift?")) return;
     await enqueueShiftDelete(shift.id);
-    // Clear the sheet cell as well
-    pushLiveToSheet({ shift, newCode: "" });
     onChanged?.();
     setMenuOpen(false);
   };

@@ -482,18 +482,9 @@ export default function Layout({ children, currentPageName }) {
   const isTrainingMode = currentPageName?.startsWith('Training');
   const computedNav = React.useMemo(() => transformNav(isTrainingMode ? TRAINING_NAV : BASE_NAV, navOverrides), [navOverrides, transformNav, isTrainingMode]);
 
-  // Quick link to Sheets Console (visible to admins/managers only)
-  const sheetsConsoleLink = { label: "Sheets", icon: TableIcon, to: "SheetsConsole", access: ["admin", "manager"] };
-  const withSheets = React.useMemo(() => {
-    const arr = [...computedNav];
-    // Avoid duplicates
-    if (!arr.some(i => i.to === sheetsConsoleLink.to)) arr.push(sheetsConsoleLink);
-    return arr;
-  }, [computedNav]);
-
   const filteredNav = React.useMemo(() => {
-    return withSheets.filter((n) => n.access.includes(access) && canRoleSee(n.to, "page"));
-  }, [withSheets, canRoleSee, access]);
+    return computedNav.filter((n) => n.access.includes(access) && canRoleSee(n.to, "page"));
+  }, [computedNav, canRoleSee, access]);
 
   const visibleNav = filteredNav.filter((n) => n.access.includes(access));
   const isActive = (to) => location.pathname + location.search === createPageUrl(to);

@@ -15,7 +15,6 @@ import DepartmentMonth from './pages/DepartmentMonth';
 import DesignPreview from './pages/DesignPreview';
 import EmployeeProfile from './pages/EmployeeProfile';
 import EmployeeSchedule from './pages/EmployeeSchedule';
-import GoogleSync from './pages/GoogleSync';
 import Home from './pages/Home';
 import IPCTrainingDB from './pages/IPCTrainingDB';
 import InteractiveBI from './pages/InteractiveBI';
@@ -29,7 +28,6 @@ import Requests from './pages/Requests';
 import RiskRegister from './pages/RiskRegister';
 import RotaGrid from './pages/RotaGrid';
 import Settings from './pages/Settings';
-import SheetsConsole from './pages/SheetsConsole';
 import ShiftMap from './pages/ShiftMap';
 import TabularRoster from './pages/TabularRoster';
 import Team from './pages/Team';
@@ -65,7 +63,6 @@ export const PAGES = {
     "DesignPreview": DesignPreview,
     "EmployeeProfile": EmployeeProfile,
     "EmployeeSchedule": EmployeeSchedule,
-    "GoogleSync": GoogleSync,
     "Home": Home,
     "IPCTrainingDB": IPCTrainingDB,
     "InteractiveBI": InteractiveBI,
@@ -79,7 +76,6 @@ export const PAGES = {
     "RiskRegister": RiskRegister,
     "RotaGrid": RotaGrid,
     "Settings": Settings,
-    "SheetsConsole": SheetsConsole,
     "ShiftMap": ShiftMap,
     "TabularRoster": TabularRoster,
     "Team": Team,
