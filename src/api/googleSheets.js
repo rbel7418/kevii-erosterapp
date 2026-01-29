@@ -1,43 +1,5 @@
 import { base44 } from './base44Client';
 
-async function getAccessToken() {
-  const hostname = import.meta.env.VITE_REPLIT_CONNECTORS_HOSTNAME || 
-    (typeof process !== 'undefined' ? process.env?.REPLIT_CONNECTORS_HOSTNAME : null);
-  
-  if (!hostname) {
-    console.warn('Google Sheets connector not configured - using mock mode');
-    return null;
-  }
-
-  const xReplitToken = typeof process !== 'undefined' ? 
-    (process.env?.REPL_IDENTITY ? 'repl ' + process.env.REPL_IDENTITY : 
-     process.env?.WEB_REPL_RENEWAL ? 'depl ' + process.env.WEB_REPL_RENEWAL : null) : null;
-
-  if (!xReplitToken) {
-    console.warn('Replit token not found - using mock mode');
-    return null;
-  }
-
-  try {
-    const response = await fetch(
-      `https://${hostname}/api/v2/connection?include_secrets=true&connector_names=google-sheet`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'X_REPLIT_TOKEN': xReplitToken
-        }
-      }
-    );
-    const data = await response.json();
-    const connectionSettings = data.items?.[0];
-    return connectionSettings?.settings?.access_token || 
-           connectionSettings?.settings?.oauth?.credentials?.access_token;
-  } catch (error) {
-    console.error('Failed to get Google Sheets access token:', error);
-    return null;
-  }
-}
-
 export function extractSpreadsheetId(url) {
   const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
   return match ? match[1] : null;
@@ -49,58 +11,30 @@ export function extractSheetGid(url) {
 }
 
 export async function fetchSheetData(spreadsheetId, range = 'Sheet1') {
-  const accessToken = await getAccessToken();
-  
-  if (!accessToken) {
-    throw new Error('Google Sheets not connected. Please set up the integration first.');
-  }
-
-  const encodedRange = encodeURIComponent(range);
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodedRange}`;
-  
-  const response = await fetch(url, {
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Accept': 'application/json'
-    }
+  const result = await base44.functions.invoke('googleSheets', {
+    action: 'getData',
+    spreadsheetId,
+    sheetName: range
   });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || 'Failed to fetch spreadsheet data');
+  
+  if (!result.data?.ok) {
+    throw new Error(result.data?.error || 'Failed to fetch spreadsheet data');
   }
-
-  const data = await response.json();
-  return data.values || [];
+  
+  return result.data.data || [];
 }
 
 export async function fetchSpreadsheetInfo(spreadsheetId) {
-  const accessToken = await getAccessToken();
-  
-  if (!accessToken) {
-    throw new Error('Google Sheets not connected. Please set up the integration first.');
-  }
-
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}?fields=sheets.properties`;
-  
-  const response = await fetch(url, {
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Accept': 'application/json'
-    }
+  const result = await base44.functions.invoke('googleSheets', {
+    action: 'getSheets',
+    spreadsheetId
   });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || 'Failed to fetch spreadsheet info');
+  
+  if (!result.data?.ok) {
+    throw new Error(result.data?.error || 'Failed to fetch spreadsheet info');
   }
-
-  const data = await response.json();
-  return data.sheets?.map(s => ({
-    sheetId: s.properties.sheetId,
-    title: s.properties.title,
-    index: s.properties.index
-  })) || [];
+  
+  return result.data.sheets || [];
 }
 
 export function parseShiftCodesFromSheet(rows) {

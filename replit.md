@@ -42,6 +42,33 @@ This is a React + Vite application exported from the Base44 platform. It's a hos
 - `VITE_BASE44_APP_ID` - Base44 application ID (optional, for backend connection)
 - `VITE_BASE44_BACKEND_URL` - Base44 backend URL (optional, for backend connection)
 
+## Google Sheets Integration
+The app includes Google Sheets import functionality for:
+- **Shift Codes** - Import from ULTIMATETRUTH sheet (hours table)
+- **Staff Master** - Import from STAFFMASTERLISTLATEST sheet
+- **Monthly Rosters** - Import grid-format rosters with date columns
+
+### Key Files
+- `src/api/googleSheets.js` - Frontend API functions for parsing and import
+- `functions/googleSheets.ts` - Backend serverless function for secure API access
+- `src/components/settings/GoogleSheetsImportDialog.jsx` - Import dialog component
+
+### Shift Code Schema (Hours Table)
+| Field | DB Field | Usage |
+|-------|----------|-------|
+| shiftCode | code | Primary key |
+| descriptor | name | Display name |
+| hours | hours | **Source of truth for calculations** |
+| financeTag | finance_tag | BILLABLE/NON-BILLABLE/LEAVE |
+| from/to | start_time/end_time | Display only |
+| category | category | Grouping |
+| isWorked | is_worked | Work vs leave classification |
+| dayNight | day_night | Day/Night shift type |
+
+### Access Points
+- Settings > Company > Google Sheets Import
+- RotaGrid > Actions menu > Import from Google Sheets
+
 ## Notes
 This app was exported from Base44 and requires a Base44 backend to fully function. Without the backend:
 - API calls will return 404 errors
