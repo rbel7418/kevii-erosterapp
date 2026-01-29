@@ -419,6 +419,152 @@ export const StaffMaster = {
 };
 
 // ============================================
+// FINANCIAL REPORT HELPER FUNCTIONS
+// ============================================
+
+const norm = (s) => String(s ?? "").trim();
+const up = (s) => norm(s).toUpperCase();
+
+function parseBoolishIsWorked(v) {
+  const x = up(v);
+  if (!x) return true;
+  return x === "Y" || x === "YES" || x === "TRUE" || x === "WORKED" || x === "1";
+}
+
+function getHoursForRow(row, hoursMap) {
+  if (row.is_custom) return Number(row.custom_hours ?? 0) || 0;
+  const code = up(row.shift_code);
+  if (!code) return 0;
+  const meta = hoursMap[code];
+  return Number(meta?.hours ?? 0) || 0;
+}
+
+function inferDayNightFromTimes(start, end) {
+  const s = norm(start).slice(0, 5);
+  const e = norm(end).slice(0, 5);
+  if (!s || !e) return "DAY";
+  if (s >= "19:00" || e <= "08:00") return "NIGHT";
+  return "DAY";
+}
+
+function classifyLeave(codeUpper, meta) {
+  const financeTag = up(meta?.finance_tag);
+  const cat = up(meta?.category);
+  
+  const isSick = codeUpper.includes("SICK") || financeTag.includes("SICK") || cat.includes("SICK");
+  const isUnpaid = codeUpper.includes("UNPL") || financeTag.includes("UNPAID") || cat.includes("UNPAID");
+  const isHO = codeUpper === "HO" || financeTag.includes("HO") || cat.includes("HO");
+  const isPB = codeUpper === "PB" || financeTag.includes("PB") || cat.includes("PB");
+  
+  return { isSick, isUnpaid, isHO, isPB };
+}
+
+// ============================================
+// WARD FINANCIAL PROCESSOR (DB-first)
+// ============================================
+
+export function processWardFinancial(shiftRows, ward, hoursMap, staffRecords) {
+  const WARD = up(ward);
+
+  const wardStaff = new Set();
+  for (const r of shiftRows) {
+    if (up(r.planned_ward) === WARD) wardStaff.add(norm(r.employee_id));
+  }
+
+  const byEmp = new Map();
+  for (const r of shiftRows) {
+    const empId = norm(r.employee_id);
+    if (!wardStaff.has(empId)) continue;
+    const arr = byEmp.get(empId) || [];
+    arr.push(r);
+    byEmp.set(empId, arr);
+  }
+
+  const staffById = new Map();
+  for (const s of staffRecords) staffById.set(norm(s.employee_id), s);
+
+  const out = [];
+
+  for (const [empId, rows] of byEmp.entries()) {
+    const staff = staffById.get(empId);
+    const name = norm(staff?.name) || empId;
+    const role = norm(staff?.job_title) || "";
+    let contracted = 0;
+
+    let rosteredToWardHours = 0;
+    let actual = 0;
+    let shiftCount = 0;
+    let ldCount = 0;
+    let nCount = 0;
+    let sickCount = 0;
+    let sickHours = 0;
+    let unplCount = 0;
+    let unplHours = 0;
+    let hoHours = 0;
+    let pbHours = 0;
+    let redeployedOutHours = 0;
+    let netWardHours = 0;
+
+    for (const r of rows) {
+      const plannedWard = up(r.planned_ward);
+      const effectiveWorkedWard = up(r.worked_ward) || plannedWard;
+      const hours = getHoursForRow(r, hoursMap);
+
+      const codeUpper = up(r.shift_code);
+      const meta = codeUpper ? hoursMap[codeUpper] : undefined;
+      const isWorked = r.is_custom ? true : parseBoolishIsWorked(meta?.is_worked);
+
+      if (isWorked && hours > 0) {
+        shiftCount += 1;
+        const dn = r.is_custom ? inferDayNightFromTimes(r.start_time, r.end_time) : up(meta?.day_night);
+        if (dn.includes("NIGHT")) nCount += 1;
+        else ldCount += 1;
+      }
+
+      if (isWorked) actual += hours;
+      if (plannedWard === WARD && isWorked) rosteredToWardHours += hours;
+      if (effectiveWorkedWard === WARD && isWorked) netWardHours += hours;
+      if (plannedWard === WARD && effectiveWorkedWard !== WARD && isWorked) redeployedOutHours += hours;
+
+      if (!r.is_custom && codeUpper) {
+        const { isSick, isUnpaid, isHO, isPB } = classifyLeave(codeUpper, meta);
+        if (isSick) { sickCount += 1; sickHours += hours; }
+        if (isUnpaid) { unplCount += 1; unplHours += hours; }
+        if (isHO) hoHours += hours;
+        if (isPB) pbHours += hours;
+      }
+    }
+
+    const toilBalance = hoHours - pbHours;
+    const wardBalance = netWardHours - rosteredToWardHours;
+
+    out.push({
+      employeeId: empId,
+      name,
+      role,
+      contracted,
+      rosteredToWardHours,
+      actual,
+      shiftCount,
+      ldCount,
+      nCount,
+      sickCount,
+      sickHours,
+      unplCount,
+      unplHours,
+      hoHours,
+      pbHours,
+      toilBalance,
+      redeployedOutHours,
+      netWardHours,
+      wardBalance
+    });
+  }
+
+  return out;
+}
+
+// ============================================
 // FINANCIAL REPORT GENERATOR
 // ============================================
 
@@ -442,7 +588,6 @@ export async function generateFinancialReport(startDate) {
   };
   
   try {
-    // Step 1: Load hours table
     const hoursMap = await HoursTable.getLookupMap();
     result.diagnostics.hoursCodesLoaded = Object.keys(hoursMap).length;
     
@@ -452,11 +597,9 @@ export async function generateFinancialReport(startDate) {
       return result;
     }
     
-    // Step 2: Load staff
-    const staffMap = await StaffMaster.getLookupMap();
-    result.diagnostics.staffLoaded = Object.keys(staffMap).length;
+    const staffRecords = await StaffMaster.getAll();
+    result.diagnostics.staffLoaded = staffRecords.length;
     
-    // Step 3: Load shifts for period
     const shiftsResult = await RosterShifts.loadByPeriod(startDate);
     
     if (!shiftsResult.success) {
@@ -467,124 +610,24 @@ export async function generateFinancialReport(startDate) {
     
     const shifts = shiftsResult.shifts;
     result.diagnostics.shiftRowsLoaded = shifts.length;
-    
-    // Step 4: Process each shift row
-    const wardData = {};
+    result.diagnostics.customRowsCount = shifts.filter(s => s.is_custom).length;
+
     const missingCodes = new Set();
-    
-    for (const shift of shifts) {
-      const plannedWard = shift.planned_ward || 'UNASSIGNED';
-      const workedWard = shift.worked_ward || plannedWard;
-      const empId = shift.employee_id;
-      const staffInfo = staffMap[empId] || { name: 'Unknown', job_title: '', contracted_hours: 0 };
-      
-      // Calculate hours
-      let hours = 0;
-      let isWorked = false;
-      let financeTag = '';
-      let dayNight = '';
-      
-      if (shift.is_custom) {
-        hours = parseFloat(shift.custom_hours) || 0;
-        isWorked = true;
-        result.diagnostics.customRowsCount++;
-      } else {
-        const code = (shift.shift_code || '').toUpperCase().trim();
-        const hourInfo = hoursMap[code];
-        
-        if (hourInfo) {
-          hours = hourInfo.hours;
-          isWorked = hourInfo.is_worked;
-          financeTag = hourInfo.finance_tag;
-          dayNight = hourInfo.day_night;
-        } else if (code) {
-          missingCodes.add(code);
-        }
-      }
-      
-      // Initialize ward data structure
-      if (!wardData[plannedWard]) {
-        wardData[plannedWard] = {};
-      }
-      
-      if (!wardData[plannedWard][empId]) {
-        wardData[plannedWard][empId] = {
-          employeeId: empId,
-          name: staffInfo.name,
-          role: staffInfo.job_title,
-          contracted: staffInfo.contracted_hours,
-          rosteredToWardHours: 0,
-          actual: 0,
-          shiftCount: 0,
-          ldCount: 0,
-          nCount: 0,
-          sickCount: 0,
-          sickHours: 0,
-          unplCount: 0,
-          unplHours: 0,
-          hoHours: 0,
-          pbHours: 0,
-          toilBalance: 0,
-          redeployedOutHours: 0,
-          netWardHours: 0,
-          wardBalance: 0
-        };
-      }
-      
-      const empData = wardData[plannedWard][empId];
-      
-      // Update counts
-      if (isWorked && hours > 0) {
-        empData.rosteredToWardHours += hours;
-        empData.shiftCount++;
-        
-        if (dayNight === 'D' || dayNight === 'DAY') {
-          empData.ldCount++;
-        } else if (dayNight === 'N' || dayNight === 'NIGHT') {
-          empData.nCount++;
-        }
-        
-        // Handle redeployment
-        if (workedWard !== plannedWard) {
-          empData.redeployedOutHours += hours;
-        }
-      }
-      
-      // Handle leave types
-      const tag = (financeTag || '').toUpperCase();
-      if (tag.includes('SICK')) {
-        empData.sickCount++;
-        empData.sickHours += hours;
-      } else if (tag.includes('UNPAID') || tag.includes('UNPL')) {
-        empData.unplCount++;
-        empData.unplHours += hours;
-      }
-      
-      // Handle HO/PB
-      const code = (shift.shift_code || '').toUpperCase();
-      if (code === 'HO') {
-        empData.hoHours += hours;
-      } else if (code === 'PB') {
-        empData.pbHours += hours;
-      }
-      
-      empData.actual += hours;
-    }
-    
-    // Calculate derived fields
-    for (const ward in wardData) {
-      for (const empId in wardData[ward]) {
-        const emp = wardData[ward][empId];
-        emp.toilBalance = emp.hoHours - emp.pbHours;
-        emp.netWardHours = emp.rosteredToWardHours - emp.redeployedOutHours;
-        emp.wardBalance = emp.netWardHours - emp.rosteredToWardHours;
+    for (const s of shifts) {
+      if (!s.is_custom && s.shift_code) {
+        const code = up(s.shift_code);
+        if (!hoursMap[code]) missingCodes.add(code);
       }
     }
-    
-    result.wards = wardData;
     result.diagnostics.missingHoursCodes = Array.from(missingCodes).slice(0, 20);
+
+    const wards = ['ECU', 'WARD 2', 'WARD 3'];
+    for (const ward of wards) {
+      const staffFinancials = processWardFinancial(shifts, ward, hoursMap, staffRecords);
+      result.wards[ward] = staffFinancials;
+    }
+
     result.success = true;
-    
     return result;
     
   } catch (err) {
