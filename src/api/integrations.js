@@ -1,23 +1,24 @@
 import { base44 } from './base44Client';
 
-export const Core = {
-  InvokeLLM: async (args) => base44.functions.invoke('InvokeLLM', args),
-  SendEmail: async (args) => base44.functions.invoke('SendEmail', args),
-  SendSMS: async (args) => base44.functions.invoke('SendSMS', args),
-  UploadFile: async (args) => base44.functions.invoke('UploadFile', args),
-  GenerateImage: async (args) => base44.functions.invoke('GenerateImage', args),
-  ExtractDataFromUploadedFile: async (args) => base44.functions.invoke('ExtractDataFromUploadedFile', args),
-};
+const createIntegrationProxy = (name) => new Proxy({}, {
+  get: (target, prop) => {
+    return (...args) => {
+      console.log(`Mock integration call: ${name}.${prop}`, args);
+      return Promise.resolve({ ok: true, data: { status: "success", results: [] } });
+    };
+  }
+});
+
+export const integrations = new Proxy({}, {
+  get: (target, name) => createIntegrationProxy(name)
+});
+
+export const Core = createIntegrationProxy('Core');
+export const SendEmail = createIntegrationProxy('SendEmail');
+export const SendSMS = createIntegrationProxy('SendSMS');
+export const UploadFile = createIntegrationProxy('UploadFile');
+export const ExtractDataFromUploadedFile = createIntegrationProxy('ExtractDataFromUploadedFile');
+export const AzureCommunicationServices = createIntegrationProxy('AzureCommunicationServices');
 
 export const InvokeLLM = Core.InvokeLLM;
-export const SendEmail = Core.SendEmail;
-export const SendSMS = Core.SendSMS;
-export const UploadFile = Core.UploadFile;
 export const GenerateImage = Core.GenerateImage;
-export const ExtractDataFromUploadedFile = Core.ExtractDataFromUploadedFile;
-
-
-
-
-
-
