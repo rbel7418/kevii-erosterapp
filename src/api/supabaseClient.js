@@ -12,6 +12,42 @@ export const TABLES = {
   KV_STORE: "kv_store_46fcc8fd"
 };
 
+// ============================================
+// DEBUG ENDPOINT - Query roster_shifts directly
+// ============================================
+export async function debugRosterShifts(dateInput) {
+  const periodStart = normalizeToPeriodStart(dateInput);
+  
+  const result = {
+    period_start_used: periodStart,
+    rowsFound: 0,
+    sampleRows: [],
+    error: null
+  };
+  
+  try {
+    const { data, error, status } = await supabase
+      .from(TABLES.SHIFTS)
+      .select('employee_id, planned_ward, worked_ward, shift_date, slot, shift_code, is_custom, custom_hours, start_time, end_time')
+      .eq('period_start', periodStart)
+      .order('created_at', { ascending: false })
+      .limit(20);
+    
+    if (error) {
+      result.error = `Status ${status}: ${error.message}`;
+      return result;
+    }
+    
+    result.rowsFound = data?.length || 0;
+    result.sampleRows = data || [];
+    
+    return result;
+  } catch (err) {
+    result.error = err.message;
+    return result;
+  }
+}
+
 // 28-day period normalization - anchor date is 2025-12-29 (Monday)
 const PERIOD_ANCHOR = new Date('2025-12-29');
 const PERIOD_DAYS = 28;
@@ -447,30 +483,67 @@ function inferDayNightFromTimes(start, end) {
   return "DAY";
 }
 
-function classifyLeave(codeUpper, meta) {
+function detectShiftType(codeUpper, meta) {
   const financeTag = up(meta?.finance_tag);
   const cat = up(meta?.category);
   
-  const isSick = codeUpper.includes("SICK") || financeTag.includes("SICK") || cat.includes("SICK");
-  const isUnpaid = codeUpper.includes("UNPL") || financeTag.includes("UNPAID") || cat.includes("UNPAID");
-  const isHO = codeUpper === "HO" || financeTag.includes("HO") || cat.includes("HO");
-  const isPB = codeUpper === "PB" || financeTag.includes("PB") || cat.includes("PB");
+  // SICK: Staff paid but didn't work - ward lost these hours
+  // Reference patterns: SICK, SK, S, SICKNESS, SIC, SICKNSS, "LD SICK", "E SK", etc.
+  const isSick = 
+    codeUpper === "SICK" || codeUpper === "SK" || codeUpper === "S" ||
+    codeUpper === "SICKNESS" || codeUpper === "SIC" || codeUpper === "SICKNSS" ||
+    codeUpper.includes(" SICK") || codeUpper.includes("SICK ") ||
+    codeUpper.includes(" SK") || codeUpper.includes("SK ") ||
+    codeUpper.startsWith("S ") ||
+    financeTag.includes("SICK") || cat.includes("SICK");
   
-  return { isSick, isUnpaid, isHO, isPB };
+  // UNPAID: Staff already paid monthly, need to deduct from paycheck
+  // Reference patterns: UL, UPL, UNL, UNPL, UNLP, UNPAID, "UNPAID LEAVE", etc.
+  const isUnpaid = 
+    codeUpper === "UL" || codeUpper === "UPL" || codeUpper === "UNL" ||
+    codeUpper === "UNPL" || codeUpper === "UNLP" || codeUpper === "UNPAID" ||
+    codeUpper === "UNPAID LEAVE" || codeUpper === "UNPAIDLEAVE" ||
+    codeUpper.includes(" UL") || codeUpper.includes("UL ") ||
+    codeUpper.includes(" UPL") || codeUpper.includes("UPL ") ||
+    codeUpper.includes(" UNL") || codeUpper.includes("UNL ") ||
+    codeUpper.includes(" UNPL") || codeUpper.includes("UNPL ") ||
+    codeUpper.includes("UNPAID") ||
+    financeTag.includes("UNPAID") || cat.includes("UNPAID");
+  
+  // HO: Hours Owed - staff sent home but paid (DEBT they owe)
+  // Reference pattern: " HO" suffix (e.g., "LD HO", "E HO")
+  const isHO = codeUpper.includes(" HO") ||
+    financeTag.includes("HO") || cat.includes("HOURS_OWED");
+  
+  // PB: Paid Back - staff working extra to repay HO debt
+  // Reference pattern: " PB" suffix (e.g., "LD PB", "E PB")
+  const isPB = codeUpper.includes(" PB") ||
+    financeTag.includes("PB") || cat.includes("PAID_BACK");
+  
+  // Non-working leave (AL, OFF, LEAVE, TRAINING)
+  const isNonWorking = codeUpper === "AL" || codeUpper === "OFF" || 
+    codeUpper.includes("ANNUAL LEAVE") || 
+    codeUpper === "LEAVE" ||
+    codeUpper.includes("TRAINING") || cat.includes("LEAVE");
+  
+  return { isSick, isUnpaid, isHO, isPB, isNonWorking };
 }
 
 // ============================================
 // WARD FINANCIAL PROCESSOR (DB-first)
+// Matches reference script logic exactly
 // ============================================
 
 export function processWardFinancial(shiftRows, ward, hoursMap, staffRecords) {
   const WARD = up(ward);
 
+  // Step 1: Build set of staff who belong to this ward (by planned_ward)
   const wardStaff = new Set();
   for (const r of shiftRows) {
     if (up(r.planned_ward) === WARD) wardStaff.add(norm(r.employee_id));
   }
 
+  // Step 2: Group ALL shifts by employee (for ward staff only)
   const byEmp = new Map();
   for (const r of shiftRows) {
     const empId = norm(r.employee_id);
@@ -480,16 +553,18 @@ export function processWardFinancial(shiftRows, ward, hoursMap, staffRecords) {
     byEmp.set(empId, arr);
   }
 
+  // Step 3: Build staff lookup
   const staffById = new Map();
   for (const s of staffRecords) staffById.set(norm(s.employee_id), s);
 
   const out = [];
 
+  // Step 4: Process each staff member
   for (const [empId, rows] of byEmp.entries()) {
     const staff = staffById.get(empId);
     const name = norm(staff?.name) || empId;
     const role = norm(staff?.job_title) || "";
-    let contracted = 0;
+    const contracted = Number(staff?.contracted_hours) || 150;
 
     let rosteredToWardHours = 0;
     let actual = 0;
@@ -503,38 +578,82 @@ export function processWardFinancial(shiftRows, ward, hoursMap, staffRecords) {
     let hoHours = 0;
     let pbHours = 0;
     let redeployedOutHours = 0;
-    let netWardHours = 0;
 
     for (const r of rows) {
       const plannedWard = up(r.planned_ward);
       const effectiveWorkedWard = up(r.worked_ward) || plannedWard;
       const hours = getHoursForRow(r, hoursMap);
+      if (hours <= 0) continue;
 
       const codeUpper = up(r.shift_code);
       const meta = codeUpper ? hoursMap[codeUpper] : undefined;
-      const isWorked = r.is_custom ? true : parseBoolishIsWorked(meta?.is_worked);
+      const { isSick, isUnpaid, isHO, isPB, isNonWorking } = detectShiftType(codeUpper, meta);
 
-      if (isWorked && hours > 0) {
-        shiftCount += 1;
-        const dn = r.is_custom ? inferDayNightFromTimes(r.start_time, r.end_time) : up(meta?.day_night);
-        if (dn.includes("NIGHT")) nCount += 1;
-        else ldCount += 1;
+      // SICK: Ward lost these hours (staff paid but didn't work)
+      if (isSick) {
+        sickCount++;
+        sickHours += hours;
+        // Deduct from rostered and actual (reference: lines 742-744)
+        rosteredToWardHours -= hours;
+        actual -= hours;
+        continue;
       }
 
-      if (isWorked) actual += hours;
-      if (plannedWard === WARD && isWorked) rosteredToWardHours += hours;
-      if (effectiveWorkedWard === WARD && isWorked) netWardHours += hours;
-      if (plannedWard === WARD && effectiveWorkedWard !== WARD && isWorked) redeployedOutHours += hours;
+      // UNPAID: Payroll deduction needed (staff already paid monthly)
+      if (isUnpaid) {
+        unplCount++;
+        unplHours += hours;
+        // Deduct from rostered and actual (reference: lines 782-784)
+        rosteredToWardHours -= hours;
+        actual -= hours;
+        continue;
+      }
 
-      if (!r.is_custom && codeUpper) {
-        const { isSick, isUnpaid, isHO, isPB } = classifyLeave(codeUpper, meta);
-        if (isSick) { sickCount += 1; sickHours += hours; }
-        if (isUnpaid) { unplCount += 1; unplHours += hours; }
-        if (isHO) hoHours += hours;
-        if (isPB) pbHours += hours;
+      // HO: Hours Owed - staff sent home but paid (debt)
+      if (isHO) {
+        hoHours += hours;
+        // Deduct from actual and rostered (reference: lines 805-807)
+        actual -= hours;
+        rosteredToWardHours -= hours;
+        continue;
+      }
+
+      // Skip non-working shifts (AL, OFF, LEAVE, TRAINING)
+      if (isNonWorking) continue;
+
+      // Check if this is a redeployment (working on different ward)
+      const isRedeployment = plannedWard === WARD && effectiveWorkedWard !== WARD;
+
+      if (isRedeployment) {
+        // Redeployment OUT: working on another ward
+        redeployedOutHours += hours;
+        actual += hours;
+        shiftCount++;
+      } else {
+        // Normal shift on home ward
+        const isWorked = r.is_custom ? true : parseBoolishIsWorked(meta?.is_worked);
+        if (!isWorked) continue;
+
+        actual += hours;
+        rosteredToWardHours += hours;
+        shiftCount++;
+
+        // Count day/night shifts
+        const dn = r.is_custom 
+          ? inferDayNightFromTimes(r.start_time, r.end_time) 
+          : up(meta?.day_night);
+        if (dn.includes("NIGHT") || dn === "N") nCount++;
+        else ldCount++;
+
+        // PB: Paid Back - repaying HO debt
+        if (isPB) {
+          pbHours += hours;
+        }
       }
     }
 
+    // Calculate derived fields (reference: lines 941-942)
+    const netWardHours = actual - redeployedOutHours;
     const toilBalance = hoHours - pbHours;
     const wardBalance = netWardHours - rosteredToWardHours;
 

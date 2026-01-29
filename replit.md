@@ -144,5 +144,35 @@ The `generateFinancialReport()` function returns:
 - Leave breakdown (sickHours, unplHours, hoHours, pbHours)
 - Diagnostics (shiftRowsLoaded, missingHoursCodes, etc.)
 
+### Financial Logic (from reference script)
+
+**SICK Leave** (Hours Lost):
+- Staff paid but didn't work - ward lost these hours
+- Patterns: SICK, SK, S, SICKNESS, "LD SICK", "E SK"
+- Effect: DEDUCT from rosteredToWardHours and actual
+
+**UNPAID Leave** (Payroll Deduction):
+- Staff already paid monthly, need to deduct from paycheck
+- Patterns: UL, UPL, UNL, UNPL, UNLP, UNPAID, "LD UNPL"
+- Effect: DEDUCT from rosteredToWardHours and actual
+
+**HO (Hours Owed)**: Staff sent home but paid (DEBT they owe)
+**PB (Paid Back)**: Staff working extra to repay HO debt
+**TOIL Balance** = hoHours - pbHours
+
+**Redeployment**: When worked_ward differs from planned_ward
+- redeployedOutHours = hours worked on other wards
+- netWardHours = actual - redeployedOutHours
+- wardBalance = netWardHours - rosteredToWardHours
+
+### Debug Endpoint
+```javascript
+import { debugRosterShifts } from '@/api/supabaseClient';
+
+// Test DB query for a period
+const result = await debugRosterShifts('2026-01-29');
+// Returns: { period_start_used, rowsFound, sampleRows, error }
+```
+
 ## Notes
 This app was exported from Base44. The frontend now connects directly to Supabase for data persistence. Some features still use mock data for entities not yet migrated (Department, User, etc.).

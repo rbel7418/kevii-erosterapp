@@ -2,6 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { Shift, Employee, Department, Role, ShiftCode } from "@/entities/all";
 import { RotaStatus } from "@/entities/RotaStatus";
+import { StaffMaster, RosterShifts, HoursTable, normalizeToPeriodStart, getPeriodEnd } from "@/api/supabaseClient";
 import { User } from "@/entities/User";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -339,9 +340,14 @@ export default function RotaGrid() {
 
   const activeDeptIds = React.useMemo(() => {
     const set = new Set();
+    // Add mock department IDs
     (departments || []).forEach((d) => {if (d.is_active !== false) set.add(d.id);});
+    // Also add ward IDs from Supabase staff
+    (employees || []).forEach((e) => {
+      if (e.department_id) set.add(e.department_id);
+    });
     return set;
-  }, [departments]);
+  }, [departments, employees]);
 
   const [defaultDeptEnabled, setDefaultDeptEnabled] = React.useState(false);
   const [defaultViewEnabled, setDefaultViewEnabled] = React.useState(false);
@@ -558,16 +564,56 @@ export default function RotaGrid() {
     (async () => {
       const u = await User.me();
       setCurrentUser(u);
-      const [d, e, s, sc] = await Promise.all([
-      Department.list(),
-      Employee.list(),
-      Shift.list(),
-      ShiftCode.list()]
-      );
+      
+      // Load from Supabase for staff and shift codes, keep mock for departments
+      const [d, staffData, hoursData] = await Promise.all([
+        Department.list(),
+        StaffMaster.getAll(),
+        HoursTable.getAll()
+      ]);
+      
+      // Transform staff data to match Employee entity shape
+      // Map department names to department_ids that match the ward checkboxes
+      const deptNameToId = (dept) => {
+        if (!dept) return '';
+        const upper = dept.toUpperCase().trim();
+        if (upper === 'WARD 2' || upper.includes('WARD 2')) return 'WARD 2';
+        if (upper === 'WARD 3' || upper.includes('WARD 3')) return 'WARD 3';
+        if (upper === 'ECU' || upper.includes('ECU')) return 'ECU';
+        if (upper.includes('DUTY MANAGER')) return 'DUTY MANAGERS';
+        return dept; // Return original for non-ward staff
+      };
+      
+      const transformedStaff = (staffData || []).map(s => ({
+        id: s.employee_id,
+        employee_id: s.employee_id,
+        full_name: s.name,
+        name: s.name,
+        department: s.department || '',
+        department_id: deptNameToId(s.department),
+        job_title: s.job_title || '',
+        role: s.job_title || '',
+        contract_type: s.contract_type || '',
+        contracted_hours: s.contracted_hours || 150,
+        is_active: true // All Supabase staff are active
+      }));
+      
+      // Transform hours data to match ShiftCode entity shape
+      const transformedCodes = (hoursData || []).map(h => ({
+        id: h.shift_code,
+        code: h.shift_code,
+        name: h.descriptor || h.shift_code,
+        hours: h.hours,
+        is_worked: h.is_worked,
+        finance_tag: h.finance_tag,
+        day_night: h.day_night,
+        category: h.category
+      }));
+      
       setDepartments(d || []);
-      setEmployees(e || []);
-      setShifts(s || []);
-      setShiftCodes(sc || []);
+      setEmployees(transformedStaff);
+      setShifts([]); // Shifts will be loaded per period
+      setShiftCodes(transformedCodes);
       setLoading(false);
     })();
 
