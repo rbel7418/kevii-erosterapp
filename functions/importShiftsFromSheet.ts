@@ -9,20 +9,85 @@ function toISODate(d) {
 
 function parseHeaderDate(h) {
   if (!h) return null;
-  const s = String(h).trim();
-  // Try ISO-like first
+  let s = String(h).trim();
+  if (!s) return null;
+
+  // Remove bracketed notes like "(Mon)" or extra annotations
+  s = s.replace(/\([^)]*\)/g, '').trim();
+
+  // ISO-like yyyy-mm-dd
   if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(s)) {
     const d = new Date(s);
     return isNaN(d.getTime()) ? null : toISODate(d);
   }
-  // dd/mm/yyyy or d/m/yy
-  if (/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(s)) {
-    const [d, m, y] = s.split('/').map((x) => parseInt(x, 10));
-    const yyyy = y < 100 ? 2000 + y : y;
-    const dt = new Date(yyyy, (m - 1), d);
-    return isNaN(dt.getTime()) ? null : toISODate(dt);
+
+  // Helper: resolve missing year to the date closest to today (pref UK dd/mm)
+  const resolveYear = (day, monthIndex, yearMaybe) => {
+    const today = new Date();
+    if (Number.isFinite(yearMaybe)) {
+      const d = new Date(yearMaybe, monthIndex, day);
+      return isNaN(d.getTime()) ? null : toISODate(d);
+    }
+    const y = today.getFullYear();
+    const candThis = new Date(y, monthIndex, day);
+    const candPrev = new Date(y - 1, monthIndex, day);
+    const candNext = new Date(y + 1, monthIndex, day);
+    const dist = (a) => Math.abs(a - today);
+    let best = candThis;
+    if (dist(candPrev) < dist(best)) best = candPrev;
+    if (dist(candNext) < dist(best)) best = candNext;
+    return isNaN(best.getTime()) ? null : toISODate(best);
+  };
+
+  // Map month names
+  const MONTHS = {
+    jan: 0, january: 0,
+    feb: 1, february: 1,
+    mar: 2, march: 2,
+    apr: 3, april: 3,
+    may: 4,
+    jun: 5, june: 5,
+    jul: 6, july: 6,
+    aug: 7, august: 7,
+    sep: 8, sept: 8, september: 8,
+    oct: 9, october: 9,
+    nov: 10, november: 10,
+    dec: 11, december: 11,
+  };
+
+  const toInt = (v) => Number.parseInt(String(v), 10);
+
+  // UK dd/mm[/yy|yyyy]
+  let m = s.match(/^(?:[A-Za-z]{3,}\s+)?(\d{1,2})\s*[\/\-.]\s*(\d{1,2})(?:\s*[\/\-.]\s*(\d{2,4}))?$/);
+  if (m) {
+    const d = toInt(m[1]);
+    const mm = toInt(m[2]);
+    const y = m[3] ? toInt(m[3]) : undefined;
+    const yyyy = (y !== undefined) ? (y < 100 ? 2000 + y : y) : undefined;
+    return resolveYear(d, Math.max(0, mm - 1), yyyy);
   }
-  // Try generic Date parse as last resort
+
+  // dd Mon [yy|yyyy]
+  m = s.match(/^(?:[A-Za-z]{3,}\s+)?(\d{1,2})\s+([A-Za-z]{3,})\s*(\d{2,4})?$/);
+  if (m) {
+    const d = toInt(m[1]);
+    const mon = MONTHS[m[2].toLowerCase()];
+    const y = m[3] ? toInt(m[3]) : undefined;
+    const yyyy = (y !== undefined) ? (y < 100 ? 2000 + y : y) : undefined;
+    if (mon !== undefined) return resolveYear(d, mon, yyyy);
+  }
+
+  // Mon dd [yy|yyyy]
+  m = s.match(/^([A-Za-z]{3,})\s+(\d{1,2})(?:\s+(\d{2,4}))?$/);
+  if (m) {
+    const mon = MONTHS[m[1].toLowerCase()];
+    const d = toInt(m[2]);
+    const y = m[3] ? toInt(m[3]) : undefined;
+    const yyyy = (y !== undefined) ? (y < 100 ? 2000 + y : y) : undefined;
+    if (mon !== undefined) return resolveYear(d, mon, yyyy);
+  }
+
+  // Last resort: native Date parse
   const dt = new Date(s);
   return isNaN(dt.getTime()) ? null : toISODate(dt);
 }
