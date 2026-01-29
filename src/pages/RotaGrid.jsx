@@ -408,9 +408,9 @@ export default function RotaGrid() {
     gridStart = startOfWeek(currentDate, { weekStartsOn: 1 });
     gridEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
   } else if (period === "4weeks") {
-    // NEW: 28-day period starting from Monday of current week
-    gridStart = startOfWeek(currentDate, { weekStartsOn: 1 });
-    gridEnd = addDays(gridStart, 27); // 28 days total (0-27)
+    // Use the 28-day period anchor system
+    gridStart = normalizeToPeriodStart(currentDate);
+    gridEnd = getPeriodEnd(gridStart);
   } else {
     gridStart = startOfMonth(currentDate);
     gridEnd = endOfMonth(currentDate);
@@ -528,16 +528,14 @@ export default function RotaGrid() {
   }, [employees, selectedDepts, activeDeptIds, visitingStaff]);
 
   const filteredEmpIds = React.useMemo(() => {
-    return new Set(filteredEmp.map((e) => e.id));
-  }, [filteredEmp]);
+    const ids = new Set(filteredEmp.map((e) => e.id));
+    return ids;
+  }, [filteredEmp, activeDeptIds]);
 
   const visibleShifts = React.useMemo(() => {
     const dateSet = new Set(visibleDays.map((d) => format(d, "yyyy-MM-dd")));
     return shifts.filter((s) => {
       if (!dateSet.has(s.date)) return false;
-      // Show if:
-      // 1. Belongs to a filtered employee (Home or Visiting)
-      // 2. OR if it's a "Redeployed Out" shift from a Home employee (the shift dept ID will be different, but emp ID matches)
       if (!filteredEmpIds.has(s.employee_id)) return false;
       return true;
     });
@@ -584,19 +582,22 @@ export default function RotaGrid() {
         return dept; // Return original for non-ward staff
       };
       
-      const transformedStaff = (staffData || []).map(s => ({
+      const transformedStaff = (staffData || []).map(s => {
+        const deptId = deptNameToId(s.department);
+        return {
         id: s.employee_id,
         employee_id: s.employee_id,
         full_name: s.name,
         name: s.name,
         department: s.department || '',
-        department_id: deptNameToId(s.department),
+        department_id: deptId,
         job_title: s.job_title || '',
         role: s.job_title || '',
         contract_type: s.contract_type || '',
         contracted_hours: s.contracted_hours || 150,
         is_active: true // All Supabase staff are active
-      }));
+      };
+      });
       
       // Transform hours data to match ShiftCode entity shape
       const transformedCodes = (hoursData || []).map(h => ({
@@ -631,6 +632,32 @@ export default function RotaGrid() {
     }, 3000); // Increased frequency to 3s for better responsiveness
     return () => clearInterval(interval);
   }, []);
+
+  // Load shifts from Supabase when period changes
+  React.useEffect(() => {
+    if (!gridStart) return;
+    const periodStartStr = format(gridStart, 'yyyy-MM-dd');
+    (async () => {
+      try {
+        const result = await RosterShifts.loadByPeriod(periodStartStr);
+        if (result?.shifts?.length > 0) {
+          // Transform to match expected shift format
+          const transformedShifts = result.shifts.map(s => ({
+            id: s.id,
+            employee_id: s.employee_id,
+            date: s.shift_date,
+            shift_code: s.shift_code,
+            department_id: s.planned_ward,
+            worked_ward: s.worked_ward,
+            slot: s.slot || 1
+          }));
+          setShifts(transformedShifts);
+        }
+      } catch (err) {
+        console.error('Error loading shifts:', err);
+      }
+    })();
+  }, [gridStart]);
 
   React.useEffect(() => {
     if (!currentUser) return;

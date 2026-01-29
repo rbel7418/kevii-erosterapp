@@ -1,0 +1,4363 @@
+[
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "BH",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "E DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101064",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-03",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD NIC, LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100091",
+    "department": "WARD 2",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD UL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD CL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD CL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "LD CL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100186",
+    "department": "WARD 2",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100136",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-03",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-11",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100167",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-11",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD BCU/ECU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD BCU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-18",
+    "shift_code": "LD HO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD BCU/ECU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "E OPD / \nL W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100681",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-11",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-24",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100141",
+    "department": "WARD 2",
+    "shift_date": "2026-01-25",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-03",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-04",
+    "shift_code": "LN DM PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LN NIC W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "LN NIC W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100582",
+    "department": "WARD 2",
+    "shift_date": "2026-01-18",
+    "shift_code": "LN NIC W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "E POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "A/L E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "E SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "SICK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "E SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "SICK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-11",
+    "shift_code": "LD SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "E OP",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "E OP",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "E OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100204",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "E POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-11",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "UNPL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD UL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100234",
+    "department": "WARD 2",
+    "shift_date": "2026-01-25",
+    "shift_code": "LD HO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD HO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD HO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "E POA + L W2",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD POA PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD POA PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100898",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-04",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "LD AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD ECU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD POA PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-18",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101129",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD ECU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "102121",
+    "department": "WARD 2",
+    "shift_date": "2026-01-24",
+    "shift_code": "E OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-05",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "LD HO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "E POA/W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100384",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-03",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-04",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-10",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD W2",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-18",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101084",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD BCU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD BCU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-18",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-19",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-20",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-21",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101298",
+    "department": "WARD 2",
+    "shift_date": "2026-01-25",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2025-12-29",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2025-12-30",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2025-12-31",
+    "shift_code": "A/L",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-01",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-02",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-03",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-04",
+    "shift_code": "DO",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-12",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-13",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-14",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-15",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-16",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-17",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100699",
+    "department": "WARD 2",
+    "shift_date": "2026-01-18",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "BH",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "E NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "E NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "E NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "E NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101293",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-03",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-17",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-18",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "E / L NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "E / L NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100162",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "E / L NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "E / L NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100025",
+    "department": "WARD  3",
+    "shift_date": "2026-01-25",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-03",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-04",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD NIC PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-11",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD POA PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "E OPD / L W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100200",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-03",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-04",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-17",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100583",
+    "department": "WARD  3",
+    "shift_date": "2026-01-18",
+    "shift_code": "LN DM",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-03",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "E PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-10",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-17",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD ECU",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100911",
+    "department": "WARD  3",
+    "shift_date": "2026-01-24",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "UPL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-10",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-11",
+    "shift_code": "LD UL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101094",
+    "department": "WARD  3",
+    "shift_date": "2026-01-25",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-04",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-10",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101119",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-04",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-11",
+    "shift_code": "LD NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-17",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-18",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101131",
+    "department": "WARD  3",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "E",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "LD SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-03",
+    "shift_code": "LD SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-04",
+    "shift_code": "SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-17",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-18",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100045",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-10",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-11",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LN PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-24",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100016",
+    "department": "WARD  3",
+    "shift_date": "2026-01-25",
+    "shift_code": "LN PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-04",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "LN PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-17",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-18",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101101",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD UAA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-10",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-11",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101107",
+    "department": "WARD  3",
+    "shift_date": "2026-01-25",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-03",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "E OPD / L W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "E BCU/L W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101139",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "LN NIC",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "LN NIC PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LN PB",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-17",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-18",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD OPD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101159",
+    "department": "WARD  3",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-02",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100519",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "ML",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2025-12-31",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-07",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-14",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-21",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101215",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD POA",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-01",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-08",
+    "shift_code": "SD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-09",
+    "shift_code": "SD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-15",
+    "shift_code": "SD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-16",
+    "shift_code": "SD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-22",
+    "shift_code": "SD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101152",
+    "department": "WARD  3",
+    "shift_date": "2026-01-23",
+    "shift_code": "SD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2025-12-29",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2025-12-31",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-02",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-05",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-07",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-09",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-12",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-16",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-17",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-18",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-21",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-22",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100104",
+    "department": "ECU",
+    "shift_date": "2026-01-23",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2025-12-31",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-01",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-02",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-03",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-04",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-05",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-06",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-14",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-15",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-16",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-17",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-18",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100122",
+    "department": "ECU",
+    "shift_date": "2026-01-19",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2025-12-31",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-01",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-05",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-06",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-07",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-09",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-10",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-12",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-13",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-21",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-22",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-23",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101163",
+    "department": "ECU",
+    "shift_date": "2026-01-24",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2025-12-29",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2025-12-30",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-01",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-02",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-03",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-04",
+    "shift_code": "AL",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-07",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-08",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-13",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-14",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-15",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-19",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-20",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-24",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100565",
+    "department": "ECU",
+    "shift_date": "2026-01-25",
+    "shift_code": "LD",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-02",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-03",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-04",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-05",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-06",
+    "shift_code": "LN SK",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-07",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-08",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-09",
+    "shift_code": "DOR",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-12",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-13",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-14",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-20",
+    "shift_code": "LN W3",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-23",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-24",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101044",
+    "department": "ECU",
+    "shift_date": "2026-01-25",
+    "shift_code": "LN",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100083",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-01",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100083",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-05",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100083",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-09",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100083",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-13",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100083",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-17",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100083",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-21",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100083",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-25",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100818",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-03",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100818",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-07",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100818",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-15",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100818",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-19",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "100818",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-23",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101020",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-06",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101020",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-14",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101020",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-18",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101020",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-22",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2025-12-30",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-02",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-04",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-08",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-10",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-12",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-16",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-20",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "101145",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2026-01-24",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "200527",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2025-12-31",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  },
+  {
+    "employee_id": "200669",
+    "department": "RESIDENT DOCTOR",
+    "shift_date": "2025-12-29",
+    "shift_code": "24H",
+    "period_start": "2025-12-29"
+  }
+]
