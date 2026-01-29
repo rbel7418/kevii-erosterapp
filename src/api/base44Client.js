@@ -1,4 +1,6 @@
 // Mock Base44 client to remove dependency on backend endpoint
+import { startOfWeek, addDays, format } from "date-fns";
+
 const mockHandler = {
   get: (target, prop) => {
     if (prop === 'then') return undefined;
@@ -33,6 +35,44 @@ export const base44 = new Proxy({
   entities: {
     list: async (name) => {
       console.log(`Mock list entities: ${name}`);
+      if (name === 'Department') return [
+        { id: 'dept-1', name: 'Ward 2', is_active: true, published_months: ['2026-01'], is_dm_only: false },
+        { id: 'dept-2', name: 'Ward 3', is_active: true, published_months: ['2026-01'], is_dm_only: false },
+        { id: 'dept-3', name: 'ECU', is_active: true, published_months: ['2026-01'], is_dm_only: false },
+        { id: 'dept-dm', name: 'DM Only Dept', is_active: true, is_dm_only: true }
+      ];
+      if (name === 'Employee') return [
+        { id: 'emp-1', full_name: 'John Doe', department_id: 'dept-1', role: 'Nurse', contract_type: 'Permanent', sort_index: 1, is_active: true },
+        { id: 'emp-2', full_name: 'Jane Smith', department_id: 'dept-1', role: 'Sister', contract_type: 'Permanent', sort_index: 0, is_active: true },
+        { id: 'emp-3', full_name: 'Bob Wilson', department_id: 'dept-2', role: 'Nurse', contract_type: 'Permanent', sort_index: 1, is_active: true },
+        { id: 'emp-4', full_name: 'Alice Brown', department_id: 'dept-1', role: 'Nurse', contract_type: 'Permanent', sort_index: 2, is_active: true }
+      ];
+      if (name === 'ShiftCode') return [
+        { id: 'sc-1', code: 'D', name: 'Day', start_time: '08:00', end_time: '20:30', color: '#3b82f6' },
+        { id: 'sc-2', code: 'N', name: 'Night', start_time: '20:00', end_time: '08:30', color: '#1e3a8a' },
+        { id: 'sc-3', code: 'LD', name: 'Long Day', start_time: '08:00', end_time: '21:00', color: '#ef4444' }
+      ];
+      if (name === 'Shift') {
+        const shifts = [];
+        const today = new Date();
+        const start = startOfWeek(today, { weekStartsOn: 1 });
+        // Generate a grid of shifts
+        ['emp-1', 'emp-2', 'emp-3', 'emp-4'].forEach(empId => {
+          for (let i = 0; i < 28; i++) {
+            const date = format(addDays(start, i), 'yyyy-MM-dd');
+            if (Math.random() > 0.3) { // 70% chance of a shift
+              shifts.push({
+                id: `shift-${empId}-${i}`,
+                employee_id: empId,
+                department_id: empId === 'emp-3' ? 'dept-2' : 'dept-1',
+                shift_code: i % 7 === 5 || i % 7 === 6 ? 'N' : 'D',
+                date: date
+              });
+            }
+          }
+        });
+        return shifts;
+      }
       return [];
     },
     get: async (name, id) => {

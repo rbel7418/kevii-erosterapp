@@ -8,7 +8,10 @@ const createEntityProxy = (name) => new Proxy({}, {
     if (prop === 'create') return (data) => base44.entities.create(name, data);
     if (prop === 'update') return (id, data) => base44.entities.update(name, id, data);
     if (prop === 'delete') return (id) => base44.entities.delete(name, id);
-    if (prop === 'upsert') return (data) => Promise.resolve({ id: 'mock-id', ...data });
+    if (prop === 'upsert') return (data) => {
+      console.log(`Mock upsert entity: ${name}`, data);
+      return Promise.resolve({ id: data.id || 'mock-id', ...data });
+    };
     if (prop === 'updateMyUserData') return (data) => Promise.resolve({ id: 'mock-id', ...data });
     // Handle potential function calls on the entity itself
     return () => Promise.resolve({ ok: true, data: [] });
