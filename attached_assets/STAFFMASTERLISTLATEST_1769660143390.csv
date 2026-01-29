@@ -1,0 +1,245 @@
+employee_id,name,date_of_join,job_title,department,reports_to,contract_type,contracted_hours
+100828,Rashmi Trivedi,08/02/2021,Lead Pharmacy Technician,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+100843,Maria Christina Hughes,09/09/2021,Lead Practitioner  Recovery,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100694,Stephen Kusi,4/20/2020,Assistant Practitioner in Healthcare,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100741,Dean Lock,12/01/2020,Assistant Practitioner in Healthcare,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101106,Jacqueline McCollin,3/20/2023,POA Manager,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+102124,Raymund Sobelario Belleza,07/07/2025,Duty Manager,Duty Manager,101263 - Robert Hickey,Permanent,150
+100777,Alan Farthing,04/01/2021,Responsible Officer,CEO - CEO Office,101268 - Ella Audrey Acheson,Permanent,150
+100962,Coralia Costa,03/08/2022,Senior POA Nurse,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Permanent,150
+101166,Melvia Finney,09/04/2023,Lead Practitioner – Gynaecology/General,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100122,Mosadikhumo Malete,03/04/2005,Senior Staff Nurse,ECU,TBC,Permanent,150
+100565,Jennifer Tirant,2/25/2019,Senior Staff Nurse,ECU,TBC,Permanent,150
+101163,Ana Cristina Aranda,8/21/2023,Senior Staff Nurse,ECU,TBC,Permanent,150
+100136,Marcelina Montalvo,1/13/2000,Senior Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100141,Juliana Mwakitawa,11/02/2010,Senior Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100582,Vincenzo Mattia,4/22/2019,Senior Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100681,Oana Balint,2/24/2020,Senior Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100045,Melody Cruz,09/10/2002,Senior Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100519,Patricia Oliva Guerra,07/01/2018,Senior Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100583,Lucrezia Naglieri,4/22/2019,Senior Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100911,Remya Matthews,12/01/2021,Senior Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101094,Irmina Dyer,2/13/2023,Senior Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101119,Jane Ordette Bolic,05/01/2023,Senior Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101131,Andreea Caraet,5/22/2023,Senior Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100853,Doina Liliana Vizireanu,9/20/2021,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+100877,Godelieve Cimpaye,11/01/2021,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+100892,Aisha Soetan,1/13/2022,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+100965,Farhiya Suleiman Ali,2/17/2022,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101027,Amal Hussein,8/25/2022,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101077,Julio De Oliveira,12/05/2022,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101288,Joanne Mcgregor,1/20/2025,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101304,Seraphina Viiru,5/19/2025,Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101283,Lajuane Ariana Glyne,01/06/2025,Healthcare Assistant,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+100922,Rommel Roy,01/04/2022,Healthcare Assistant,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Permanent,150
+100699,Donalyn Galino,5/18/2020,Healthcare Assistant,Ward 2,101064 - Mervin Albania,Permanent,150
+101084,Mariyana Savcheva,01/09/2023,Healthcare Assistant,Ward 2,101064 - Mervin Albania,Permanent,150
+101298,Snezhana Velkova,4/30/2025,Healthcare Assistant,Ward 2,101064 - Mervin Albania,Permanent,150
+100897,Athina Tsompanoudi,11/22/2021,Healthcare Assistant,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101046,Mercy Ng'ang'a,10/10/2022,Healthcare Assistant,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101152,Muhammad Usman,7/31/2023,Healthcare Assistant,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100795,Izabella Gorak,06/07/2021,Healthcare Assistant,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100727,Lul Khalif,10/26/2020,Imaging Manager,IMAGINGD - Imaging Direct,102126 - Rosemary Fegan,Permanent,150
+100704,Chimezuru Chianakwalam,7/27/2020,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+100989,Masuma Khanom,05/09/2022,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+100990,Gurmeet Patwalia,05/09/2022,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101021,Charlie McKay,07/11/2022,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101177,Isahaq Mohamud,10/16/2023,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101193,Hawo Abdule,01/08/2024,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101210,Nina Katya Ibanez,03/04/2024,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101266,Georgia Hunt,10/22/2024,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101284,Abdiaziz Hussein,01/06/2025,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101303,Mallory Sharp,5/19/2025,Senior Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+100975,Najah Abdigani,04/04/2022,Pre,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Permanent,150
+100874,Arwa Ali Adamjee,10/15/2021,Pharmacist,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+100884,Melanie Mamood,11/04/2021,Pharmacist,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+101251,Susan Hamoud,8/27/2024,Pharmacist,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+100161,Emmanuel Peralta,8/28/2008,Pharmacy Assistant,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+100826,Lok Tung Tam,08/02/2021,Physiotherapy Manager,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+100646,Jennifer Earl,11/01/2019,Senior Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Permanent,150
+100909,Jimsy Simon,01/08/2022,Senior Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Permanent,150
+101061,Chun Hang Jerome Ng,11/07/2022,Senior Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Permanent,150
+101277,Min Wei Loh,12/10/2024,Senior Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Permanent,150
+100275,Alvaro Cardona Cabrera,11/24/2015,Physiotherapy Assistant,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Permanent,150
+100012,Roderic Arandia,6/22/2009,Theatre Support Worker,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100503,Angelee Mae Serrano Otic,4/30/2018,Theatre Support Worker,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100076,Ahmed Hamdy,02/01/2005,Theatre Porter,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100991,Abbas Mohamud,05/09/2022,Theatre Porter,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101201,Darkhan Abilov,2/13/2024,Theatre Porter,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101228,James Lyons,4/15/2024,Theatre Porter,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100392,Miriam Buenafe,5/15/2017,Staff Nurse,ECU,TBC,Permanent,150
+101044,Bisrat Teklay Haile,10/05/2022,Staff Nurse,ECU,TBC,Permanent,150
+101135,Somayyeh Razavi,06/07/2023,Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101205,Nadia Fiaz,2/20/2024,Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+102123,Alexandra Horwood,07/02/2025,Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+100739,Agnieszka Nowak,11/30/2020,Staff Nurse,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Permanent,150
+101004,Flordeliza Dela Cruz,6/20/2022,Staff Nurse,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Permanent,150
+101203,Roberto Fittipaldi,2/14/2024,Staff Nurse,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Permanent,150
+100167,Ersire Remollo,03/11/2002,Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100204,Charlotte Kent,12/17/2010,Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100234,Mihaela Mihalceanu,01/05/2015,Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100384,Emily Caliao,05/08/2017,Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100898,Lara Fenude,11/22/2021,Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+101129,Oundrey Tolato,5/22/2023,Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+102121,Tony Daniel Gurbuxani,04/08/2024,Staff Nurse,Ward 2,101064 - Mervin Albania,Permanent,150
+100016,Regina Baah,3/21/2011,Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101101,Nickshia Henry,03/06/2023,Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101107,Vervelin Brown,3/20/2023,Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101139,Saira Rasheed,07/03/2023,Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101159,Antonio Constantini,8/14/2023,Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101212,Charity Gichia,03/11/2024,Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+101215,Stella Ameto,03/11/2024,Staff Nurse,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100091,Tania Jones,1/20/2003,Ward Sister,Ward 2,101064 - Mervin Albania,Permanent,150
+100025,Mariel Minette Bulahan,04/10/2000,Ward Sister,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100162,Petronella Phiri,2/21/2000,Ward Sister,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+100748,Elaine Edwards,01/04/2021,Ward Clerk,Ward 2,101064 - Mervin Albania,Permanent,150
+101202,Ramya Jesmi Ratnakumar,2/14/2024,Ward Clerk,Ward 2,101064 - Mervin Albania,Permanent,150
+100636,Margaret Gaspar,10/01/2019,Ward Clerk,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+200910,Ana Dzitac,4/15/2024,Bank Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200936,Ijeoma Offormezie,11/01/2024,Bank Healthcare Assistant,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200912,Seema Isaiah,4/25/2024,Bank Healthcare Assistant,Ward 2,101064 - Mervin Albania,Bank,150
+200924,Abigail Addai,6/17/2024,Bank Healthcare Assistant,SSUNITDI - Short Stay Unit Direct,101126 - Jose Lorenzo Diokno,Bank,150
+200947,Sobia Awan,02/10/2025,Bank Pharmacy Assistant,PHARM - Pharmacy,100157 - Bina Patel,Bank,150
+200615,Amir Mostaed,09/09/2022,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200681,Kimberley Phung,11/20/2023,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200942,Michael Chun Wong,8/23/2024,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200943,Ashleigh Jordan,1/31/2025,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200955,Callum Stinson,3/19/2025,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200966,Michael Stacy,6/16/2025,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200968,Claudia Wharton,6/23/2025,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200969,Gabrielle Crofts,6/23/2025,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200598,Karin Goldschmidt,6/20/2022,Bank Physiotherapist,PHYSIODI - Physiotherapy Direct,100834 - Amelia Cook,Bank,150
+200471,Lucia Brito,11/28/2019,Bank Physiotherapy Assistant,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Bank,150
+200894,Alex Henderson,1/28/2024,Bank Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Bank,150
+200904,Fiona Barry,01/11/2024,Bank Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Bank,150
+200925,Saaid Ali,6/29/2024,Bank Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Bank,150
+200956,Isabelle Murphy,04/01/2025,Bank Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Bank,150
+200952,Magdalena Pitio,03/01/2025,Bank Recovery Nurse,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200963,Kalaivani Rajan,05/01/2025,Bank Resident Medical Officer,Clinical Mngt. Grp.,101263 - Robert Hickey,Bank,150
+200902,Cristina Luchetta,11/01/2023,Bank Staff Nurse,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Bank,150
+200926,Keneth Arciaga,6/26/2024,Bank Staff Nurse,Clinical Mngt. Grp.,101263 - Robert Hickey,Bank,150
+200901,Isabelle Chase,2/22/2024,Bank Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200911,Cosimo Sergio,3/14/2024,Bank Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200940,Emmanuel Sodekuu,12/01/2024,Bank Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200941,Maria Hiquaiana,01/01/2025,Bank Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200965,Ivan Kim Carlos Ayson,6/16/2025,Bank Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200970,Glory Ann Barrios,6/27/2025,Bank Staff Nurse,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Bank,150
+200920,Catherine Herbert,05/11/2024,Bank Staff Nurse,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Bank,150
+200933,Joydee Soriano,10/12/2024,Bank Staff Nurse,POA - Pre Operative Assessment Direct,101106 - Jacqueline McCollin,Bank,150
+200972,Gopikrishnan Balaraman,6/18/2025,Bank Staff Nurse,SSUNITDI - Short Stay Unit Direct,100187 - Sibonokuhle Sibanda,Bank,150
+200538,Christiana Akpan,7/21/2021,Bank Staff Nurse,Ward 2,101064 - Mervin Albania,Bank,150
+200602,Nyaradzo Abigail Chiswo,07/11/2022,Bank Staff Nurse,Ward 2,101064 - Mervin Albania,Bank,150
+200938,Galya Georgieva,7/22/2024,Bank Staff Nurse,Ward 2,101064 - Mervin Albania,Bank,150
+200644,Mavis Asare,06/09/2023,Bank Staff Nurse,SSUNITDI - Short Stay Unit Direct,101126 - Jose Lorenzo Diokno,Bank,150
+200147,Guy Rayner-Rudland,10/01/2015,Bank Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200661,Ruqiya Khalif,8/29/2023,Bank Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200663,Liliane Sahie,09/05/2023,Bank Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200937,Dimitrina Ilieva,11/11/2024,Bank Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200945,Monika Pitio,1/24/2025,Bank Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200949,Isabel Fernandez Ramos,03/03/2025,Bank Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200957,Karina Rose Jayme,04/01/2025,Bank Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200298,Neediya Lamichhane,12/05/2017,Bank Theatre Scrub Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200928,Rebecca Fatima Zesooli,8/30/2024,Bank Theatre Scrub Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200950,Mary Antonette Guial,03/03/2025,Bank Theatre Scrub Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200562,Sylvia Picken,10/18/2021,Bank Theatre Support Worker,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+100104,Bibian Koyi,03/01/2004,Critical Care Sister,ECU,TBC,Permanent,150
+101289,Immaculate Cariaga,02/06/2025,Orthoapedic Team Leader,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100144,Isabelle Nicol,01/06/1987,Theatre Co,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101281,Viveka Lasam,01/06/2025,Theatre Co,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100006,Abdelaziz Akkouche,4/30/2007,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100195,Darius Stankevicius,07/12/2004,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100856,Arthurnatius Muringani,10/04/2021,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100971,Ciarra Pamela Pasicolan,3/28/2022,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101055,John Joey Sobrejuanite,10/31/2022,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101109,Shimre Rose Abad,3/27/2023,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101211,Toni Faye Ederosas,03/11/2024,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101252,Alissa Sirju-Ramoutar,09/11/2024,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101253,J-Angela Bagamasbad,09/11/2024,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101273,Alice Calvert,12/02/2024,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101295,Desiree Mary Therese Velez,4/14/2025,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+200909,Reginaldo Stephansson,4/13/2024,Bank Theatre Porter,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+100719,Helen Froyd,9/21/2020,Breast Clinical Nurse Specialist,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+200650,Agnieszka Szybka,07/08/2003,Bank Pharmacy Technician,PHARM - Pharmacy,100157 - Bina Patel,Bank,150
+100672,Liga Jakucionis,1/20/2020,Theatre Business Administrator,THEATREIN - Theatre Indirect,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100673,Jelena Rozepal,1/20/2020,Lead Anaesthetic Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101064,Mervin Albania,11/14/2022,Matron,Ward 2,101263 - Robert Hickey,Permanent,150
+101240,Lydia Brett-Dormon,6/26/2024,Superintendent Mammographer,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+100187,Sibonokuhle Sibanda,10/14/2002,Head of Nursing,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+100157,Bina Patel,5/27/2014,Head of Pharmacy,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+100823,Jeremy Downes,08/10/2021,Outpatient Nurse Manager,CONROMMD - Consulting Rooms Direct,102126 - Rosemary Fegan,Permanent,150
+100764,Usha Gail Nanan,03/01/2021,Outpatients Sister,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101056,Lucy Frost,10/31/2022,Outpatients Sister,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101165,Tahnee Walmsley,09/01/2023,Senior Occupational Therapist/Dementia Lead,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Permanent,150
+101264,Maria Victoria Defante,11/11/2024,Senior Mammographer,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+100855,Sian Keegan,9/21/2021,CT & General Superintendent,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+100878,Perrisha Hudson-Wood,01/04/2022,MRI Superintendent Radiographer,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+200566,Paul Low,10/11/2021,Gynae MDT Coordinator,OPERATIONS - Operations Indirect,100834 - Amelia Cook,Bank,150
+100921,Fatima Siddiqa,01/05/2022,Breast Unit Secretary,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+100976,Sarah Mant,04/11/2022,Orthopaedic Clinical Nurse Specialist,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+100709,Tiffany Lorraine,09/09/2020,Theatre Practitioner / IVT Lead,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+200899,Lisa Fearon,2/20/2024,Bank ODP,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+200922,Eduardo Correia,06/12/2024,Bank ODP,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+100127,Renata Marucha,12/01/2008,Clinical Nurse Specialist,CLINADMIND - Clinical Administration Direct,100834 - Amelia Cook,Permanent,150
+100213,Samuel Victor Vargas,12/06/2010,Lead Practitioner â€“ Orthopaedic,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101019,Daisy Ann Holmes,08/01/2022,Lead Practitioner â€“ Orthopaedic,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100362,Temporo I Dy,02/01/2017,Senior Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100587,Issa Paguidopon,05/07/2019,Senior Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100773,Nahid Miah,3/29/2021,Senior Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101000,Ma Theressel Angelica Deduyo,6/13/2022,Senior Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101226,Elena Castaniere,4/15/2024,Senior Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101267,Madhumathi Srinivasapuram,11/18/2024,Senior Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+200964,Edward Watson,05/01/2025,Bank ITU Clinical Fellow,ECU,TBC,Bank,150
+200367,Janis Burns,10/13/2018,Bank ITU Clinical Fellow,Clinical Mngt. Grp.,101263 - Robert Hickey,Bank,150
+200573,Benjamin Post,12/01/2021,Bank ITU Clinical Fellow,Clinical Mngt. Grp.,101263 - Robert Hickey,Bank,150
+200666,Amour Patel,9/18/2023,Bank ITU Clinical Fellow,Clinical Mngt. Grp.,101263 - Robert Hickey,Bank,150
+200908,Stefano Falini,04/01/2024,Bank ITU Clinical Fellow,Clinical Mngt. Grp.,101263 - Robert Hickey,Bank,150
+101176,Joanna Shokat,10/16/2023,Opthalmology Team Lead,OPHTHALMOL - Ophthalmology,100823 - Jeremy Downes,Permanent,150
+100804,Mikaela Bobon,6/14/2021,Robotic/Urology Lead Nurse,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100197,Anna Steyn,01/12/2004,Infection Prevention and Control specialist Nurse,CLINADMIND - Clinical Administration Direct,100383 - Andrea Testi,Permanent,150
+101293,Velisiwe Babongile Ndaba,03/03/2025,Ward Manager,Ward 3,101263 - Robert Hickey,Permanent,150
+100649,Sally Howe,11/19/2019,MDT Coordinator,OPERATIONS - Operations Indirect,100834 - Amelia Cook,Permanent,150
+100598,Clodoaldo Da Silva,06/05/2019,Instrument and SSD Manager,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+200921,Jonathan Sherlock,06/03/2024,Bank Ophthalmic Technician,OPHTHALMOL - Ophthalmology,100823 - Jeremy Downes,Bank,150
+200961,Susanna Ampiainen-Johnson,04/01/2025,Bank Ophthalmic Technician,OPHTHALMOL - Ophthalmology,100823 - Jeremy Downes,Bank,150
+200932,Dermot Finn,9/27/2024,Bank Ophthalmic Technician,OPHTHALMOL - Ophthalmology,101176 - Joanna Shokat,Bank,150
+101235,Janilyn Jabel,5/20/2024,Endoscopy Lead Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+101239,Lucilene Bastos da Silva,6/17/2024,Operating Theatre Attendant,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100093,Sabina Jovanovic,4/28/2004,Senior Pharmacy Technician,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+100622,Margaret Law,8/19/2019,Senior Pharmacy Technician,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+100865,Reyhan Kutlu,10/11/2021,Senior Pharmacy Technician,PHARM - Pharmacy,100157 - Bina Patel,Permanent,150
+200642,Orla Hashemi,05/09/2023,Bank Recovery Anaesthetic ODP,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Bank,150
+100997,Vanessa Jane Catulin,5/31/2022,Urology Associate CNS,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+101276,Jake Bishop,12/09/2024,Outpatient Clinical Lead Physiotherapist,PHYSIODI - Physiotherapy Direct,100826 - Lok Tung Tam,Permanent,150
+200610,Bagwantee Hurbungs,09/01/2022,Bank Senior Staff Nurse,ECU,TBC,Bank,150
+100186,Jennifer Gomez Sibal,11/27/2000,Junior Sister,Ward 2,101064 - Mervin Albania,Permanent,150
+100200,Christine Takundwa,6/18/2007,Junior Sister,Ward 3,101293 - Velisiwe Babongile Ndaba,Permanent,150
+200614,Virginia Rodell,09/02/2022,Bank Clinical Nurse Specialist,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Bank,150
+100881,Simona Ologu,11/01/2021,Radiology Department Assistant,IMAGINGD - Imaging Direct,100727 - Lul Khalif,Permanent,150
+101138,Mpembi Bompela,6/19/2023,Recovery Nurse,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100867,Nancy Tendai Sibanda,10/11/2021,Imaging Assistant Breast Services,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+100900,Alyssa Caballero,11/29/2021,Imaging Assistant Breast Services,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+101279,Teja Sree Patneedi,12/18/2024,Reservations Officer,PATIENT - Patient Services,100695 - Valentina Mitran,Permanent,150
+101282,Rebecca Ahmed,01/06/2025,Head of Clinical Education,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+101244,Paulo Jose Sousa Dias,07/08/2024,Operation Department Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100383,Andrea Testi,05/02/2017,Infection Prevention and Control Charge Nurse,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+200677,Rachel Perkins,10/26/2023,Bank Urinary Diversion CNS,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Bank,150
+100834,Amelia Cook,8/23/2021,Head of Cancer Services,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+100165,Anka Rakas,10/16/2006,Associate Orthopaedic CNS,SSUNITDI - Short Stay Unit Direct,100531 - Desmond Runganga,Permanent,150
+101292,Ana Cristina Rego Dos Santos,2/17/2025,Head of Theatre Services,THEATREDI - Theatre Direct,102126 - Rosemary Fegan,Permanent,150
+101023,Laszlo Agocs,08/04/2022,Resident Doctor,Resident Doctor,TBC,Permanent,150
+200946,Kyron Chambers,02/10/2025,Resident Doctor,Resident Doctor,100187 - Sibonokuhle Sibanda,Bank,150
+100083,Colin Howard,9/29/2003,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Permanent,150
+100818,Maria Joao Jardim Faria,08/03/2021,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Permanent,150
+101020,Pradeep Mannur,7/20/2022,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Permanent,150
+101145,Jordan Scott,7/19/2023,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Permanent,150
+200069,Pandelis Philippidis,09/01/2006,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Bank,150
+200443,Alexandra Hay,04/01/2019,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Bank,150
+200527,Chet Pager,5/15/2021,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Bank,150
+200669,Zaheer Raffeeq,9/25/2023,Resident Doctor,Resident Doctor,101263 - Robert Hickey,Bank,150
+200596,Rachael Morris,5/16/2022,Resident Doctor,Resident Doctor,101292 - Ana Cristina Rego Dos Santos,Bank,150
+101263,Robert Hickey,11/04/2024,Deputy Chief Nursing Officer,SSUNITDI - Short Stay Unit Direct,101255 - Stella Ryder,Permanent,150
+101153,Faris Alsqour,08/01/2023,Theatre Practitioner,THEATREDI - Theatre Direct,101292 - Ana Cristina Rego Dos Santos,Permanent,150
+100531,Desmond Runganga,10/01/2018,Head of Orthopaedics,Clinical Mngt. Grp.,101263 - Robert Hickey,Permanent,150
+101231,Ziecil Joy Miranda,4/29/2024,Urology Clinical Nurse Specialist,BCAREDI - Breast Care Direct,100834 - Amelia Cook,Permanent,150
+100608,Isabelle Masson,7/15/2019,Gynaecology Associate CNS,CONROMMD - Consulting Rooms Direct,100823 - Jeremy Downes,Permanent,150
+100750,Helen Cordwell,01/05/2021,Theatre Scheduler,PATIENT - Patient Services,101292 - Ana Cristina Rego Dos Santos,Permanent,150
