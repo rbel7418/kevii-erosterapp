@@ -39,6 +39,7 @@ import SnapshotDialog from "@/components/schedule/SnapshotDialog";
 import { emailPrefix } from "@/components/utils/strings";
 import RedeployDialog from "@/components/roster/RedeployDialog";
 import RedeploymentDetailsDialog from "@/components/roster/RedeploymentDetailsDialog";
+import GoogleSheetsImportDialog from "@/components/settings/GoogleSheetsImportDialog";
 
 
 function ExportDialog({ open, onClose, startDate, endDate, departmentId, shifts }) {
@@ -545,6 +546,7 @@ export default function RotaGrid() {
   const [showReset, setShowReset] = React.useState(false);
   const [showSnapshot, setShowSnapshot] = React.useState(false);
   const [showGridReplicaImport, setShowGridReplicaImport] = React.useState(false);
+  const [showGoogleSheetsImport, setShowGoogleSheetsImport] = React.useState(false);
   const [showAddStaff, setShowAddStaff] = React.useState(false);
   const [redeployData, setRedeployData] = React.useState(null); // { shift, employee }
   const [redeployInfoShift, setRedeployInfoShift] = React.useState(null);
@@ -1556,6 +1558,9 @@ export default function RotaGrid() {
                     <DropdownMenuItem onClick={() => setShowGridReplicaImport(true)} disabled={published || !canManage}>
                       Upload grid template
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setShowGoogleSheetsImport(true)} disabled={!canManage}>
+                      Import from Google Sheets…
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setShowExport(true)} disabled={!canManage}>
                       Export month…
                     </DropdownMenuItem>
@@ -1899,10 +1904,30 @@ export default function RotaGrid() {
         onShiftUpdated={async () => {
            const updated = await Shift.list();
            setShifts(updated || []);
-           // Update the local shift object if needed, but the list refresh handles the grid.
-           // We might want to close the dialog or keep it open with updated data. 
-           // The component handles closing/updating local state, but we need to refresh grid.
-           setRedeployInfoShift(null); // Close on save
+           setRedeployInfoShift(null);
+        }}
+      />
+
+      <GoogleSheetsImportDialog
+        open={showGoogleSheetsImport}
+        onOpenChange={setShowGoogleSheetsImport}
+        onImportComplete={async (type, result) => {
+          console.log('Google Sheets import complete:', type, result);
+          if (type === 'roster' || type === 'staff') {
+            const [d, e, s, sc] = await Promise.all([
+              Department.list(),
+              Employee.list(),
+              Shift.list(),
+              ShiftCode.list()
+            ]);
+            setDepartments(d || []);
+            setEmployees(e || []);
+            setShifts(s || []);
+            setShiftCodes(sc || []);
+          } else if (type === 'shift-codes') {
+            const sc = await ShiftCode.list();
+            setShiftCodes(sc || []);
+          }
         }}
       />
 

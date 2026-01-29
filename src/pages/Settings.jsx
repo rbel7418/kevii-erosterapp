@@ -5,11 +5,12 @@ import RoleManager from "@/components/settings/RoleManager";
 import ShiftCodeColorManager from "@/components/settings/ShiftCodeColorManager";
 import EmployeeMasterList from "@/components/settings/EmployeeMasterList";
 import IntegrationsList from "@/components/settings/IntegrationsList";
-import ThemeManager from "@/components/settings/ThemeManager"; // NEW
+import ThemeManager from "@/components/settings/ThemeManager";
+import GoogleSheetsImportDialog from "@/components/settings/GoogleSheetsImportDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Settings as SettingsIcon, Palette, Shield, Building2, Bot, CreditCard, Smile, Rss, DollarSign, Lock, Plug2, Search, Briefcase, Users } from "lucide-react";
+import { Settings as SettingsIcon, Palette, Shield, Building2, Bot, CreditCard, Smile, Rss, DollarSign, Lock, Plug2, Search, Briefcase, Users, FileSpreadsheet } from "lucide-react";
 import { ShiftCode } from "@/entities/ShiftCode";
 
 export default function Settings() {
@@ -49,12 +50,15 @@ export default function Settings() {
     { key: "integrations", label: "Integrations", icon: Plug2 },
   ];
 
+  const [showGoogleSheetsImport, setShowGoogleSheetsImport] = useState(false);
+
   // NEW: left menu entries for company tab
   const COMPANY_MENU = [
     { key: "departments", label: "Departments", icon: Building2, desc: "Manage departments & locations" },
     { key: "roles", label: "Roles", icon: Briefcase, desc: "Manage roles & position rates" },
     { key: "employees", label: "Employees", icon: Users, desc: "Control who appears on the roster grid" },
     { key: "shiftcodes", label: "Shift Codes", icon: Palette, desc: "Manage shift code colors & defaults" },
+    { key: "import", label: "Google Sheets Import", icon: FileSpreadsheet, desc: "Import data from Google Sheets" },
   ];
 
   return (
@@ -148,6 +152,63 @@ export default function Settings() {
               {companySection === "shiftcodes" && (
                 <ShiftCodeColorManager />
               )}
+
+              {companySection === "import" && (
+                <Card className="p-6">
+                  <CardHeader className="px-0 pt-0">
+                    <CardTitle className="flex items-center gap-2">
+                      <FileSpreadsheet className="w-5 h-5 text-green-600" />
+                      Google Sheets Import
+                    </CardTitle>
+                    <CardDescription>
+                      Import staff master list, shift codes, and monthly rosters directly from Google Sheets.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="px-0 pb-0">
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Card className="p-4 border-2 border-dashed hover:border-green-300 cursor-pointer transition-colors" onClick={() => setShowGoogleSheetsImport(true)}>
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                              <Palette className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium">Shift Codes</div>
+                              <div className="text-sm text-slate-500">Import shift code definitions</div>
+                            </div>
+                          </div>
+                        </Card>
+                        <Card className="p-4 border-2 border-dashed hover:border-green-300 cursor-pointer transition-colors" onClick={() => setShowGoogleSheetsImport(true)}>
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                              <Users className="w-5 h-5 text-purple-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium">Staff Master List</div>
+                              <div className="text-sm text-slate-500">Import employee data</div>
+                            </div>
+                          </div>
+                        </Card>
+                        <Card className="p-4 border-2 border-dashed hover:border-green-300 cursor-pointer transition-colors" onClick={() => setShowGoogleSheetsImport(true)}>
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                              <FileSpreadsheet className="w-5 h-5 text-orange-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium">Monthly Roster</div>
+                              <div className="text-sm text-slate-500">Import shift schedules</div>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                      <Button onClick={() => setShowGoogleSheetsImport(true)} className="gap-2">
+                        <FileSpreadsheet className="w-4 h-4" />
+                        Open Import Dialog
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </section>
           </div>
         ) : tab === "branding" ? (
@@ -164,6 +225,14 @@ export default function Settings() {
           </Card>
         )}
       </div>
+
+      <GoogleSheetsImportDialog 
+        open={showGoogleSheetsImport} 
+        onOpenChange={setShowGoogleSheetsImport}
+        onImportComplete={(type, result) => {
+          console.log('Import complete:', type, result);
+        }}
+      />
     </div>
   );
 }
