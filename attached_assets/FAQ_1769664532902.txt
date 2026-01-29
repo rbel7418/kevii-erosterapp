@@ -1,0 +1,251 @@
+YOU ARE AN ENGINEER AGENT. YOUR JOB IS TO BUILD A DB-FIRST ROSTER + FINANCIAL REPORTING PIPELINE IN A SUPABASE + REACT (TSX) APP. DO NOT TALK ABOUT “UI THEMES”, CSS, OR DESIGN SYSTEMS UNLESS ASKED. FOCUS ONLY ON DATA, STORAGE, ENDPOINTS, CALCULATIONS, AND REPORT OUTPUT.
+
+========================
+0) DEFINITIONS (MUST UNDERSTAND)
+========================
+
+A) WHAT THE ROSTER GRID IS
+- The roster grid is a MATRIX UI for editing shifts.
+- It shows staff rows and date columns (usually 28 days).
+- A “cell” can store either:
+  (1) a predefined shift_code (e.g., LD, LN, AL, SICK, HO, PB, etc.) OR
+  (2) a custom time shift with start_time/end_time/custom_hours (e.g., 08:00–12:00 = 4.0 hours)
+
+B) WHAT SHIFT CODES ARE FOR
+- shift_code is the standard code that maps to HOURS and rules.
+- shift_code must match hours_table.shift_code (trimmed + uppercased) for hours lookup.
+- hours_table tells:
+  - hours numeric
+  - is_worked (worked vs leave)
+  - finance_tag/category (Sick, Unpaid, HO/PB, etc.)
+  - day_night (for day/night counts)
+
+C) ROSTERED VS PLANNED VS WORKED VS REDEPLOYED
+- planned_ward: where the shift originated/was rostered (ECU/WARD 2/WARD 3/etc)
+- worked_ward: override only; where staff actually worked if redeployed
+- effectiveWorkedWard = worked_ward ?? planned_ward
+- redeployment: when effectiveWorkedWard != planned_ward for worked shifts
+- Split shift: one staff member can have multiple rows on the same date using slot=1..5
+
+D) HOURS TABLE EXISTS AS REFERENCE
+- hours_table_b07c7a84 is the single source of truth for predefined shift_code -> hours and classification
+- For is_custom=true shifts, hours come from custom_hours directly (not from hours_table)
+
+E) PERIOD START / END
+- The system uses a fixed 28-day roster cycle.
+- Store only period_start in DB; derive end:
+  period_end = period_start + 27 days
+- Financial report endpoint MUST accept ANY date, normalize it to the correct period_start using a fixed anchor (e.g., 2025-12-29) and 28-day blocks.
+
+========================
+1) BACKEND TABLES (MUST USE THESE EXACT TABLES)
+========================
+
+1) staff_masterlist_b07c7a84
+- employee_id (PK)
+- name
+- job_title
+- department
+- contract_type
+Purpose:
+- staff identity + metadata
+- DO NOT duplicate name/job title in roster_shifts
+
+2) hours_table_b07c7a84
+- shift_code (PK)
+- hours
+- descriptor, finance_tag, category, is_worked, day_night
+Purpose:
+- standard code hours lookup and leave/work classification
+
+3) roster_shifts_b07c7a84 (THE SOURCE OF TRUTH FOR SHIFTS)
+Columns (must exist):
+- period_start date NOT NULL
+- shift_date date NOT NULL
+- employee_id text NOT NULL FK -> staff_masterlist(employee_id)
+- planned_ward text NOT NULL (ECU/WARD 2/WARD 3/etc)
+- worked_ward text NULL (override only)
+- staff_group text NOT NULL default ''
+- shift_code text NULL (nullable because custom shifts may have no code)
+- slot smallint NOT NULL default 1 (1..5)
+- is_custom boolean NOT NULL default false
+- start_time time NULL
+- end_time time NULL
+- custom_hours numeric NULL
+Constraint:
+CHECK (
+ (is_custom=true AND start_time IS NOT NULL AND end_time IS NOT NULL AND custom_hours IS NOT NULL)
+ OR
+ (is_custom=false AND shift_code IS NOT NULL AND shift_code <> '')
+)
+Unique constraint for multiple shifts per day:
+unique(employee_id, shift_date, planned_ward, staff_group, slot)
+
+RULE:
+- worked_ward MUST BE NULL unless redeployed. If worked in planned ward, keep worked_ward NULL.
+
+========================
+2) FRONTEND -> BACKEND DATA FLOW (MUST IMPLEMENT)
+========================
+
+A) ROSTER GRID MUST SAVE/LOAD FROM POSTGRES ONLY (NO KV)
+- DO NOT read or write roster shifts to kv_store_*.
+- The roster grid can keep its existing in-memory shape, but persistence must be Postgres.
+
+B) REQUEST FORMAT FOR SAVING PER WARD
+Backend endpoint should accept:
+{
+  "startDate": "YYYY-MM-DD",     // can be any date; backend normalizes to period_start
+  "ward": "ECU" | "WARD 2" | "WARD 3" | "All Departments",
+  "shifts": { ... }              // ward-specific payload
+}
+
+IMPORTANT: If ward === "All Departments" then backend deletes all rows for the period and then inserts for ALL wards. This requires either:
+- Frontend calls save once per ward, OR
+- Payload is grouped by ward:
+  { "wards": { "ECU": {...}, "WARD 2": {...} } }
+
+C) SAVE LOGIC (MUST DO)
+- Normalize startDate -> period_start
+- If ward === "All Departments": delete rows where period_start=period_start
+- Else: delete rows where period_start=period_start AND planned_ward=ward
+- Parse each shift payload item into rows with slot
+- Insert/Upsert rows into roster_shifts_b07c7a84
+- Return a progress report JSON:
+  { success, period_start, period_end, ward, deleted_count, upserted_count, skipped_empty, bad_keys, missing_staff_count, errors[] }
+
+D) LOAD LOGIC (MUST DO)
+- Endpoint accepts startDate (any date), normalizes to period_start
+- Query roster_shifts_b07c7a84 where period_start=...
+- Return a payload the grid can render:
+  - either matrix-friendly map:
+    { "empId_YYYY-MM-DD#slot": {...} }
+  - or structured rows; choose one and be consistent.
+
+========================
+3) FINANCIAL REPORT (MUST BE 100% POSTGRES)
+========================
+
+A) FINANCIAL REPORT ENDPOINT INPUT
+{
+  "startDate": "YYYY-MM-DD"  // may be end date or any date; normalize internally
+}
+
+B) FINANCIAL REPORT ENDPOINT MUST DO
+1) Normalize input date to period_start and compute period_end
+2) Load hours table from hours_table_b07c7a84 into a lookup map by shift_code (uppercase)
+3) Load staff from staff_masterlist_b07c7a84
+4) Load ALL shift rows for period from roster_shifts_b07c7a84 including custom fields:
+   employee_id, planned_ward, worked_ward, shift_date, slot, shift_code, is_custom, custom_hours, start_time, end_time
+5) Compute ward financials for each ward: ECU, WARD 2, WARD 3
+   - OPD or other wards are “external”: they are used via worked_ward to count redeployed-out and actual hours, but not shown as a separate ward report unless explicitly required.
+
+C) PROCESSING RULES FOR HOURS PER ROW (MANDATORY)
+For each shift row:
+- effectiveWorkedWard = worked_ward ?? planned_ward
+- hours =
+    if is_custom=true: custom_hours
+    else: lookup hours_table[shift_code].hours
+- isWorked =
+    if is_custom=true: true
+    else: interpret hours_table[shift_code].is_worked (Y/TRUE/WORKED => worked; N/FALSE/LEAVE => leave)
+- For leave breakdown:
+    Sick/Unpaid/HO/PB classification comes from hours_table.finance_tag/category OR code patterns (only if table doesn’t have tags)
+
+D) STAFF FINANCIAL OUTPUT FIELDS (MATCH EXACTLY)
+For each ward and each staff member rostered to that ward:
+- employeeId
+- name
+- role
+- contracted (if contract hours exist; otherwise 0)
+- rosteredToWardHours     = sum(hours where planned_ward==WARD AND isWorked)
+- actual                 = sum(hours where isWorked across all rows for that staff in the period)
+- shiftCount             = count(worked rows with hours>0)
+- ldCount / nCount       = day/night counts from hours_table.day_night OR inferred from times if custom
+- sickCount/sickHours
+- unplCount/unplHours
+- hoHours, pbHours, toilBalance = hoHours - pbHours
+- redeployedOutHours      = sum(hours where planned_ward==WARD AND effectiveWorkedWard!=WARD AND isWorked)
+- netWardHours            = sum(hours where effectiveWorkedWard==WARD AND isWorked)
+- wardBalance             = netWardHours - rosteredToWardHours
+
+E) REPORT OUTPUT
+- Use generateBankStatementFinancialReport(...) or equivalent to create HTML
+- Must include periodStart and periodEnd in header
+- Must include totals per ward and grand totals
+
+F) ENDPOINT RESPONSE MUST INCLUDE DIAGNOSTICS
+Return:
+- success true/false
+- period_start / period_end
+- counts:
+  - shiftRowsLoaded
+  - staffLoaded
+  - hoursCodesLoaded
+  - missingHoursCodes (list top 20 shift_codes that were not found in hours_table)
+  - customRowsCount
+- if failed: return why exactly (query error, parse error, hours lookup missing, etc.)
+
+========================
+4) “SUCCESS/FAILED AND WHY” (NON-NEGOTIABLE)
+========================
+Every important operation must return a structured progress report:
+- SUCCESS should include counts and key dates
+- FAILED must include the exact error message and which step failed
+
+Example:
+{
+  "success": false,
+  "step": "load_hours_table",
+  "error": "hours_table query failed: permission denied",
+  "period_start": "2026-01-26"
+}
+
+========================
+5) DO THIS IN ORDER (STEP-BY-STEP EXECUTION PLAN)
+========================
+
+FIRST:
+- Confirm roster_shifts table has custom columns + constraints
+- Confirm hours_table and staff_masterlist exist
+
+SECOND:
+- Implement save-roster-shifts endpoint to write to roster_shifts Postgres
+- Implement get-roster-shifts endpoint to read from roster_shifts Postgres
+- Remove any KV usage for roster shifts
+
+THIRD:
+- Implement generate-financial-report endpoint to read:
+  - roster_shifts Postgres
+  - hours_table Postgres
+  - staff_masterlist Postgres
+- Patch processWardFinancial() to use:
+  - is_custom -> custom_hours
+  - else -> hours_table lookup
+  - effectiveWorkedWard logic
+- Ensure split shifts (slot) are included in totals (multiple rows per day)
+
+FOURTH:
+- Provide test SQL queries and expected results:
+  - count rows per period_start
+  - ward distribution per period
+  - sample staff ledger lines
+
+FIFTH:
+- Confirm outputs are non-zero and match hours_table logic; if 0:
+  - return missingHoursCodes diagnostics immediately.
+
+========================
+6) STOP CONDITIONS (WHAT NOT TO DO)
+========================
+- Do NOT discuss CSS themes or UI styling unless asked.
+- Do NOT store roster shifts in kv_store_*.
+- Do NOT put time values into planned_ward/worked_ward.
+- Do NOT ignore worked_ward; it is required for redeployments.
+- Do NOT ask the user vague questions; use queries and show diagnostics.
+
+NOW EXECUTE THIS PLAN AND PRODUCE:
+- Updated edge function code implementing these endpoints
+- Updated processor logic
+- Clear success/failure diagnostic output
+- No KV dependencies for roster shifts or financial reporting
