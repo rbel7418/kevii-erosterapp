@@ -1,12 +1,11 @@
 
 import React from "react";
-import { sendSms } from "@/functions/sendSms";
-import { smsHealth } from "@/functions/smsHealth";
+// Removed Base44 function imports
 
-// Replace postSMS helper to use backend function
+// Mock postSMS helper
 async function postSMS({ to, body, staff_id, tags = [] }) {
-  const { data } = await sendSms({ to, body, staff_id, tags });
-  return data; // { id, provider, provider_message_id, status }
+  console.log("Mock SMS sent to:", to, body);
+  return { id: "mock-sms-id", provider: "mock", status: "sent" };
 }
 
 export default function Messaging({
@@ -17,33 +16,23 @@ export default function Messaging({
 }) {
   const [dept, setDept] = React.useState(defaultDepartment);
   const [channel, setChannel] = React.useState(defaultChannel); // "sms" | "email"
-  const [logOnly, setLogOnly] = React.useState(true); // when OFF, we will hit /api/messaging/send
+  const [logOnly, setLogOnly] = React.useState(true); // Default to log only
   const [selectedStaffIds, setSelectedStaffIds] = React.useState([]);
   const [body, setBody] = React.useState("");
   const [sending, setSending] = React.useState(false);
 
-  // New state for backend health check
-  const [backendOk, setBackendOk] = React.useState(false);
-  const [checkingBackend, setCheckingBackend] = React.useState(true);
+  // New state for backend health check - defaulted to true for mock
+  const [backendOk, setBackendOk] = React.useState(true);
+  const [checkingBackend, setCheckingBackend] = React.useState(false);
 
   // Local OutboundMessage list to reflect results immediately
   const [outbound, setOutbound] = React.useState([]);
   // shape: {id, to_number, body, provider, provider_message_id, status, staff_id, tags, created_at}
 
-  // Effect to check backend health
+  // Effect to check backend health - removed network call
   React.useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data } = await smsHealth();
-        if (!cancelled) setBackendOk(!!data?.ok);
-      } catch {
-        if (!cancelled) setBackendOk(false);
-      } finally {
-        if (!cancelled) setCheckingBackend(false);
-      }
-    })();
-    return () => { cancelled = true; };
+    setBackendOk(true);
+    setCheckingBackend(false);
   }, []);
 
   // If backend isn't available, enforce Log-only even if the user toggles it off

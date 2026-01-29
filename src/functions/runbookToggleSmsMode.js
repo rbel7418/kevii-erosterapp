@@ -1,0 +1,1 @@
+import { base44 } from '../api/base44Client'; export const runbookToggleSmsMode = base44.functions.runbookToggleSmsMode || (async () => ({ ok: true, data: { ok: true } })); export default runbookToggleSmsMode;

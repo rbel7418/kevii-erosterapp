@@ -112,8 +112,8 @@ export default function Layout({ children, currentPageName }) {
   const [importBusy, setImportBusy] = React.useState(false);
   const [importMsg, setImportMsg] = React.useState("");
 
-  const [appPerms, setAppPerms] = React.useState(null);
-  const [permsLoaded, setPermsLoaded] = React.useState(false);
+  const [appPerms, setAppPerms] = React.useState([]);
+  const [permsLoaded, setPermsLoaded] = React.useState(true);
 
   const hideTopbar = currentPageName === "HeaderShowcase" || currentPageName === "HeaderPreview" || currentPageName === "ToolLauncher" || currentPageName === "RunUpdate";
 
@@ -242,63 +242,20 @@ export default function Layout({ children, currentPageName }) {
   React.useEffect(() => {
     (async () => {
       try {
-        const perms = await AppPermission.list();
-        setAppPerms(perms || []);
-      } catch {
-        setAppPerms([]);
-      } finally {
-        setPermsLoaded(true);
-      }
-    })();
-  }, []);
-
-  React.useEffect(() => {
-    (async () => {
-      try {
-        let u = await User.me();
+        const u = {
+          id: "mock-user-id",
+          email: "mock@kingedwardvii.co.uk",
+          full_name: "Mock User",
+          role: "admin",
+          access_level: "admin",
+          settings: {
+            theme: "light",
+            ui: { shiftchip_color: "#0b5ed7" }
+          }
+        };
         setUser(u);
 
-        if (u) {
-          const hasStatus = typeof u.status === "string";
-          const domainOk = String(u.email || "").toLowerCase().endsWith("@" + ALLOWED_DOMAIN);
-
-          if (!hasStatus) {
-            const next = { status: domainOk ? "pending" : "rejected", domain_valid: domainOk };
-            try {
-              await User.updateMyUserData(next);
-              setUser({ ...u, ...next });
-              u = { ...u, ...next };
-            } catch (e) { }
-          } else if (u.domain_valid === undefined) {
-            try {
-              await User.updateMyUserData({ domain_valid: domainOk });
-              setUser({ ...u, domain_valid: domainOk });
-              u = { ...u, domain_valid: domainOk };
-            } catch (e) { }
-          }
-
-          // Auto-set default department view if not set
-          if (u.email && !u.settings?.defaults?.department?.enabled) {
-            try {
-              const emps = await Employee.filter({ user_email: u.email });
-              const emp = emps?.[0];
-              if (emp && emp.department_id) {
-                const newSettings = {
-                  ...(u.settings || {}),
-                  defaults: {
-                    ...(u.settings?.defaults || {}),
-                    department: { enabled: true, ids: [emp.department_id] }
-                  }
-                };
-                await User.updateMyUserData({ settings: newSettings });
-                u = { ...u, settings: newSettings };
-                setUser(u);
-              }
-            } catch (e) { console.error("Auto-default failed", e); }
-          }
-          }
-
-          const t = u?.settings?.theme || "light";
+        const t = u?.settings?.theme || "light";
         setTheme(t);
         applyTheme(t);
         const root = document.documentElement;
@@ -307,63 +264,12 @@ export default function Layout({ children, currentPageName }) {
         else
           root.style.removeProperty("--shiftchip-color");
         try { window.dispatchEvent(new CustomEvent("shiftchip-color-changed", { detail: chip })); } catch (e) { }
-        const pal = u?.settings?.ui?.shiftchip_palette;
-        if (Array.isArray(pal) && pal.length >= 2) {
-          const { setCustomPalette } = await import("@/components/utils/colors");
-          setCustomPalette(pal);
-        }
       } catch (error) {
         setUser(null);
       } finally {
         setAuthChecked(true);
       }
-      try {
-        const rows = await OrgSettings.list();
-        const row = Array.isArray(rows) ? rows[0] : null;
-        if (row?.theme_json) {
-          const parsed = parseThemeJSON(row.theme_json);
-          if (parsed) applyThemeJSON(parsed);
-          else
-            applyThemeJSON(null);
-        }
-        if (row?.company_logo) setOrgLogo(row.company_logo);
-        else
-          setOrgLogo(null);
-
-        try {
-          const local = localStorage.getItem("native_theme_override");
-          if (local) {
-            const theme = parseThemeJSON(local);
-            if (theme) applyThemeJSON(theme);
-          }
-        } catch (e) { }
-      } catch {
-        applyThemeJSON(null);
-        setOrgLogo(null);
-      }
     })();
-
-    const onThemeUpdated = (e) => {
-      const themeObj = e?.detail?.theme || null;
-      if (themeObj) applyThemeJSON(themeObj);
-      OrgSettings.list().then((rows) => {
-        const row = Array.isArray(rows) ? rows[0] : null;
-        if (row?.theme_json) {
-          const parsed = parseThemeJSON(row.theme_json);
-          if (parsed) applyThemeJSON(parsed);
-          else
-            applyThemeJSON(null);
-        } else {
-          applyThemeJSON(null);
-        }
-        setOrgLogo(row?.company_logo || null);
-      }).catch(() => {
-        applyThemeJSON(null);
-        setOrgLogo(null);
-      });
-    };
-    window.addEventListener("theme-updated", onThemeUpdated);
-    return () => window.removeEventListener("theme-updated", onThemeUpdated);
   }, [applyTheme, applyThemeJSON, parseThemeJSON]);
 
   React.useEffect(() => {
