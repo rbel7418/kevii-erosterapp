@@ -5,6 +5,18 @@ export function extractSpreadsheetId(url) {
   return match ? match[1] : null;
 }
 
+export function normalizeSpreadsheetId(urlOrId) {
+  if (!urlOrId || typeof urlOrId !== 'string') return null;
+  const trimmed = urlOrId.trim();
+  if (trimmed.includes('/')) {
+    return extractSpreadsheetId(trimmed);
+  }
+  if (/^[a-zA-Z0-9-_]{20,}$/.test(trimmed)) {
+    return trimmed;
+  }
+  return null;
+}
+
 export function extractSheetGid(url) {
   const match = url.match(/[#&]gid=(\d+)/);
   return match ? match[1] : '0';
@@ -183,10 +195,10 @@ export function parseRosterGridFromSheet(rows, year = new Date().getFullYear()) 
   return { employees, shifts };
 }
 
-export async function importShiftCodes(spreadsheetUrl, sheetName = 'Sheet1') {
-  const spreadsheetId = extractSpreadsheetId(spreadsheetUrl);
+export async function importShiftCodes(spreadsheetUrlOrId, sheetName = 'Sheet1') {
+  const spreadsheetId = normalizeSpreadsheetId(spreadsheetUrlOrId);
   if (!spreadsheetId) {
-    throw new Error('Invalid Google Sheets URL');
+    throw new Error('Invalid Google Sheets URL or Document ID');
   }
 
   const rows = await fetchSheetData(spreadsheetId, sheetName);
@@ -215,10 +227,10 @@ export async function importShiftCodes(spreadsheetUrl, sheetName = 'Sheet1') {
   return { created, updated, total: shiftCodes.length };
 }
 
-export async function importStaffMaster(spreadsheetUrl, sheetName = 'Sheet1') {
-  const spreadsheetId = extractSpreadsheetId(spreadsheetUrl);
+export async function importStaffMaster(spreadsheetUrlOrId, sheetName = 'Sheet1') {
+  const spreadsheetId = normalizeSpreadsheetId(spreadsheetUrlOrId);
   if (!spreadsheetId) {
-    throw new Error('Invalid Google Sheets URL');
+    throw new Error('Invalid Google Sheets URL or Document ID');
   }
 
   const rows = await fetchSheetData(spreadsheetId, sheetName);
@@ -282,10 +294,10 @@ export async function importStaffMaster(spreadsheetUrl, sheetName = 'Sheet1') {
   return { created, updated, deptsCreated, total: staffList.length };
 }
 
-export async function importMonthlyRoster(spreadsheetUrl, sheetName = 'Sheet1', year = new Date().getFullYear()) {
-  const spreadsheetId = extractSpreadsheetId(spreadsheetUrl);
+export async function importMonthlyRoster(spreadsheetUrlOrId, sheetName = 'Sheet1', year = new Date().getFullYear()) {
+  const spreadsheetId = normalizeSpreadsheetId(spreadsheetUrlOrId);
   if (!spreadsheetId) {
-    throw new Error('Invalid Google Sheets URL');
+    throw new Error('Invalid Google Sheets URL or Document ID');
   }
 
   const rows = await fetchSheetData(spreadsheetId, sheetName);

@@ -31,7 +31,8 @@ import {
   Plus,
   Save,
   RefreshCw,
-  Zap
+  Zap,
+  FileSpreadsheet
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { User } from "@/entities/User";
@@ -60,6 +61,7 @@ import { importShiftsFromSheet } from "@/functions/importShiftsFromSheet";
 import { AnnouncementInbox } from "@/entities/AnnouncementInbox";
 import PendingApproval from "@/components/common/PendingApproval";
 import CommsCenter from "@/components/comms/CommsCenter";
+import GoogleSheetsImportDialog from "@/components/settings/GoogleSheetsImportDialog";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -102,6 +104,7 @@ export default function Layout({ children, currentPageName }) {
   const [randomiserOpen, setRandomiserOpen] = React.useState(false);
   const [announceOpen, setAnnounceOpen] = React.useState(false);
   const [commsOpen, setCommsOpen] = React.useState(false);
+  const [googleSheetsImportOpen, setGoogleSheetsImportOpen] = React.useState(false);
   // Removed aiAssistantOpen state
   // const [aiAssistantOpen, setAiAssistantOpen] = React.useState(false);
 
@@ -1501,6 +1504,10 @@ export default function Layout({ children, currentPageName }) {
                       <FileText className="w-4 h-4 mr-2" />
                       Risk Register
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setGoogleSheetsImportOpen(true)}>
+                      <FileSpreadsheet className="w-4 h-4 mr-2" />
+                      Google Sheets Import
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     {visibleNav.map((item) =>
                       <DropdownMenuItem key={`m-${item.label}`} onClick={() => window.location.href = createPageUrl(item.to)}>
@@ -1733,6 +1740,15 @@ export default function Layout({ children, currentPageName }) {
         {!hideTopbar &&
           <footer className="px-3 py-2 text-right text-xs text-slate-500">Created by: RaymundB DM v.1 2025</footer>
         }
+
+        <GoogleSheetsImportDialog
+          open={googleSheetsImportOpen}
+          onOpenChange={setGoogleSheetsImportOpen}
+          onImportComplete={(type, result) => {
+            console.log('Import complete:', type, result);
+            setGoogleSheetsImportOpen(false);
+          }}
+        />
       </div>
     </div>
   );
