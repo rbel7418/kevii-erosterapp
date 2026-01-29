@@ -38,6 +38,7 @@ import { User } from "@/entities/User";
 import { OrgSettings } from "@/entities/OrgSettings";
 import { AppPermission } from "@/entities/AppPermission";
 import { Employee } from "@/entities/Employee";
+import { ImportConfig } from "@/entities/ImportConfig";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -54,11 +55,13 @@ import { agentSDK } from "@/agents";
 import WhatsAppTool from "@/components/floating/WhatsAppTool";
 import ShiftRandomiser from "@/components/floating/ShiftRandomiser";
 import LoginAnnouncementPopup from "@/components/announcements/LoginAnnouncementPopup";
+import { importShiftsFromSheet } from "@/functions/importShiftsFromSheet";
 // Removed AIAssistant import
 import { AnnouncementInbox } from "@/entities/AnnouncementInbox";
 import PendingApproval from "@/components/common/PendingApproval";
 import CommsCenter from "@/components/comms/CommsCenter";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { format, addDays, subMonths, addMonths, parseISO } from "date-fns";
 import DateRangePicker from "@/components/common/DateRangePicker";
@@ -103,6 +106,11 @@ export default function Layout({ children, currentPageName }) {
   // const [aiAssistantOpen, setAiAssistantOpen] = React.useState(false);
 
   const [unreadAnnouncements, setUnreadAnnouncements] = React.useState([]);
+  const [sheetId, setSheetId] = React.useState("");
+  const [sheetName, setSheetName] = React.useState("");
+  const [autoSync, setAutoSync] = React.useState(false);
+  const [importBusy, setImportBusy] = React.useState(false);
+  const [importMsg, setImportMsg] = React.useState("");
 
   const [appPerms, setAppPerms] = React.useState(null);
   const [permsLoaded, setPermsLoaded] = React.useState(false);
@@ -383,6 +391,20 @@ export default function Layout({ children, currentPageName }) {
       }
     })();
   }, [user]);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const cfgs = await ImportConfig.list();
+        const cfg = Array.isArray(cfgs) ? cfgs[0] : null;
+        if (cfg) {
+          setSheetId(cfg.spreadsheet_id || "");
+          setSheetName(cfg.sheet_name || "");
+          setAutoSync(Boolean(cfg.is_enabled));
+        }
+      } catch (e) {}
+    })();
+  }, []);
 
   const handleMarkAllReadForFloating = React.useCallback(async () => {
     try {
