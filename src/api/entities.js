@@ -1,29 +1,57 @@
 import { base44 } from './base44Client';
+import { SupabaseShiftCode, SupabaseEmployee, SupabaseShift } from './supabaseClient';
 
-const createEntityProxy = (name) => new Proxy({}, {
-  get: (target, prop) => {
-    if (prop === 'list') return (params) => base44.entities.list(name, params);
-    if (prop === 'get') return (id) => base44.entities.get(name, id);
-    if (prop === 'filter') return (params) => base44.entities.filter(name, params);
-    if (prop === 'create') return (data) => base44.entities.create(name, data);
-    if (prop === 'update') return (id, data) => base44.entities.update(name, id, data);
-    if (prop === 'delete') return (id) => base44.entities.delete(name, id);
-    if (prop === 'upsert') return (data) => {
-      console.log(`Mock upsert entity: ${name}`, data);
-      return Promise.resolve({ id: data.id || 'mock-id', ...data });
-    };
-    if (prop === 'updateMyUserData') return (data) => Promise.resolve({ id: 'mock-id', ...data });
-    // Handle potential function calls on the entity itself
-    return () => Promise.resolve({ ok: true, data: [] });
+const SUPABASE_ENTITIES = {
+  'ShiftCode': SupabaseShiftCode,
+  'Employee': SupabaseEmployee,
+  'Shift': SupabaseShift
+};
+
+const createEntityProxy = (name) => {
+  const supabaseEntity = SUPABASE_ENTITIES[name];
+  
+  if (supabaseEntity) {
+    return new Proxy({}, {
+      get: (target, prop) => {
+        if (prop === 'list') return (params) => supabaseEntity.list();
+        if (prop === 'get') return (id) => supabaseEntity.get(id);
+        if (prop === 'filter') return (params) => supabaseEntity.filter(params);
+        if (prop === 'create') return (data) => supabaseEntity.create(data);
+        if (prop === 'update') return (id, data) => supabaseEntity.update(id, data);
+        if (prop === 'delete') return (id) => supabaseEntity.delete(id);
+        if (prop === 'upsert') return async (data) => {
+          if (data.id) {
+            return supabaseEntity.update(data.id, data);
+          }
+          return supabaseEntity.create(data);
+        };
+        return () => Promise.resolve({ ok: true, data: [] });
+      }
+    });
   }
-});
+  
+  return new Proxy({}, {
+    get: (target, prop) => {
+      if (prop === 'list') return (params) => base44.entities.list(name, params);
+      if (prop === 'get') return (id) => base44.entities.get(name, id);
+      if (prop === 'filter') return (params) => base44.entities.filter(name, params);
+      if (prop === 'create') return (data) => base44.entities.create(name, data);
+      if (prop === 'update') return (id, data) => base44.entities.update(name, id, data);
+      if (prop === 'delete') return (id) => base44.entities.delete(name, id);
+      if (prop === 'upsert') return (data) => {
+        console.log(`Mock upsert entity: ${name}`, data);
+        return Promise.resolve({ id: data.id || 'mock-id', ...data });
+      };
+      if (prop === 'updateMyUserData') return (data) => Promise.resolve({ id: 'mock-id', ...data });
+      return () => Promise.resolve({ ok: true, data: [] });
+    }
+  });
+};
 
-// Dynamic export handler for all entities
 export const all = new Proxy({}, {
   get: (target, name) => createEntityProxy(name)
 });
 
-// Specific exports for commonly used entities to satisfy named imports
 export const User = createEntityProxy('User');
 export const Employee = createEntityProxy('Employee');
 export const Shift = createEntityProxy('Shift');

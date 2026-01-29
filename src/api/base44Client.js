@@ -199,8 +199,24 @@ export const base44 = new Proxy({
   integrations: new Proxy({}, mockHandler),
   functions: {
     invoke: async (name, args) => {
+      const realFunctions = ['supabase', 'googleSheets'];
+      
+      if (realFunctions.includes(name)) {
+        try {
+          const response = await fetch(`/_/functions/${name}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(args)
+          });
+          const data = await response.json();
+          return { data, ok: response.ok };
+        } catch (err) {
+          console.error(`Function ${name} error:`, err);
+          return { data: { ok: false, error: err.message }, ok: false };
+        }
+      }
+      
       console.log(`Mock invoke function: ${name}`, args);
-      // Return a standard response structure that components expect
       return { 
         data: { 
           ok: true, 
