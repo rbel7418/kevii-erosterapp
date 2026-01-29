@@ -66,8 +66,18 @@ The app includes Google Sheets import functionality for:
 | dayNight | day_night | Day/Night shift type |
 
 ### Access Points
+- **Gear icon dropdown** (header) > Google Sheets Import (new - quick access from anywhere)
 - Settings > Company > Google Sheets Import
 - RotaGrid > Actions menu > Import from Google Sheets
+
+### Import Flow
+1. Click "Google Sheets Import" from the gear menu
+2. Enter your Google Sheet Document ID (found in the URL after /d/)
+3. Select a sheet from the dropdown
+4. Choose import type (Roster, Shift Codes, or Staff)
+5. Click "Import Shifts"
+
+The import logic matches EMP_ID from the sheet to your database and inserts shift codes on the correct date/row automatically.
 
 ## Notes
 This app was exported from Base44 and requires a Base44 backend to fully function. Without the backend:
