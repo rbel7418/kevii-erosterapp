@@ -1,0 +1,256 @@
+type HoursMeta = {
+  shift_code: string;
+  hours: number;
+  finance_tag?: string | null;
+  is_worked?: string | null;   // often "Y"/"N" or "true"/"false"
+  day_night?: string | null;   // "DAY"/"NIGHT" etc
+  category?: string | null;    // optional
+};
+
+type StaffRecord = {
+  employee_id: string;
+  name?: string | null;
+  job_title?: string | null;
+  department?: string | null;
+  contract_type?: string | null;
+};
+
+type ShiftRow = {
+  employee_id: string;
+  planned_ward: string;
+  worked_ward: string | null;
+  staff_group: string | null;
+  shift_date: string;          // yyyy-mm-dd
+  slot: number;
+
+  shift_code: string | null;
+
+  is_custom: boolean;
+  custom_hours: number | null;
+  start_time: string | null;   // "08:00:00" or "08:00"
+  end_time: string | null;
+};
+
+type StaffFinancial = {
+  employeeId: string;
+  name: string;
+  role: string;
+
+  contracted: number;
+
+  rosteredToWardHours: number;
+  actual: number;
+
+  shiftCount: number;
+  ldCount: number;
+  nCount: number;
+
+  sickCount: number;
+  sickHours: number;
+  unplCount: number;
+  unplHours: number;
+
+  hoHours: number;
+  pbHours: number;
+  toilBalance: number;
+
+  redeployedOutHours: number;
+  netWardHours: number;
+  wardBalance: number;
+};
+
+// --- helpers ---
+const norm = (s: any) => String(s ?? "").trim();
+const up = (s: any) => norm(s).toUpperCase();
+
+function parseBoolishIsWorked(v: string | null | undefined): boolean {
+  const x = up(v);
+  if (!x) return true; // default to worked if not specified (safer than zeroing)
+  return x === "Y" || x === "YES" || x === "TRUE" || x === "WORKED" || x === "1";
+}
+
+function getHoursForRow(row: ShiftRow, hoursMap: Record<string, HoursMeta>): number {
+  if (row.is_custom) return Number(row.custom_hours ?? 0) || 0;
+
+  const code = up(row.shift_code);
+  if (!code) return 0;
+
+  const meta = hoursMap[code];
+  return Number(meta?.hours ?? 0) || 0;
+}
+
+// If you want custom time rows to count as day/night:
+function inferDayNightFromTimes(start: string | null, end: string | null): "DAY" | "NIGHT" {
+  // simple heuristic: any shift starting >= 19:00 or ending <= 08:00 counts as NIGHT
+  // (tweak later if needed; this is “good enough” for dashboards)
+  const s = norm(start).slice(0, 5);
+  const e = norm(end).slice(0, 5);
+
+  if (!s || !e) return "DAY";
+  if (s >= "19:00" || e <= "08:00") return "NIGHT";
+  return "DAY";
+}
+
+// classify leave buckets from finance_tag/category (coded shifts only)
+function classifyLeave(codeUpper: string, meta?: HoursMeta) {
+  const financeTag = up(meta?.finance_tag);
+  const cat = up(meta?.category);
+
+  // you can harden these rules if your hours table has exact tags
+  const isSick = codeUpper.includes("SICK") || financeTag.includes("SICK") || cat.includes("SICK");
+  const isUnpaid = codeUpper.includes("UNPL") || financeTag.includes("UNPAID") || cat.includes("UNPAID");
+
+  const isHO = codeUpper === "HO" || financeTag.includes("HO") || cat.includes("HO");
+  const isPB = codeUpper === "PB" || financeTag.includes("PB") || cat.includes("PB");
+
+  return { isSick, isUnpaid, isHO, isPB };
+}
+
+/**
+ * DB-first ward processor:
+ * - "ward" is the planned ward report you are generating (ECU / WARD 2 / WARD 3)
+ * - shiftRows should include ALL rows for the period (we filter inside)
+ */
+export function processWardFinancial(
+  shiftRows: ShiftRow[],
+  ward: string,
+  hoursMap: Record<string, HoursMeta>,
+  staffRecords: StaffRecord[]
+): StaffFinancial[] {
+  const WARD = up(ward);
+
+  // 1) define "ward staff set" = anyone rostered (planned) to this ward in this period
+  const wardStaff = new Set<string>();
+  for (const r of shiftRows) {
+    if (up(r.planned_ward) === WARD) wardStaff.add(norm(r.employee_id));
+  }
+
+  // 2) group all shift rows for those staff (includes redeployments)
+  const byEmp = new Map<string, ShiftRow[]>();
+  for (const r of shiftRows) {
+    const empId = norm(r.employee_id);
+    if (!wardStaff.has(empId)) continue;
+
+    const arr = byEmp.get(empId) || [];
+    arr.push(r);
+    byEmp.set(empId, arr);
+  }
+
+  // staff lookup
+  const staffById = new Map<string, StaffRecord>();
+  for (const s of staffRecords) staffById.set(norm(s.employee_id), s);
+
+  const out: StaffFinancial[] = [];
+
+  for (const [empId, rows] of byEmp.entries()) {
+    const staff = staffById.get(empId);
+
+    const name = norm(staff?.name) || empId;
+    const role = norm(staff?.job_title) || "";
+
+    // NOTE: "contracted" depends on your contract model; keep 0 if you don’t have period contract hours yet.
+    let contracted = 0;
+
+    let rosteredToWardHours = 0;
+    let actual = 0;
+
+    let shiftCount = 0;
+    let ldCount = 0;
+    let nCount = 0;
+
+    let sickCount = 0;
+    let sickHours = 0;
+
+    let unplCount = 0;
+    let unplHours = 0;
+
+    let hoHours = 0;
+    let pbHours = 0;
+
+    let redeployedOutHours = 0;
+    let netWardHours = 0;
+
+    for (const r of rows) {
+      const plannedWard = up(r.planned_ward);
+      const effectiveWorkedWard = up(r.worked_ward) || plannedWard;
+
+      const hours = getHoursForRow(r, hoursMap);
+
+      // Determine worked vs leave (custom defaults to worked)
+      const codeUpper = up(r.shift_code);
+      const meta = codeUpper ? hoursMap[codeUpper] : undefined;
+      const isWorked = r.is_custom ? true : parseBoolishIsWorked(meta?.is_worked);
+
+      // Count shift occurrences (only count worked shifts as “shiftCount” to avoid leave inflating)
+      if (isWorked && hours > 0) {
+        shiftCount += 1;
+
+        // Day/night counts:
+        const dn = r.is_custom ? inferDayNightFromTimes(r.start_time, r.end_time) : up(meta?.day_night);
+        if (dn.includes("NIGHT")) nCount += 1;
+        else ldCount += 1;
+      }
+
+      // “Actual” hours overall (worked only)
+      if (isWorked) actual += hours;
+
+      // “Rostered to ward” = planned to this ward + worked shift (not leave)
+      if (plannedWard === WARD && isWorked) rosteredToWardHours += hours;
+
+      // Net ward hours delivered (where they actually worked)
+      if (effectiveWorkedWard === WARD && isWorked) netWardHours += hours;
+
+      // Redeployed out = planned to this ward but worked elsewhere (worked only)
+      if (plannedWard === WARD && effectiveWorkedWard !== WARD && isWorked) redeployedOutHours += hours;
+
+      // Leave buckets for coded rows
+      if (!r.is_custom && codeUpper) {
+        const { isSick, isUnpaid, isHO, isPB } = classifyLeave(codeUpper, meta);
+
+        if (isSick) {
+          sickCount += 1;
+          sickHours += hours;
+        }
+        if (isUnpaid) {
+          unplCount += 1;
+          unplHours += hours;
+        }
+        if (isHO) hoHours += hours;
+        if (isPB) pbHours += hours;
+      }
+    }
+
+    const toilBalance = hoHours - pbHours;
+    const wardBalance = netWardHours - rosteredToWardHours;
+
+    out.push({
+      employeeId: empId,
+      name,
+      role,
+
+      contracted,
+
+      rosteredToWardHours,
+      actual,
+
+      shiftCount,
+      ldCount,
+      nCount,
+
+      sickCount,
+      sickHours,
+      unplCount,
+      unplHours,
+
+      hoHours,
+      pbHours,
+      toilBalance,
+
+      redeployedOutHours,
+      netWardHours,
+      wardBalance,
+    });
+  }
+
+  return out;
+}

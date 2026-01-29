@@ -79,10 +79,70 @@ The app includes Google Sheets import functionality for:
 
 The import logic matches EMP_ID from the sheet to your database and inserts shift codes on the correct date/row automatically.
 
-## Notes
-This app was exported from Base44 and requires a Base44 backend to fully function. Without the backend:
-- API calls will return 404 errors
-- Authentication won't work
-- Data operations won't persist
+## Supabase Database Integration
 
-The frontend UI will display and navigate correctly.
+The app now uses Supabase as the primary database for roster, staff, and shift code data.
+
+### Supabase Configuration
+- **URL**: https://sybbwgxcgfkqqhriebxh.supabase.co
+- **Client File**: `src/api/supabaseClient.js`
+
+### Database Tables
+| Table | Purpose |
+|-------|---------|
+| `hours_table_46fcc8fd` | Shift code definitions (hours, is_worked, finance_tag, day_night) |
+| `staff_masterlist_46fcc8fd` | Employee master data (employee_id, name, job_title, department) |
+| `roster_shifts_46fcc8fd` | Roster shift assignments (period_start, shift_date, employee_id, planned_ward, shift_code) |
+| `kv_store_46fcc8fd` | Key-value store for settings |
+
+### 28-Day Period System
+- Rosters use 28-day periods starting from anchor date 2025-12-29
+- `normalizeToPeriodStart(date)` - Calculates period start for any date
+- `getPeriodEnd(periodStart)` - Returns period end (start + 27 days)
+
+### Key API Functions
+```javascript
+import { 
+  RosterShifts, 
+  HoursTable, 
+  StaffMaster, 
+  generateFinancialReport 
+} from '@/api/supabaseClient';
+
+// Load shifts for a period
+const result = await RosterShifts.loadByPeriod('2026-01-26', 'ECU');
+
+// Save shifts for a period
+const diagnostics = await RosterShifts.saveForPeriod('2026-01-26', 'ECU', shifts);
+
+// Get hours lookup map
+const hoursMap = await HoursTable.getLookupMap();
+
+// Generate financial report
+const report = await generateFinancialReport('2026-01-26');
+```
+
+### Roster Shift Schema
+| Field | Type | Description |
+|-------|------|-------------|
+| period_start | date | Start of 28-day period |
+| shift_date | date | Actual shift date |
+| employee_id | text | FK to staff_masterlist |
+| planned_ward | text | Home ward (ECU/WARD 2/WARD 3) |
+| worked_ward | text | Override if redeployed (null if same as planned) |
+| shift_code | text | Code from hours_table |
+| slot | smallint | 1-5 for split shifts |
+| is_custom | boolean | True for custom time shifts |
+| start_time | time | Custom shift start |
+| end_time | time | Custom shift end |
+| custom_hours | numeric | Custom hours (if is_custom) |
+
+### Financial Report Output
+The `generateFinancialReport()` function returns:
+- Per-ward staff financials (rosteredToWardHours, actual, shiftCount, etc.)
+- Redeployment tracking (redeployedOutHours, netWardHours)
+- Leave breakdown (sickHours, unplHours, hoHours, pbHours)
+- Diagnostics (shiftRowsLoaded, missingHoursCodes, etc.)
+
+## Notes
+This app was exported from Base44. The frontend now connects directly to Supabase for data persistence. Some features still use mock data for entities not yet migrated (Department, User, etc.).
