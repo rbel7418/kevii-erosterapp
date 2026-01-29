@@ -64,6 +64,9 @@ Deno.serve(async (req) => {
         spreadsheetId = cfg.spreadsheet_id;
         sheetName = cfg.sheet_name;
         enableAuto = cfg.is_enabled === true;
+        if (enableAuto !== true) {
+          return Response.json({ status: 'skipped', reason: 'auto sync disabled' });
+        }
       }
     }
 

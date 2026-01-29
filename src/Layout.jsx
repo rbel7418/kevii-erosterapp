@@ -1382,6 +1382,44 @@ export default function Layout({ children, currentPageName }) {
                       <Filter className="w-4 h-4" />
                       <span className="text-xs font-medium hidden 2xl:inline">Filters</span>
                     </Button>
+
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="ghost" size="sm" className="h-8 gap-1 px-2 themed" title="Import from Google Sheets">
+                          <Upload className="w-4 h-4" />
+                          <span className="text-xs font-medium hidden 2xl:inline">Sheets</span>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-[320px] p-3 themed">
+                        <div className="space-y-2">
+                          <Input placeholder="Spreadsheet ID" value={sheetId} onChange={(e) => setSheetId(e.target.value)} />
+                          <Input placeholder="Sheet name" value={sheetName} onChange={(e) => setSheetName(e.target.value)} />
+                          <div className="flex items-center gap-2">
+                            <Switch checked={autoSync} onCheckedChange={setAutoSync} className="scale-75" />
+                            <span className="text-xs">Auto sync daily 02:00</span>
+                          </div>
+                          {importMsg && (
+                            <div className="text-xs text-slate-600">{importMsg}</div>
+                          )}
+                          <div className="flex justify-end gap-2">
+                            <Button variant="outline" size="sm" disabled={importBusy} onClick={async () => {
+                              setImportBusy(true);
+                              const res = await importShiftsFromSheet({ spreadsheetId: sheetId, sheetName, saveConfig: true, enableAuto: autoSync });
+                              const d = res?.data || res;
+                              setImportMsg(d?.status === 'saved' ? 'Saved configuration' : 'Saved');
+                              setImportBusy(false);
+                            }}>Save</Button>
+                            <Button size="sm" className="bg-sky-600 hover:bg-sky-700" disabled={importBusy || !sheetId || !sheetName} onClick={async () => {
+                              setImportBusy(true);
+                              const res = await importShiftsFromSheet({ spreadsheetId: sheetId, sheetName });
+                              const d = res?.data || res;
+                              setImportMsg(`Imported ${d?.created || 0} new, ${d?.updated || 0} updated, ${d?.skipped || 0} skipped`);
+                              setImportBusy(false);
+                            }}>{importBusy ? 'Importing…' : 'Import Now'}</Button>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                     </div>
 
                     {/* Navigation Controls Group */}
