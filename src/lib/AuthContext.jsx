@@ -25,7 +25,19 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // No-op in mock mode
+    const initAuth = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (user) {
+          setUser(user);
+        }
+      } catch (err) {
+        console.error("Auth initialization failed:", err);
+      } finally {
+        setIsLoadingAuth(false);
+      }
+    };
+    initAuth();
   }, []);
 
   const checkAppState = async () => {
