@@ -15,7 +15,10 @@ export const base44 = new Proxy({
   auth: {
     me: async () => {
       console.log("Mock me call");
-      return {
+      const stored = localStorage.getItem('mock_User_me');
+      if (stored) return JSON.parse(stored);
+      
+      const defaultUser = {
         id: "mock-user-id",
         email: "mock@kingedwardvii.co.uk",
         full_name: "Mock User",
@@ -30,19 +33,33 @@ export const base44 = new Proxy({
           }
         }
       };
+      localStorage.setItem('mock_User_me', JSON.stringify(defaultUser));
+      return defaultUser;
     },
     logout: () => {
       console.log("Mock logout");
       window.location.reload();
     },
-    redirectToLogin: () => {
-      console.log("Mock redirect to login");
+    updateMyUserData: async (data) => {
+      console.log("Mock updateMyUserData", data);
+      // Ensure the me() call reflects changes immediately by updating mock_User_me
+      const stored = localStorage.getItem('mock_User_me');
+      const user = stored ? JSON.parse(stored) : { id: 'mock-user-id', settings: {} };
+      const updatedUser = { ...user, ...data };
+      localStorage.setItem('mock_User_me', JSON.stringify(updatedUser));
+      
+      // Also update the list if it exists
+      const list = await base44.entities.list('User');
+      const updatedList = list.map(item => item.id === 'mock-user-id' ? updatedUser : item);
+      localStorage.setItem('mock_User', JSON.stringify(updatedList));
+      
+      window.dispatchEvent(new CustomEvent('mock-data-change', { detail: { name: 'User', action: 'update', id: 'mock-user-id', data: updatedUser } }));
+      return updatedUser;
     }
   },
   entities: {
     list: async (name) => {
       console.log(`Mock list entities: ${name}`);
-      // Try to load from localStorage first for "persistence"
       const stored = localStorage.getItem(`mock_${name}`);
       if (stored) return JSON.parse(stored);
 
@@ -58,10 +75,10 @@ export const base44 = new Proxy({
       }
       if (name === 'Employee') {
         const data = [
-          { id: 'emp-1', full_name: 'John Doe', department_id: 'dept-1', role: 'Nurse', contract_type: 'Permanent', sort_index: 1, is_active: true },
-          { id: 'emp-2', full_name: 'Jane Smith', department_id: 'dept-1', role: 'Sister', contract_type: 'Permanent', sort_index: 0, is_active: true },
-          { id: 'emp-3', full_name: 'Bob Wilson', department_id: 'dept-2', role: 'Nurse', contract_type: 'Permanent', sort_index: 1, is_active: true },
-          { id: 'emp-4', full_name: 'Alice Brown', department_id: 'dept-1', role: 'Nurse', contract_type: 'Permanent', sort_index: 2, is_active: true }
+          { id: 'emp-1', full_name: 'John Doe', department_id: 'dept-1', role: 'Nurse', contract_type: 'Permanent', sort_index: 1, is_active: true, access_level: 'admin' },
+          { id: 'emp-2', full_name: 'Jane Smith', department_id: 'dept-1', role: 'Sister', contract_type: 'Permanent', sort_index: 0, is_active: true, access_level: 'staff' },
+          { id: 'emp-3', full_name: 'Bob Wilson', department_id: 'dept-2', role: 'Nurse', contract_type: 'Permanent', sort_index: 1, is_active: true, access_level: 'staff' },
+          { id: 'emp-4', full_name: 'Alice Brown', department_id: 'dept-1', role: 'Nurse', contract_type: 'Permanent', sort_index: 2, is_active: true, access_level: 'staff' }
         ];
         localStorage.setItem(`mock_${name}`, JSON.stringify(data));
         return data;
@@ -77,19 +94,23 @@ export const base44 = new Proxy({
         return data;
       }
       if (name === 'Shift') {
+        const stored = localStorage.getItem(`mock_${name}`);
+        if (stored) return JSON.parse(stored);
         const shifts = [];
         const today = new Date();
         const start = startOfWeek(today, { weekStartsOn: 1 });
         ['emp-1', 'emp-2', 'emp-3', 'emp-4'].forEach(empId => {
           for (let i = 0; i < 28; i++) {
             const date = format(addDays(start, i), 'yyyy-MM-dd');
-            if (Math.random() > 0.3) {
+            // Ensure we have some shifts for the mock data
+            if ((i + empId.charCodeAt(4)) % 3 === 0) {
               shifts.push({
                 id: `shift-${empId}-${i}`,
                 employee_id: empId,
                 department_id: empId === 'emp-3' ? 'dept-2' : 'dept-1',
                 shift_code: i % 7 === 5 || i % 7 === 6 ? 'N' : 'D',
-                date: date
+                date: date,
+                is_published: true
               });
             }
           }
@@ -105,12 +126,20 @@ export const base44 = new Proxy({
         localStorage.setItem(`mock_${name}`, JSON.stringify(data));
         return data;
       }
-      if (name === 'AppPermission') return [
-        { id: 'perm-1', user_id: 'mock-user-id', permission: 'admin', resource: 'rota' }
-      ];
-      if (name === 'OrgSettings') return [
-        { id: 'org-1', key: 'rota_config', value: { allow_self_assign: true } }
-      ];
+      if (name === 'AppPermission') {
+        const data = [
+          { id: 'perm-1', user_id: 'mock-user-id', permission: 'admin', resource: 'rota' }
+        ];
+        localStorage.setItem(`mock_${name}`, JSON.stringify(data));
+        return data;
+      }
+      if (name === 'OrgSettings') {
+        const data = [
+          { id: 'org-1', key: 'rota_config', value: { allow_self_assign: true } }
+        ];
+        localStorage.setItem(`mock_${name}`, JSON.stringify(data));
+        return data;
+      }
       return [];
     },
     get: async (name, id) => {
@@ -139,12 +168,21 @@ export const base44 = new Proxy({
     },
     update: async (name, id, data) => {
       console.log(`Mock update entity: ${name} (${id})`, data);
+      
+      // Handle the specific case of User settings update
+      if (name === 'User' && (id === 'mock-user-id' || id === 'me')) {
+        const storedUser = localStorage.getItem('mock_User_me');
+        const currentUser = storedUser ? JSON.parse(storedUser) : { id: 'mock-user-id', settings: {} };
+        const updatedUser = { ...currentUser, ...data };
+        localStorage.setItem('mock_User_me', JSON.stringify(updatedUser));
+        window.dispatchEvent(new CustomEvent('mock-data-change', { detail: { name: 'User', action: 'update', id, data } }));
+        return updatedUser;
+      }
+
       const list = await base44.entities.list(name);
       const updatedList = list.map(item => item.id === id ? { ...item, ...data } : item);
       localStorage.setItem(`mock_${name}`, JSON.stringify(updatedList));
-      
       window.dispatchEvent(new CustomEvent('mock-data-change', { detail: { name, action: 'update', id, data } }));
-      
       return { id, ...data };
     },
     delete: async (name, id) => {

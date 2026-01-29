@@ -142,7 +142,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "UserLanding",
+    mainPage: "RotaGrid",
     Pages: PAGES,
     Layout: __Layout,
 };

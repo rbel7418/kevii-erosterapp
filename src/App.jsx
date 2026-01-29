@@ -41,7 +41,7 @@ const AuthenticatedApp = () => {
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
-          path={`/${path.toLowerCase()}`}
+          path={path === 'RotaGrid' ? '/rotagrid' : `/${path.toLowerCase()}`}
           element={
             <LayoutWrapper currentPageName={path}>
               <Page />
@@ -58,16 +58,16 @@ const AuthenticatedApp = () => {
 function App() {
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
+    <Router>
+      <AuthProvider>
+        <QueryClientProvider client={queryClientInstance}>
           <NavigationTracker />
           <AuthenticatedApp />
-        </Router>
-        <Toaster />
-        <VisualEditAgent />
-      </QueryClientProvider>
-    </AuthProvider>
+          <Toaster />
+          <VisualEditAgent />
+        </QueryClientProvider>
+      </AuthProvider>
+    </Router>
   )
 }
 
