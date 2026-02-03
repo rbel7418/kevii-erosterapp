@@ -1,0 +1,103 @@
+CREATE OR REPLACE VIEW public.v_financials_ward_period_cumulative_59b1a037 AS
+WITH employee_period AS (
+  SELECT
+    employee_id,
+    period_start,
+    SUM(ho_hours) AS period_ho_total,
+    SUM(pb_hours) AS period_pb_total,
+    SUM(ho_hours - pb_hours) AS period_toil_net
+  FROM public.v_financials_staff_period_59b1a037
+  GROUP BY employee_id, period_start
+),
+running AS (
+  SELECT
+    ep.*,
+    SUM(period_toil_net) OVER (
+      PARTITION BY employee_id
+      ORDER BY period_start
+      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS closing_toil_balance
+  FROM employee_period ep
+),
+primary_ward AS (
+  SELECT
+    employee_id,
+    period_start,
+    (array_agg(ward ORDER BY rostered_to_ward_hours DESC, ward))[1] AS ward
+  FROM public.v_financials_staff_period_59b1a037
+  GROUP BY employee_id, period_start
+),
+ward_balances AS (
+  SELECT
+    pw.period_start,
+    pw.ward,
+    SUM(r.closing_toil_balance - r.period_toil_net) AS opening_toil_balance,
+    SUM(r.closing_toil_balance) AS closing_toil_balance
+  FROM primary_ward pw
+  JOIN running r
+    ON r.employee_id = pw.employee_id
+   AND r.period_start = pw.period_start
+  GROUP BY pw.period_start, pw.ward
+),
+ward_activity AS (
+  SELECT
+    period_start,
+    ward,
+    COUNT(DISTINCT employee_id) AS headcount,
+    SUM(rostered_to_ward_hours) AS total_rostered_hours,
+    SUM(actual_hours) AS total_actual_hours,
+    SUM(actual_hours - rostered_to_ward_hours) AS variance_hours,
+    SUM(ho_hours) AS ho_debt_hours,
+    SUM(pb_hours) AS pb_worked_hours,
+    SUM(ho_hours - pb_hours) AS period_toil_net
+  FROM public.v_financials_staff_period_59b1a037
+  GROUP BY period_start, ward
+)
+SELECT
+  wa.*,
+  COALESCE(wb.opening_toil_balance, 0) AS opening_toil_balance,
+  COALESCE(wb.closing_toil_balance, 0) AS closing_toil_balance
+FROM ward_activity wa
+LEFT JOIN ward_balances wb
+  ON wb.period_start = wa.period_start
+ AND wb.ward = wa.ward;-------------------------->CREATE OR REPLACE VIEW public.v_financials_ward_period_cumulative_59b1a037 AS
+WITH ward_base AS (
+  -- KEEP EVERYTHING the frontend already expects
+  SELECT *
+  FROM public.v_financials_ward_period_59b1a037
+),
+
+-- Get ONE row per employee+period for TOIL running balances
+employee_period AS (
+  SELECT
+    employee_id,
+    period_start,
+    -- use department/home ward as the ward owner of the TOIL balance
+    department AS ward,
+    opening_toil_balance,
+    period_toil_net,
+    cumulative_toil_balance
+  FROM public.v_financials_staff_cumulative_59b1a037
+),
+
+toil_rollup AS (
+  SELECT
+    period_start,
+    ward,
+    SUM(opening_toil_balance)   AS opening_toil_hours,
+    SUM(period_toil_net)        AS period_toil_hours,
+    SUM(cumulative_toil_balance) AS closing_toil_hours
+  FROM employee_period
+  GROUP BY period_start, ward
+)
+
+SELECT
+  wb.*,
+  COALESCE(tr.opening_toil_hours, 0) AS opening_toil_hours,
+  COALESCE(tr.period_toil_hours, wb.toil_balance_hours) AS period_toil_hours,
+  COALESCE(tr.closing_toil_hours, 0) AS closing_toil_hours
+FROM ward_base wb
+LEFT JOIN toil_rollup tr
+  ON tr.period_start = wb.period_start
+ AND tr.ward = wb.ward;
+ 

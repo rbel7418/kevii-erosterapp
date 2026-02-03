@@ -687,6 +687,108 @@ export function processWardFinancial(shiftRows, ward, hoursMap, staffRecords) {
 // FINANCIAL REPORT GENERATOR
 // ============================================
 
+// ============================================
+// FINANCIAL VIEWS API
+// ============================================
+
+const VIEWS = {
+  STAFF_PERIOD: "v_financials_staff_period_59b1a037",
+  STAFF_CUMULATIVE: "v_financials_staff_cumulative_59b1a037",
+  WARD_PERIOD: "v_financials_ward_period_59b1a037",
+  WARD_CUMULATIVE: "v_financials_ward_period_cumulative_59b1a037"
+};
+
+export const FinancialViews = {
+  async getWardPeriodCumulative(periodStart) {
+    try {
+      const { data, error } = await supabase
+        .from(VIEWS.WARD_CUMULATIVE)
+        .select('*')
+        .eq('period_start', periodStart);
+      
+      if (error) {
+        console.error('FinancialViews.getWardPeriodCumulative error:', error);
+        return { success: false, error: error.message, data: [] };
+      }
+      
+      return { success: true, data: data || [] };
+    } catch (err) {
+      console.error('FinancialViews.getWardPeriodCumulative exception:', err);
+      return { success: false, error: err.message, data: [] };
+    }
+  },
+
+  async getStaffPeriod(periodStart, ward = null) {
+    try {
+      let query = supabase
+        .from(VIEWS.STAFF_PERIOD)
+        .select('*')
+        .eq('period_start', periodStart);
+      
+      if (ward) {
+        query = query.eq('ward', ward);
+      }
+      
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error('FinancialViews.getStaffPeriod error:', error);
+        return { success: false, error: error.message, data: [] };
+      }
+      
+      return { success: true, data: data || [] };
+    } catch (err) {
+      console.error('FinancialViews.getStaffPeriod exception:', err);
+      return { success: false, error: err.message, data: [] };
+    }
+  },
+
+  async getStaffCumulative(periodStart, ward = null) {
+    try {
+      let query = supabase
+        .from(VIEWS.STAFF_CUMULATIVE)
+        .select('*')
+        .eq('period_start', periodStart);
+      
+      if (ward) {
+        query = query.eq('department', ward);
+      }
+      
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error('FinancialViews.getStaffCumulative error:', error);
+        return { success: false, error: error.message, data: [] };
+      }
+      
+      return { success: true, data: data || [] };
+    } catch (err) {
+      console.error('FinancialViews.getStaffCumulative exception:', err);
+      return { success: false, error: err.message, data: [] };
+    }
+  },
+
+  async getAllPeriods() {
+    try {
+      const { data, error } = await supabase
+        .from(VIEWS.WARD_CUMULATIVE)
+        .select('period_start')
+        .order('period_start', { ascending: false });
+      
+      if (error) {
+        console.error('FinancialViews.getAllPeriods error:', error);
+        return { success: false, error: error.message, data: [] };
+      }
+      
+      const uniquePeriods = [...new Set((data || []).map(r => r.period_start))];
+      return { success: true, data: uniquePeriods };
+    } catch (err) {
+      console.error('FinancialViews.getAllPeriods exception:', err);
+      return { success: false, error: err.message, data: [] };
+    }
+  }
+};
+
 export async function generateFinancialReport(startDate) {
   const periodStart = normalizeToPeriodStart(startDate);
   const periodEnd = getPeriodEnd(periodStart);

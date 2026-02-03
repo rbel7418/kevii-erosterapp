@@ -64,6 +64,8 @@ import DepartmentMonth from './pages/DepartmentMonth';
 import DesignPreview from './pages/DesignPreview';
 import EmployeeProfile from './pages/EmployeeProfile';
 import EmployeeSchedule from './pages/EmployeeSchedule';
+import Financials from './pages/Financials';
+import FinancialsLedgers from './pages/FinancialsLedgers';
 import Home from './pages/Home';
 import IPCTrainingDB from './pages/IPCTrainingDB';
 import InteractiveBI from './pages/InteractiveBI';
@@ -112,6 +114,8 @@ export const PAGES = {
     "DesignPreview": DesignPreview,
     "EmployeeProfile": EmployeeProfile,
     "EmployeeSchedule": EmployeeSchedule,
+    "Financials": Financials,
+    "FinancialsLedgers": FinancialsLedgers,
     "Home": Home,
     "IPCTrainingDB": IPCTrainingDB,
     "InteractiveBI": InteractiveBI,
